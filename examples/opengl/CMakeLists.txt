@@ -2,7 +2,7 @@
 set(SRCROOT ${PROJECT_SOURCE_DIR}/examples/opengl)
 
 # all source files
-set(SRC ${SRCROOT}/OpenGL.cpp)
+set(SRC ${SRCROOT}/opengl.cpp)
 
 # find OpenGL and GLU
 find_package(OpenGL REQUIRED)

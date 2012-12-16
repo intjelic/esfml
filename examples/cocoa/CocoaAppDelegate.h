@@ -24,7 +24,7 @@
 ////////////////////////////////////////////////////////////
 
 #import <Cocoa/Cocoa.h>
-#import <SFML/Graphics.hpp>
+#import <sfml/graphics.hpp>
 
 /*
  * NB : We need pointers for C++ objects fields in Obj-C interface !

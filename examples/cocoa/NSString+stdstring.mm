@@ -24,7 +24,7 @@
 ////////////////////////////////////////////////////////////
 
 #import "NSString+stdstring.h"
-#include <SFML/System/Utf.hpp>
+#include <sfml/system/Utf.hpp>
 
 @implementation NSString (NSString_stdstring)
 

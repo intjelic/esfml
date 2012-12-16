@@ -12,8 +12,8 @@
 ///
 /// \code
 ///
-/// #include <SFML/Audio.hpp>
-/// #include <SFML/Graphics.hpp>
+/// #include <sfml/audio.hpp>
+/// #include <sfml/graphics.hpp>
 /// 
 /// int main()
 /// {

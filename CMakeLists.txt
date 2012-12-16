@@ -128,7 +128,7 @@ set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 set_property(GLOBAL PROPERTY PREDEFINED_TARGETS_FOLDER "CMake")
 
 # add the subdirectories
-add_subdirectory(src/SFML)
+add_subdirectory(src/sfml)
 if(SFML_BUILD_EXAMPLES)
     add_subdirectory(examples)
 endif()
@@ -144,7 +144,7 @@ if(NOT SFML_BUILD_FRAMEWORKS)
             PATTERN ".svn" EXCLUDE)
 else()
     # find only "root" headers
-    file(GLOB SFML_HEADERS RELATIVE ${PROJECT_SOURCE_DIR} "include/SFML/*")
+    file(GLOB SFML_HEADERS RELATIVE ${PROJECT_SOURCE_DIR} "include/sfml/*")
 
     # in fact we have to fool cmake to copy all the headers in subdirectories
     # to do that we have to add the "root" headers to the PUBLIC_HEADER
@@ -172,7 +172,7 @@ else()
     # add the remaining headers
     add_custom_command(TARGET SFML 
                        POST_BUILD
-                       COMMAND cp -r ${PROJECT_SOURCE_DIR}/include/SFML/* SFML.framework/Versions/${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH}/Headers)
+                       COMMAND cp -r ${PROJECT_SOURCE_DIR}/include/sfml/* SFML.framework/Versions/${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH}/Headers)
 
     # adapt install directory to allow distributing dylibs/frameworks in user’s frameworks/application bundle
     # NOTE : it's not required to link agains SFML.framework
