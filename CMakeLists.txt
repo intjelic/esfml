@@ -144,7 +144,7 @@ if(NOT SFML_BUILD_FRAMEWORKS)
             PATTERN ".svn" EXCLUDE)
 else()
     # find only "root" headers
-    file(GLOB SFML_HEADERS RELATIVE ${PROJECT_SOURCE_DIR} "include/sfml/*")
+    file(GLOB SFML_HEADERS RELATIVE ${PROJECT_SOURCE_DIR} "include/*")
 
     # in fact we have to fool cmake to copy all the headers in subdirectories
     # to do that we have to add the "root" headers to the PUBLIC_HEADER
