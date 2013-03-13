@@ -41,9 +41,11 @@ namespace
     // Retrieve the maximum number of texture units available
     GLint getMaxTextureUnits()
     {
+        #ifndef SFML_EMBEDDED_SYSTEM
         GLint maxUnits;
         glCheck(glGetIntegerv(GL_MAX_TEXTURE_COORDS_ARB, &maxUnits));
         return maxUnits;
+        #endif
     }
 
     // Read the contents of a file into an array of char
@@ -103,11 +105,13 @@ m_currentTexture(-1)
 ////////////////////////////////////////////////////////////////////////////////
 Shader::~Shader()
 {
+    #ifndef SFML_EMBEDDED_SYSTEM
     ensureGlContext();
 
     // Destroy effect program
     if (m_shaderProgram)
         glCheck(glDeleteObjectARB(m_shaderProgram));
+    #endif
 }
 
 
@@ -219,6 +223,7 @@ bool Shader::loadFromStream(InputStream& vertexShaderStream, InputStream& fragme
 ////////////////////////////////////////////////////////////////////////////////
 void Shader::setParameter(const std::string& name, float x)
 {
+    #ifndef SFML_EMBEDDED_SYSTEM
     if (m_shaderProgram)
     {
         ensureGlContext();
@@ -241,12 +246,14 @@ void Shader::setParameter(const std::string& name, float x)
         // Disable program
         glCheck(glUseProgramObjectARB(program));
     }
+    #endif
 }
 
 
 ////////////////////////////////////////////////////////////////////////////////
 void Shader::setParameter(const std::string& name, float x, float y)
 {
+    #ifndef SFML_EMBEDDED_SYSTEM
     if (m_shaderProgram)
     {
         ensureGlContext();
@@ -265,16 +272,18 @@ void Shader::setParameter(const std::string& name, float x, float y)
         {
             err() << "Parameter \"" << name << "\" not found in shader" << std::endl;
         }
-        
+
         // Disable program
         glCheck(glUseProgramObjectARB(program));
     }
+    #endif
 }
 
 
 ////////////////////////////////////////////////////////////////////////////////
 void Shader::setParameter(const std::string& name, float x, float y, float z)
 {
+    #ifndef SFML_EMBEDDED_SYSTEM
     if (m_shaderProgram)
     {
         ensureGlContext();
@@ -297,12 +306,14 @@ void Shader::setParameter(const std::string& name, float x, float y, float z)
         // Disable program
         glCheck(glUseProgramObjectARB(program));
     }
+    #endif
 }
 
 
 ////////////////////////////////////////////////////////////////////////////////
 void Shader::setParameter(const std::string& name, float x, float y, float z, float w)
 {
+    #ifndef SFML_EMBEDDED_SYSTEM
     if (m_shaderProgram)
     {
         ensureGlContext();
@@ -325,6 +336,7 @@ void Shader::setParameter(const std::string& name, float x, float y, float z, fl
         // Disable program
         glCheck(glUseProgramObjectARB(program));
     }
+    #endif
 }
 
 
@@ -352,6 +364,7 @@ void Shader::setParameter(const std::string& name, const Color& color)
 ////////////////////////////////////////////////////////////////////////////////
 void Shader::setParameter(const std::string& name, const sf::Transform& transform)
 {
+    #ifndef SFML_EMBEDDED_SYSTEM
     if (m_shaderProgram)
     {
         ensureGlContext();
@@ -374,12 +387,14 @@ void Shader::setParameter(const std::string& name, const sf::Transform& transfor
         // Disable program
         glCheck(glUseProgramObjectARB(program));
     }
+    #endif
 }
 
 
 ////////////////////////////////////////////////////////////////////////////////
 void Shader::setParameter(const std::string& name, const Texture& texture)
 {
+    #ifndef SFML_EMBEDDED_SYSTEM
     if (m_shaderProgram)
     {
         ensureGlContext();
@@ -412,12 +427,14 @@ void Shader::setParameter(const std::string& name, const Texture& texture)
             it->second = &texture;
         }
     }
+    #endif
 }
 
 
 ////////////////////////////////////////////////////////////////////////////////
 void Shader::setParameter(const std::string& name, CurrentTextureType)
 {
+    #ifndef SFML_EMBEDDED_SYSTEM
     if (m_shaderProgram)
     {
         ensureGlContext();
@@ -427,12 +444,14 @@ void Shader::setParameter(const std::string& name, CurrentTextureType)
         if (m_currentTexture == -1)
             err() << "Texture \"" << name << "\" not found in shader" << std::endl;
     }
+    #endif
 }
 
 
 ////////////////////////////////////////////////////////////////////////////////
 void Shader::bind(const Shader* shader)
 {
+    #ifndef SFML_EMBEDDED_SYSTEM
     ensureGlContext();
 
     if (shader && shader->m_shaderProgram)
@@ -452,21 +471,27 @@ void Shader::bind(const Shader* shader)
         // Bind no shader
         glCheck(glUseProgramObjectARB(0));
     }
+    #endif
 }
 
 
 ////////////////////////////////////////////////////////////////////////////////
 bool Shader::isAvailable()
 {
-    ensureGlContext();
+    #ifndef SFML_EMBEDDED_SYSTEM
+        ensureGlContext();
 
-    // Make sure that GLEW is initialized
-    priv::ensureGlewInit();
+        // Make sure that GLEW is initialized
+        priv::ensureGlewInit();
 
-    return GLEW_ARB_shading_language_100 &&
-           GLEW_ARB_shader_objects       &&
-           GLEW_ARB_vertex_shader        &&
-           GLEW_ARB_fragment_shader;
+        return GLEW_ARB_shading_language_100 &&
+               GLEW_ARB_shader_objects       &&
+               GLEW_ARB_vertex_shader        &&
+               GLEW_ARB_fragment_shader;
+    #else
+        // OpenGL ES 1.x doesn't support shaders
+        return false;
+    #endif
 }
 
 
@@ -483,6 +508,7 @@ bool Shader::compile(const char* vertexShaderCode, const char* fragmentShaderCod
         return false;
     }
 
+    #ifndef SFML_EMBEDDED_SYSTEM
     // Destroy the shader if it was already created
     if (m_shaderProgram)
         glCheck(glDeleteObjectARB(m_shaderProgram));
@@ -562,6 +588,7 @@ bool Shader::compile(const char* vertexShaderCode, const char* fragmentShaderCod
         m_shaderProgram = 0;
         return false;
     }
+    #endif
 
     return true;
 }
@@ -570,6 +597,7 @@ bool Shader::compile(const char* vertexShaderCode, const char* fragmentShaderCod
 ////////////////////////////////////////////////////////////////////////////////
 void Shader::bindTextures() const
 {
+    #ifndef SFML_EMBEDDED_SYSTEM
     TextureTable::const_iterator it = m_textures.begin();
     for (std::size_t i = 0; i < m_textures.size(); ++i)
     {
@@ -582,6 +610,7 @@ void Shader::bindTextures() const
 
     // Make sure that the texture unit which is left active is the number 0
     glCheck(glActiveTextureARB(GL_TEXTURE0_ARB));
+    #endif
 }
 
 } // namespace sf
