@@ -49,8 +49,12 @@
 
 #elif defined(SFML_SYSTEM_LINUX) || defined(SFML_SYSTEM_FREEBSD)
 
-    #include <GL/gl.h>
-    #include <GL/glu.h>
+    #ifndef SFML_EMBEDDED_SYSTEM
+        #include <GL/gl.h>
+        #include <GL/glu.h>
+    #else
+        #include <GLES/gl.h>
+    #endif
 
 #elif defined(SFML_SYSTEM_MACOS)
 
