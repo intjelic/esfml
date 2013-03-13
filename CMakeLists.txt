@@ -34,7 +34,7 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
 sfml_set_option(SFML_BUILD_TYPE Release STRING "Choose the type of build (Debug or Release)")
 
 # add an option for choosing the build type (shared or static)
-sfml_set_option(BUILD_SHARED_LIBS TRUE BOOL "TRUE to build SFML as shared libraries, FALSE to build it as static libraries")
+sfml_set_option(SFML_LIBRARY_TYPE Shared STRING "Choose the type of build (Static or Shared)")
 
 # add an option for building the examples
 sfml_set_option(SFML_BUILD_EXAMPLES FALSE BOOL "TRUE to build the SFML examples, FALSE to ignore them")
@@ -46,7 +46,7 @@ sfml_set_option(SFML_BUILD_DOC FALSE BOOL "TRUE to generate the API documentatio
 if(MACOSX)
     # add an option to build frameworks instead of dylibs (release only)
     sfml_set_option(SFML_BUILD_FRAMEWORKS FALSE BOOL "TRUE to build SFML as frameworks libraries (release only), FALSE to build according to BUILD_SHARED_LIBS")
-    
+
     # add an option to let the user specify a custom directory for frameworks installation (SFML, sndfile, ...)
     sfml_set_option(CMAKE_INSTALL_FRAMEWORK_PREFIX "/Library/Frameworks" STRING "Frameworks installation directory")
 
@@ -54,12 +54,18 @@ if(MACOSX)
     sfml_set_option(SFML_INSTALL_XCODE4_TEMPLATES FALSE BOOL "TRUE to automatically install the Xcode 4 templates, FALSE to do nothing about it")
 endif()
 
-# CMAKE_BUILD_TYPE is a default variable created by CMake at initialization 
+# CMAKE_BUILD_TYPE is a default variable created by CMake at initialization
 # time, this line removes it from the entry in GUI mode
 SET(CMAKE_BUILD_TYPE VAR-NOT-FOUND CACHE INTERNAL "")
 
-# Tell CMake the build type (Released or Shared)
+# Tell CMake about the chosen build options (Released/Debug and Static/Shared)
 set(CMAKE_BUILD_TYPE ${SFML_BUILD_TYPE})
+
+if(SFML_LIBRARY_TYPE MATCHES "Static")
+	set(BUILD_SHARED_LIBS 0)
+else()
+	set(BUILD_SHARED_LIBS 1)
+endif()
 
 # define SFML_STATIC if the build type is not set to 'shared'
 if(NOT BUILD_SHARED_LIBS)
