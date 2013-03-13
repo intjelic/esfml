@@ -32,7 +32,9 @@
 #include <sfml/system/Mutex.hpp>
 #include <sfml/system/Lock.hpp>
 #include <sfml/opengl.hpp>
-#include <sfml/window/glext/glext.h>
+#ifndef SFML_EMBEDDED_SYSTEM
+    #include <sfml/window/glext/glext.h>
+#endif
 #include <set>
 #include <cstdlib>
 #include <cassert>
@@ -277,9 +279,11 @@ void GlContext::initialize()
         m_settings.minorVersion = 0;
     }
 
+    #ifndef SFML_EMBEDDED_SYSTEM
     // Enable antialiasing if needed
     if (m_settings.antialiasingLevel > 0)
         glCheck(glEnable(GL_MULTISAMPLE_ARB));
+    #endif
 }
 
 } // namespace priv
