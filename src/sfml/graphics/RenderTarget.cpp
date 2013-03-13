@@ -32,7 +32,6 @@
 #include <sfml/graphics/Texture.hpp>
 #include <sfml/graphics/VertexArray.hpp>
 #include <sfml/graphics/GLCheck.hpp>
-#include <iostream>
 
 
 namespace sf
@@ -220,9 +219,15 @@ void RenderTarget::draw(const Vertex* vertices, unsigned int vertexCount,
             glCheck(glTexCoordPointer(2, GL_FLOAT, sizeof(Vertex), data + 12));
         }
 
-        // Find the OpenGL primitive type
+        // Find the OpenGL primitive type (GL_QUADS not available on ES)
+        #ifndef SFML_EMBEDDED_SYSTEM
         static const GLenum modes[] = {GL_POINTS, GL_LINES, GL_LINE_STRIP, GL_TRIANGLES,
                                        GL_TRIANGLE_STRIP, GL_TRIANGLE_FAN, GL_QUADS};
+        #else
+        static const GLenum modes[] = {GL_POINTS, GL_LINES, GL_LINE_STRIP, GL_TRIANGLES,
+                                       GL_TRIANGLE_STRIP, GL_TRIANGLE_FAN, GL_TRIANGLE_FAN};
+        #endif
+
         GLenum mode = modes[type];
 
         // Draw the primitives
@@ -243,8 +248,11 @@ void RenderTarget::pushGLStates()
 {
     if (activate(true))
     {
-        glCheck(glPushClientAttrib(GL_CLIENT_ALL_ATTRIB_BITS));
-        glCheck(glPushAttrib(GL_ALL_ATTRIB_BITS));
+        #ifndef SFML_EMBEDDED_SYSTEM
+            glCheck(glPushClientAttrib(GL_CLIENT_ALL_ATTRIB_BITS));
+            glCheck(glPushAttrib(GL_ALL_ATTRIB_BITS));
+        #endif
+
         glCheck(glMatrixMode(GL_MODELVIEW));
         glCheck(glPushMatrix());
         glCheck(glMatrixMode(GL_PROJECTION));
@@ -268,8 +276,11 @@ void RenderTarget::popGLStates()
         glCheck(glPopMatrix());
         glCheck(glMatrixMode(GL_TEXTURE));
         glCheck(glPopMatrix());
-        glCheck(glPopClientAttrib());
-        glCheck(glPopAttrib());
+
+        #ifndef SFML_EMBEDDED_SYSTEM
+            glCheck(glPopClientAttrib());
+            glCheck(glPopAttrib());
+        #endif
     }
 }
 
@@ -279,8 +290,10 @@ void RenderTarget::resetGLStates()
 {
     if (activate(true))
     {
-        // Make sure that GLEW is initialized
-        priv::ensureGlewInit();
+        #ifndef SFML_EMBEDDED_SYSTEM
+            // Make sure that GLEW is initialized
+            priv::ensureGlewInit();
+        #endif
 
         // Define the default OpenGL states
         glCheck(glDisable(GL_CULL_FACE));
@@ -345,34 +358,39 @@ void RenderTarget::applyBlendMode(BlendMode mode)
 {
     switch (mode)
     {
+
+    #ifndef SFML_EMBEDDED_SYSTEM
         // glBlendFuncSeparateEXT is used when available to avoid an incorrect alpha value when the target
         // is a RenderTexture -- in this case the alpha value must be written directly to the target buffer
 
         // Alpha blending
         default :
         case BlendAlpha :
-            if (GLEW_EXT_blend_func_separate)
-            {
-                glCheck(glBlendFuncSeparateEXT(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ONE_MINUS_SRC_ALPHA));
-            }
-            else
-            {
-                glCheck(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
-            }
-
+            if (GLEW_EXT_blend_func_separate) {
+                glCheck(glBlendFuncSeparateEXT(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ONE_MINUS_SRC_ALPHA)); }
+            else {
+                glCheck(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)); }
             break;
 
         // Additive blending
         case BlendAdd :
-            if (GLEW_EXT_blend_func_separate)
-            {
-                glCheck(glBlendFuncSeparateEXT(GL_SRC_ALPHA, GL_ONE, GL_ONE, GL_ONE));
-            }
-            else
-            {
-                glCheck(glBlendFunc(GL_SRC_ALPHA, GL_ONE));
-            }
+            if (GLEW_EXT_blend_func_separate) {
+                glCheck(glBlendFuncSeparateEXT(GL_SRC_ALPHA, GL_ONE, GL_ONE, GL_ONE)); }
+            else {
+                glCheck(glBlendFunc(GL_SRC_ALPHA, GL_ONE)); }
             break;
+    #else
+        // Alpha blending
+        default :
+        case BlendAlpha :
+            glCheck(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
+            break;
+
+        // Additive blending
+        case BlendAdd :
+            glCheck(glBlendFunc(GL_SRC_ALPHA, GL_ONE));
+            break;
+    #endif
 
         // Multiplicative blending
         case BlendMultiply :
