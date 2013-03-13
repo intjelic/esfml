@@ -140,6 +140,14 @@ if(LINUX)
             message(WARNING "No pkg-config files are provided for the static SFML libraries (SFML_INSTALL_PKGCONFIG_FILES will be ignored).")
         endif()
     endif()
+
+    # add option to know if we compile with OpenGL for embedded system or not
+    sfml_set_option(SFML_EMBEDDED_SYSTEM FALSE BOOL "Do we compile with OpenGL for embedded systems ?")
+endif()
+
+if(SFML_EMBEDDED_SYSTEM)
+    add_definitions(-DSFML_EMBEDDED_SYSTEM)
+    add_definitions(-DGL_GLEXT_PROTOTYPES)
 endif()
 
 # enable project folders
