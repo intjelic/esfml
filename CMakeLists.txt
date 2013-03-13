@@ -11,7 +11,9 @@ endmacro()
 
 # set a default build type if none was provided
 # this has to be done before the project() instruction!
-sfml_set_option(CMAKE_BUILD_TYPE Release STRING "Choose the type of build (Debug or Release)")
+#sfml_set_option(CMAKE_BUILD_TYPE Release STRING "Choose the type of build (Debug or Release)")
+#set(CMAKE_BUILD_TYPE "Release")
+SET(CMAKE_BUILD_TYPE VAR-NOT-FOUND CACHE INTERNAL "")
 
 # project name
 project(SFML)
@@ -26,6 +28,10 @@ set(VERSION_PATCH 0)
 
 # add the SFML header path
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
+
+# set a default build type if none was provided
+# this has to be done before the project() instruction!
+sfml_set_option(SFML_BUILD_TYPE Release STRING "Choose the type of build (Debug or Release)")
 
 # add an option for choosing the build type (shared or static)
 sfml_set_option(BUILD_SHARED_LIBS TRUE BOOL "TRUE to build SFML as shared libraries, FALSE to build it as static libraries")
@@ -47,6 +53,13 @@ if(MACOSX)
     # add an option to automatically install Xcode 4 templates
     sfml_set_option(SFML_INSTALL_XCODE4_TEMPLATES FALSE BOOL "TRUE to automatically install the Xcode 4 templates, FALSE to do nothing about it")
 endif()
+
+# CMAKE_BUILD_TYPE is a default variable created by CMake at initialization 
+# time, this line removes it from the entry in GUI mode
+SET(CMAKE_BUILD_TYPE VAR-NOT-FOUND CACHE INTERNAL "")
+
+# Tell CMake the build type (Released or Shared)
+set(CMAKE_BUILD_TYPE ${SFML_BUILD_TYPE})
 
 # define SFML_STATIC if the build type is not set to 'shared'
 if(NOT BUILD_SHARED_LIBS)
