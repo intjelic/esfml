@@ -26,6 +26,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 // Headers
 ////////////////////////////////////////////////////////////////////////////////
+#include <sfml/graphics/GLCheck.hpp>
 #include <sfml/window/GlContext.hpp>
 #include <sfml/system/ThreadLocalPtr.hpp>
 #include <sfml/system/Mutex.hpp>
@@ -257,7 +258,7 @@ void GlContext::initialize()
     setActive(true);
 
     // Retrieve the context version number
-    const GLubyte* version = glGetString(GL_VERSION);
+    const GLubyte* version = glCheck(glGetString(GL_VERSION));
     if (version)
     {
         // The beginning of the returned string is "major.minor" (this is standard)
@@ -273,7 +274,7 @@ void GlContext::initialize()
 
     // Enable antialiasing if needed
     if (m_settings.antialiasingLevel > 0)
-        glEnable(GL_MULTISAMPLE_ARB);
+        glCheck(glEnable(GL_MULTISAMPLE_ARB));
 }
 
 } // namespace priv

@@ -352,17 +352,26 @@ void RenderTarget::applyBlendMode(BlendMode mode)
         default :
         case BlendAlpha :
             if (GLEW_EXT_blend_func_separate)
+            {
                 glCheck(glBlendFuncSeparateEXT(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ONE_MINUS_SRC_ALPHA));
+            }
             else
+            {
                 glCheck(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
+            }
+
             break;
 
         // Additive blending
         case BlendAdd :
             if (GLEW_EXT_blend_func_separate)
+            {
                 glCheck(glBlendFuncSeparateEXT(GL_SRC_ALPHA, GL_ONE, GL_ONE, GL_ONE));
+            }
             else
+            {
                 glCheck(glBlendFunc(GL_SRC_ALPHA, GL_ONE));
+            }
             break;
 
         // Multiplicative blending

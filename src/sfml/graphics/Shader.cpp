@@ -224,15 +224,19 @@ void Shader::setParameter(const std::string& name, float x)
         ensureGlContext();
 
         // Enable program
-        GLhandleARB program = glGetHandleARB(GL_PROGRAM_OBJECT_ARB);
+        GLhandleARB program = glCheck(glGetHandleARB(GL_PROGRAM_OBJECT_ARB));
         glCheck(glUseProgramObjectARB(m_shaderProgram));
 
         // Get parameter location and assign it new values
-        GLint location = glGetUniformLocationARB(m_shaderProgram, name.c_str());
+        GLint location = glCheck(glGetUniformLocationARB(m_shaderProgram, name.c_str()));
         if (location != -1)
+        {
             glCheck(glUniform1fARB(location, x));
+        }
         else
+        {
             err() << "Parameter \"" << name << "\" not found in shader" << std::endl;
+        }
 
         // Disable program
         glCheck(glUseProgramObjectARB(program));
@@ -248,16 +252,20 @@ void Shader::setParameter(const std::string& name, float x, float y)
         ensureGlContext();
 
         // Enable program
-        GLhandleARB program = glGetHandleARB(GL_PROGRAM_OBJECT_ARB);
+        GLhandleARB program = glCheck(glGetHandleARB(GL_PROGRAM_OBJECT_ARB));
         glCheck(glUseProgramObjectARB(m_shaderProgram));
 
         // Get parameter location and assign it new values
-        GLint location = glGetUniformLocationARB(m_shaderProgram, name.c_str());
+        GLint location = glCheck(glGetUniformLocationARB(m_shaderProgram, name.c_str()));
         if (location != -1)
+        {
             glCheck(glUniform2fARB(location, x, y));
+        }
         else
+        {
             err() << "Parameter \"" << name << "\" not found in shader" << std::endl;
-
+        }
+        
         // Disable program
         glCheck(glUseProgramObjectARB(program));
     }
@@ -272,15 +280,19 @@ void Shader::setParameter(const std::string& name, float x, float y, float z)
         ensureGlContext();
 
         // Enable program
-        GLhandleARB program = glGetHandleARB(GL_PROGRAM_OBJECT_ARB);
+        GLhandleARB program = glCheck(glGetHandleARB(GL_PROGRAM_OBJECT_ARB));
         glCheck(glUseProgramObjectARB(m_shaderProgram));
 
         // Get parameter location and assign it new values
-        GLint location = glGetUniformLocationARB(m_shaderProgram, name.c_str());
+        GLint location = glCheck(glGetUniformLocationARB(m_shaderProgram, name.c_str()));
         if (location != -1)
+        {
             glCheck(glUniform3fARB(location, x, y, z));
+        }
         else
+        {
             err() << "Parameter \"" << name << "\" not found in shader" << std::endl;
+        }
 
         // Disable program
         glCheck(glUseProgramObjectARB(program));
@@ -296,15 +308,19 @@ void Shader::setParameter(const std::string& name, float x, float y, float z, fl
         ensureGlContext();
 
         // Enable program
-        GLhandleARB program = glGetHandleARB(GL_PROGRAM_OBJECT_ARB);
+        GLhandleARB program = glCheck(glGetHandleARB(GL_PROGRAM_OBJECT_ARB));
         glCheck(glUseProgramObjectARB(m_shaderProgram));
 
         // Get parameter location and assign it new values
-        GLint location = glGetUniformLocationARB(m_shaderProgram, name.c_str());
+        GLint location = glCheck(glGetUniformLocationARB(m_shaderProgram, name.c_str()));
         if (location != -1)
+        {
             glCheck(glUniform4fARB(location, x, y, z, w));
+        }
         else
+        {
             err() << "Parameter \"" << name << "\" not found in shader" << std::endl;
+        }
 
         // Disable program
         glCheck(glUseProgramObjectARB(program));
@@ -341,15 +357,19 @@ void Shader::setParameter(const std::string& name, const sf::Transform& transfor
         ensureGlContext();
 
         // Enable program
-        GLhandleARB program = glGetHandleARB(GL_PROGRAM_OBJECT_ARB);
+        GLhandleARB program = glCheck(glGetHandleARB(GL_PROGRAM_OBJECT_ARB));
         glCheck(glUseProgramObjectARB(m_shaderProgram));
 
         // Get parameter location and assign it new values
-        GLint location = glGetUniformLocationARB(m_shaderProgram, name.c_str());
+        GLint location = glCheck(glGetUniformLocationARB(m_shaderProgram, name.c_str()));
         if (location != -1)
+        {
             glCheck(glUniformMatrix4fvARB(location, 1, GL_FALSE, transform.getMatrix()));
+        }
         else
+        {
             err() << "Parameter \"" << name << "\" not found in shader" << std::endl;
+        }
 
         // Disable program
         glCheck(glUseProgramObjectARB(program));
@@ -365,7 +385,7 @@ void Shader::setParameter(const std::string& name, const Texture& texture)
         ensureGlContext();
 
         // Find the location of the variable in the shader
-        int location = glGetUniformLocationARB(m_shaderProgram, name.c_str());
+        int location = glCheck(glGetUniformLocationARB(m_shaderProgram, name.c_str()));
         if (location == -1)
         {
             err() << "Texture \"" << name << "\" not found in shader" << std::endl;
@@ -403,7 +423,7 @@ void Shader::setParameter(const std::string& name, CurrentTextureType)
         ensureGlContext();
 
         // Find the location of the variable in the shader
-        m_currentTexture = glGetUniformLocationARB(m_shaderProgram, name.c_str());
+        m_currentTexture = glCheck(glGetUniformLocationARB(m_shaderProgram, name.c_str()));
         if (m_currentTexture == -1)
             err() << "Texture \"" << name << "\" not found in shader" << std::endl;
     }
@@ -468,13 +488,13 @@ bool Shader::compile(const char* vertexShaderCode, const char* fragmentShaderCod
         glCheck(glDeleteObjectARB(m_shaderProgram));
 
     // Create the program
-    m_shaderProgram = glCreateProgramObjectARB();
+    m_shaderProgram = glCheck(glCreateProgramObjectARB());
 
     // Create the vertex shader if needed
     if (vertexShaderCode)
     {
         // Create and compile the shader
-        GLhandleARB vertexShader = glCreateShaderObjectARB(GL_VERTEX_SHADER_ARB);
+        GLhandleARB vertexShader = glCheck(glCreateShaderObjectARB(GL_VERTEX_SHADER_ARB));
         glCheck(glShaderSourceARB(vertexShader, 1, &vertexShaderCode, NULL));
         glCheck(glCompileShaderARB(vertexShader));
 
@@ -502,7 +522,7 @@ bool Shader::compile(const char* vertexShaderCode, const char* fragmentShaderCod
     if (fragmentShaderCode)
     {
         // Create and compile the shader
-        GLhandleARB fragmentShader = glCreateShaderObjectARB(GL_FRAGMENT_SHADER_ARB);
+        GLhandleARB fragmentShader = glCheck(glCreateShaderObjectARB(GL_FRAGMENT_SHADER_ARB));
         glCheck(glShaderSourceARB(fragmentShader, 1, &fragmentShaderCode, NULL));
         glCheck(glCompileShaderARB(fragmentShader));
 
