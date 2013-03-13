@@ -33,6 +33,14 @@ set(SRC
     ${SRCROOT}/WindowImpl.hpp
     ${INCROOT}/WindowStyle.hpp
 )
+
+if(LINUX AND SFML_EMBEDDED_SYSTEM)
+	set(SRC ${SRC}
+		${SRCROOT}/EGLCheck.cpp
+		${SRCROOT}/EGLCheck.hpp
+		)
+endif()
+
 source_group("" FILES ${SRC})
 
 # add platform specific sources
