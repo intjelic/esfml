@@ -61,8 +61,6 @@ elseif(LINUX)
     set(PLATFORM_SRC
         ${SRCROOT}/Linux/Display.cpp
         ${SRCROOT}/Linux/Display.hpp
-        ${SRCROOT}/Linux/GlxContext.cpp
-        ${SRCROOT}/Linux/GlxContext.hpp
         ${SRCROOT}/Linux/InputImpl.cpp
         ${SRCROOT}/Linux/InputImpl.hpp
         ${SRCROOT}/Linux/JoystickImpl.cpp
@@ -71,6 +69,19 @@ elseif(LINUX)
         ${SRCROOT}/Linux/WindowImplX11.cpp
         ${SRCROOT}/Linux/WindowImplX11.hpp
     )
+
+    if(NOT SFML_EMBEDDED_SYSTEM)
+		set(PLATFORM_SRC ${PLATFORM_SRC}
+			${SRCROOT}/Linux/GlxContext.cpp
+			${SRCROOT}/Linux/GlxContext.hpp
+		)
+    else()
+		set(PLATFORM_SRC ${PLATFORM_SRC}
+			${SRCROOT}/Linux/EGLContext.cpp
+			${SRCROOT}/Linux/EGLContext.hpp
+		)
+    endif()
+
     source_group("linux" FILES ${PLATFORM_SRC})
 else() # MACOSX
     set(PLATFORM_SRC

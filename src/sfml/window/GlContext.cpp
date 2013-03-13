@@ -45,8 +45,13 @@
 
 #elif defined(SFML_SYSTEM_LINUX) || defined(SFML_SYSTEM_FREEBSD)
 
-    #include <sfml/window/Linux/GlxContext.hpp>
-    typedef sf::priv::GlxContext ContextType;
+    #ifndef SFML_EMBEDDED_SYSTEM
+        #include <sfml/window/Linux/GlxContext.hpp>
+        typedef sf::priv::GlxContext ContextType;
+    #else
+        #include <sfml/window/Linux/EGLContext.hpp>
+        typedef sf::priv::_EGLContext ContextType;
+    #endif
 
 #elif defined(SFML_SYSTEM_MACOS)
 
