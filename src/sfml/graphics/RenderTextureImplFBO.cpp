@@ -48,6 +48,8 @@ m_depthBuffer(0)
 ////////////////////////////////////////////////////////////////////////////////
 RenderTextureImplFBO::~RenderTextureImplFBO()
 {
+    #ifndef SFML_EMBEDDED_SYSTEM
+
     ensureGlContext();
 
     // Destroy the depth buffer
@@ -66,24 +68,36 @@ RenderTextureImplFBO::~RenderTextureImplFBO()
 
     // Delete the context
     delete m_context;
+
+    #endif
 }
 
 
 ////////////////////////////////////////////////////////////////////////////////
 bool RenderTextureImplFBO::isAvailable()
 {
-    ensureGlContext();
+    #ifndef SFML_EMBEDDED_SYSTEM
 
-    // Make sure that GLEW is initialized
-    priv::ensureGlewInit();
+        ensureGlContext();
 
-    return GLEW_EXT_framebuffer_object != 0;
+        // Make sure that GLEW is initialized
+        priv::ensureGlewInit();
+
+        return GLEW_EXT_framebuffer_object != 0;
+
+    #else
+
+        return false;
+
+    #endif
 }
 
 
 ////////////////////////////////////////////////////////////////////////////////
 bool RenderTextureImplFBO::create(unsigned int width, unsigned int height, unsigned int textureId, bool depthBuffer)
 {
+    #ifndef SFML_EMBEDDED_SYSTEM
+
     // Create the context
     m_context = new Context;
 
@@ -127,13 +141,21 @@ bool RenderTextureImplFBO::create(unsigned int width, unsigned int height, unsig
     }
 
     return true;
+
+    #else
+
+    return false;
+
+    #endif
 }
 
 
 ////////////////////////////////////////////////////////////////////////////////
 bool RenderTextureImplFBO::activate(bool active)
 {
+    #ifndef SFML_EMBEDDED_SYSTEM
     return m_context->setActive(active);
+    #endif
 }
 
 
