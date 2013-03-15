@@ -143,7 +143,11 @@ bool Texture::create(unsigned int width, unsigned int height)
 
     // Initialize the texture
     glCheck(glBindTexture(GL_TEXTURE_2D, m_texture));
-    glCheck(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, m_actualSize.x, m_actualSize.y, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL));
+    #ifndef SFML_EMBEDDED_SYSTEM
+        glCheck(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, m_actualSize.x, m_actualSize.y, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL));
+    #else
+        glCheck(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, m_actualSize.x, m_actualSize.y, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL));
+    #endif
     glCheck(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, m_isRepeated ? GL_REPEAT : GL_CLAMP_TO_EDGE));
     glCheck(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, m_isRepeated ? GL_REPEAT : GL_CLAMP_TO_EDGE));
     glCheck(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, m_isSmooth ? GL_LINEAR : GL_NEAREST));
@@ -262,7 +266,11 @@ Image Texture::copyToImage() const
     {
         // Texture is not padded nor flipped, we can use a direct copy
         glCheck(glBindTexture(GL_TEXTURE_2D, m_texture));
-        glCheck(glGetTexImage(GL_TEXTURE_2D, 0, GL_RGBA, GL_UNSIGNED_BYTE, &pixels[0]));
+        #ifndef SFML_EMBEDDED_SYSTEM
+            glCheck(glGetTexImage(GL_TEXTURE_2D, 0, GL_RGBA8, GL_UNSIGNED_BYTE, &pixels[0]));
+        #else
+            glCheck(glReadPixels(0, 0, m_size.x, m_size.y, GL_RGBA, GL_UNSIGNED_BYTE, &pixels[0]));
+        #endif
     }
     else
     {
@@ -271,7 +279,11 @@ Image Texture::copyToImage() const
         // All the pixels will first be copied to a temporary array
         std::vector<Uint8> allPixels(m_actualSize.x * m_actualSize.y * 4);
         glCheck(glBindTexture(GL_TEXTURE_2D, m_texture));
-        glCheck(glGetTexImage(GL_TEXTURE_2D, 0, GL_RGBA, GL_UNSIGNED_BYTE, &allPixels[0]));
+        #ifndef SFML_EMBEDDED_SYSTEM
+            glCheck(glGetTexImage(GL_TEXTURE_2D, 0, GL_RGBA8, GL_UNSIGNED_BYTE, &allPixels[0]));
+        #else
+            glCheck(glReadPixels(0, 0, m_size.x, m_size.y, GL_RGBA, GL_UNSIGNED_BYTE, &pixels[0]));
+        #endif
 
         // Then we copy the useful pixels from the temporary array to the final one
         const Uint8* src = &allPixels[0];
@@ -515,23 +527,32 @@ unsigned int Texture::getValidSize(unsigned int size)
 {
     ensureGlContext();
 
-    // Make sure that GLEW is initialized
-    priv::ensureGlewInit();
+    #ifndef SFML_EMBEDDED_SYSTEM
 
-    if (GLEW_ARB_texture_non_power_of_two)
-    {
-        // If hardware supports NPOT textures, then just return the unmodified size
+        // Make sure that GLEW is initialized
+        priv::ensureGlewInit();
+
+        if (GLEW_ARB_texture_non_power_of_two)
+        {
+            // If hardware supports NPOT textures, then just return the unmodified size
+            return size;
+        }
+        else
+        {
+            // If hardware doesn't support NPOT textures, we calculate the nearest power of two
+            unsigned int powerOfTwo = 1;
+            while (powerOfTwo < size)
+                powerOfTwo *= 2;
+
+            return powerOfTwo;
+        }
+
+    #else
+
+        // Embedded systems don't support  NPOT textures
         return size;
-    }
-    else
-    {
-        // If hardware doesn't support NPOT textures, we calculate the nearest power of two
-        unsigned int powerOfTwo = 1;
-        while (powerOfTwo < size)
-            powerOfTwo *= 2;
 
-        return powerOfTwo;
-    }
+    #endif
 }
 
 } // namespace sf
