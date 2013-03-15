@@ -265,7 +265,8 @@ void GlContext::initialize()
     setActive(true);
 
     // Retrieve the context version number
-    const GLubyte* version = glCheck(glGetString(GL_VERSION));
+    //const GLubyte* version = glCheck(glGetString(GL_VERSION));
+    const GLubyte* version = glGetString(GL_VERSION);
     if (version)
     {
         // The beginning of the returned string is "major.minor" (this is standard)
