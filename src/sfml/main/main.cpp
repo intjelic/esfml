@@ -71,7 +71,7 @@ struct ActivityStates
     bool terminated;
 };
 
-sf::priv::ActivityStates* getStates(ANativeActivity* activity)
+sf::priv::ActivityStates* retrieveStates(ANativeActivity* activity)
 {
     // Hide the ugly cast we find in each callback function
     return (sf::priv::ActivityStates*)activity->instance;
@@ -130,7 +130,7 @@ void* main(ActivityStates* states)
 static void onDestroy(ANativeActivity* activity)
 {
     // Retrieve our activity states from the activity instance
-    sf::priv::ActivityStates* states = sf::priv::getStates(activity);
+    sf::priv::ActivityStates* states = sf::priv::retrieveStates(activity);
     
     // Wait for the main thread to be terminated
     {
