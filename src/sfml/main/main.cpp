@@ -44,13 +44,10 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, INT)
 
 #elif defined(ANDROID)
 
-#include <android/native_activity.h>
-
 #include <sfml/system/sleep.hpp>
 #include <sfml/system/Thread.hpp>
-#include <sfml/system/Mutex.hpp>
 #include <sfml/system/Lock.hpp>
-
+#include <sfml/main/activity.hpp>
 
 extern int main(int argc, char *argv[]);
 
@@ -58,20 +55,17 @@ namespace sf
 {
 namespace priv
 {
-struct ActivityStates
+ActivityStates* getActivityStates(ActivityStates* initializedStates)
 {
-    ANativeActivity* activity;
+    static ActivityStates* states = NULL;
 
-    void* savedState;
-    size_t savedStateSize;
+    if (!states)
+        states = initializedStates;
+        
+    return states;
+}
 
-    sf::Mutex mutex;
-
-    bool initialized;
-    bool terminated;
-};
-
-sf::priv::ActivityStates* retrieveStates(ANativeActivity* activity)
+ActivityStates* retrieveStates(ANativeActivity* activity)
 {
     // Hide the ugly cast we find in each callback function
     return (sf::priv::ActivityStates*)activity->instance;
@@ -183,10 +177,22 @@ static void onWindowFocusChanged(ANativeActivity* activity, int focused)
 
 static void onNativeWindowCreated(ANativeActivity* activity, ANativeWindow* window)
 {
+    sf::priv::ActivityStates* states = sf::priv::retrieveStates(activity);
+
+    sf::Mutex mutex;
+    sf::Lock lock(mutex);
+      
+    states->window = window;
 }
 
 static void onNativeWindowDestroyed(ANativeActivity* activity, ANativeWindow* window)
 {
+    sf::priv::ActivityStates* states = sf::priv::retrieveStates(activity);
+
+    sf::Mutex mutex;
+    sf::Lock lock(mutex);
+    
+    states->window = NULL;
 }
 
 static void onInputQueueCreated(ANativeActivity* activity, AInputQueue* queue)
@@ -204,6 +210,8 @@ void ANativeActivity_onCreate(ANativeActivity* activity, void* savedState, size_
     states = new sf::priv::ActivityStates;
 
     // Initialize the states value
+    states->window = NULL;
+    
     if (savedState != NULL) {
         states->savedState = malloc(savedStateSize);
         states->savedStateSize = savedStateSize;
@@ -213,6 +221,9 @@ void ANativeActivity_onCreate(ANativeActivity* activity, void* savedState, size_
     states->initialized = false;
     states->terminated = false;
 
+    // Share it across the SFML modules
+    sf::priv::getActivityStates(states);
+    
     // These functions will update the activity states and then keep the SFML
     // in the know
     activity->callbacks->onDestroy = onDestroy;
@@ -228,7 +239,7 @@ void ANativeActivity_onCreate(ANativeActivity* activity, void* savedState, size_
     activity->callbacks->onNativeWindowDestroyed = onNativeWindowDestroyed;
     activity->callbacks->onInputQueueCreated = onInputQueueCreated;
     activity->callbacks->onInputQueueDestroyed = onInputQueueDestroyed;
-      
+    
     // Share this activity with the callback functions
     states->activity = activity;
     
