@@ -47,6 +47,10 @@
     #include <GL/gl.h>
     #include <GL/glu.h>
 
+#elif defined(SFML_SYSTEM_ANDROID)
+
+    #include <GLES/gl.h>
+
 #elif defined(SFML_SYSTEM_LINUX) || defined(SFML_SYSTEM_FREEBSD)
 
     #ifndef SFML_EMBEDDED_SYSTEM
