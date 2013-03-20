@@ -140,6 +140,9 @@ static void onDestroy(ANativeActivity* activity)
         sf::sleep(sf::milliseconds(20));
     }
 
+    // Delete our allocated states
+    delete states;
+    
     // The application should now terminate
 }
 
