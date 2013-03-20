@@ -47,6 +47,11 @@ namespace sf
     // Window handle is HWND (HWND__*) on Windows
     typedef HWND__* WindowHandle;
 
+#elif defined(SFML_SYSTEM_ANDROID)
+
+    // Window handle doesn't exist on Android
+    typedef void* WindowHandle;
+
 #elif defined(SFML_SYSTEM_LINUX) || defined(SFML_SYSTEM_FREEBSD)
 
     // Window handle is Window (unsigned long) on Unix - X11
