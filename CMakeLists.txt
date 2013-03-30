@@ -1,7 +1,9 @@
-
 cmake_minimum_required(VERSION 2.8)
 
-include(cmake/Macros.cmake)
+# allow to put Platform directory in cmake/
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake") 
+
+include(Macros)
 
 # set a default build type if none was provided
 # this has to be done before the project() instruction!
