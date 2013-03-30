@@ -9,6 +9,14 @@
 # - for other compilers and OSes, static build is not encouraged so we don't try to
 #   pre-link dependencies, we just "link" them so that the SFML samples can compile
 #   out-of-the-box (CMake forwards the dependencies automatically)
+
+macro(sfml_set_option var default type docstring)
+    if(NOT DEFINED ${var})
+        set(${var} ${default})
+    endif()
+    set(${var} ${${var}} CACHE ${type} ${docstring} FORCE)
+endmacro()
+
 macro(sfml_static_add_libraries target)
     if(WINDOWS AND COMPILER_GCC)
         # Windows - gcc

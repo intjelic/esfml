@@ -1,13 +1,7 @@
 
 cmake_minimum_required(VERSION 2.8)
 
-# define a macro that helps defining an option
-macro(sfml_set_option var default type docstring)
-    if(NOT DEFINED ${var})
-        set(${var} ${default})
-    endif()
-    set(${var} ${${var}} CACHE ${type} ${docstring} FORCE)
-endmacro()
+include(cmake/Macros.cmake)
 
 # set a default build type if none was provided
 # this has to be done before the project() instruction!
