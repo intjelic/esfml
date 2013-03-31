@@ -33,8 +33,10 @@
 #include <sfml/system/NonCopyable.hpp>
 #include <sfml/system/String.hpp>
 #include <sfml/window/Event.hpp>
-#include <sfml/window/Joystick.hpp>
-#include <sfml/window/JoystickImpl.hpp>
+#ifndef SFML_SYSTEM_ANDROID
+	#include <sfml/window/Joystick.hpp>
+	#include <sfml/window/JoystickImpl.hpp>
+#endif
 #include <sfml/window/VideoMode.hpp>
 #include <sfml/window/WindowHandle.hpp>
 #include <sfml/window/ContextSettings.hpp>
@@ -231,8 +233,10 @@ private :
     // Member data
     ////////////////////////////////////////////////////////////////////////////
     std::queue<Event> m_events;                     ///< Queue of available events
+    #ifndef SFML_SYSTEM_ANDROID
     JoystickState     m_joyStates[Joystick::Count]; ///< Previous state of the joysticks
     float             m_joyThreshold;               ///< Joystick threshold (minimum motion for MOVE event to be generated)
+    #endif
 };
 
 } // namespace priv

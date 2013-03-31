@@ -28,7 +28,9 @@
 ////////////////////////////////////////////////////////////////////////////////
 #include <sfml/window/WindowImpl.hpp>
 #include <sfml/window/Event.hpp>
-#include <sfml/window/JoystickManager.hpp>
+#ifndef SFML_SYSTEM_ANDROID
+	#include <sfml/window/JoystickManager.hpp>
+#endif
 #include <sfml/system/sleep.hpp>
 #include <algorithm>
 #include <cmath>
@@ -70,6 +72,7 @@ WindowImpl* WindowImpl::create(WindowHandle handle)
 
 
 ////////////////////////////////////////////////////////////////////////////////
+#ifndef SFML_SYSTEM_ANDROID
 WindowImpl::WindowImpl() :
 m_joyThreshold(0.1f)
 {
@@ -78,6 +81,11 @@ m_joyThreshold(0.1f)
     for (unsigned int i = 0; i < Joystick::Count; ++i)
         m_joyStates[i] = JoystickManager::getInstance().getState(i);
 }
+#else
+WindowImpl::WindowImpl()
+{
+}
+#endif
 
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -90,7 +98,9 @@ WindowImpl::~WindowImpl()
 ////////////////////////////////////////////////////////////////////////////////
 void WindowImpl::setJoystickThreshold(float threshold)
 {
+#ifndef SFML_SYSTEM_ANDROID
     m_joyThreshold = threshold;
+#endif
 }
 
 
@@ -102,8 +112,10 @@ bool WindowImpl::popEvent(Event& event, bool block)
     {
         if (!block)
         {
-            // Non-blocking mode: process events and continue
-            processJoystickEvents();
+            // Non-blocking mode: process events and continue	
+            #ifndef SFML_SYSTEM_ANDROID
+                processJoystickEvents();
+            #endif
             processEvents();
         }
         else
@@ -115,7 +127,9 @@ bool WindowImpl::popEvent(Event& event, bool block)
             // events (which require polling)
             while (m_events.empty())
             {
+            #ifndef SFML_SYSTEM_ANDROID
                 processJoystickEvents();
+            #endif
                 processEvents();
                 sleep(milliseconds(10));
             }
@@ -145,6 +159,7 @@ void WindowImpl::pushEvent(const Event& event)
 ////////////////////////////////////////////////////////////////////////////////
 void WindowImpl::processJoystickEvents()
 {
+#ifndef SFML_SYSTEM_ANDROID
     // First update the global joystick states
     JoystickManager::getInstance().update();
 
@@ -204,6 +219,7 @@ void WindowImpl::processJoystickEvents()
             }
         }
     }
+#endif
 }
 
 
