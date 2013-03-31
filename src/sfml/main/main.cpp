@@ -75,8 +75,7 @@ ActivityStates* retrieveStates(ANativeActivity* activity)
 static void initializeMain(ActivityStates* states)
 {
     // Protect from concurent access
-    sf::Mutex mutex;
-    sf::Lock lock(mutex);
+    sf::Lock lock(states->mutex);
 
     // Nothing to do; will initialize things later
     // ...
@@ -85,8 +84,7 @@ static void initializeMain(ActivityStates* states)
 static void terminateMain(ActivityStates* states)
 {
     // Protect from concurent access
-    sf::Mutex mutex;
-    sf::Lock lock(mutex);
+    sf::Lock lock(states->mutex);
 
     // Nothing to do; will terminate things later
     // ...
@@ -96,10 +94,9 @@ void* main(ActivityStates* states)
 {
     // Initialize the thread before giving the hand
     initializeMain(states);
-    
-    sf::Mutex mutex;
+   
     {
-        sf::Lock lock(mutex);
+        sf::Lock lock(states->mutex);
         
         states->initialized = true;
     }
@@ -111,7 +108,8 @@ void* main(ActivityStates* states)
     terminateMain(states);
 
     {
-        sf::Lock lock(mutex);
+        sf::Lock lock(states->mutex);
+        
         states->terminated = true;
     }
 
@@ -127,12 +125,16 @@ static void onDestroy(ANativeActivity* activity)
     sf::priv::ActivityStates* states = sf::priv::retrieveStates(activity);
     
     // Wait for the main thread to be terminated
-    {
-    sf::Lock lock(states->mutex);
-
+    states->mutex.lock();
+    
     while (!states->terminated)
+    {
+        states->mutex.unlock();
         sf::sleep(sf::milliseconds(20));
+        states->mutex.lock();
     }
+    
+    states->mutex.unlock();
 
     // Delete our allocated states
     delete states;
@@ -178,19 +180,15 @@ static void onWindowFocusChanged(ANativeActivity* activity, int focused)
 static void onNativeWindowCreated(ANativeActivity* activity, ANativeWindow* window)
 {
     sf::priv::ActivityStates* states = sf::priv::retrieveStates(activity);
+    sf::Lock lock(states->mutex);
 
-    sf::Mutex mutex;
-    sf::Lock lock(mutex);
-      
     states->window = window;
 }
 
 static void onNativeWindowDestroyed(ANativeActivity* activity, ANativeWindow* window)
 {
     sf::priv::ActivityStates* states = sf::priv::retrieveStates(activity);
-
-    sf::Mutex mutex;
-    sf::Lock lock(mutex);
+    sf::Lock lock(states->mutex);
     
     states->window = NULL;
 }
@@ -248,13 +246,16 @@ void ANativeActivity_onCreate(ANativeActivity* activity, void* savedState, size_
     thread->launch();
     
     // Wait for the main thread to be initialized
-    sf::Mutex mutex;
+    states->mutex.lock();
+    
+    while (!states->initialized)
     {
-        sf::Lock lock(mutex);
-
-        while (!states->initialized)
-            sf::sleep(sf::milliseconds(20));
+        states->mutex.unlock();
+        sf::sleep(sf::milliseconds(20));
+        states->mutex.lock();
     }
+    
+    states->mutex.unlock();
 
     // Share this state with the callback functions
     activity->instance = states;
