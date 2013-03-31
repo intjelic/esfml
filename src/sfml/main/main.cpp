@@ -148,6 +148,15 @@ static void onStart(ANativeActivity* activity)
 
 static void onResume(ANativeActivity* activity)
 {
+    // Retrieve our activity states from the activity instance
+    sf::priv::ActivityStates* states = sf::priv::retrieveStates(activity);
+	sf::Lock lock(states->mutex);
+	
+	// Send an event to warn people the activity has been resumed
+    sf::Event event;
+    event.type = sf::Event::MouseEntered;
+
+    states->pendingEvents.push_back(event);
 }
 
 static void* onSaveInstanceState(ANativeActivity* activity, size_t* outLen)
@@ -159,6 +168,15 @@ static void* onSaveInstanceState(ANativeActivity* activity, size_t* outLen)
 
 static void onPause(ANativeActivity* activity)
 {
+    // Retrieve our activity states from the activity instance
+    sf::priv::ActivityStates* states = sf::priv::retrieveStates(activity);
+	sf::Lock lock(states->mutex);
+	
+	// Send an event to warn people the activity has been paused
+    sf::Event event;
+    event.type = sf::Event::MouseLeft;
+
+    states->pendingEvents.push_back(event);
 }
 
 static void onStop(ANativeActivity* activity)
@@ -203,7 +221,7 @@ static void onInputQueueDestroyed(ANativeActivity* activity, AInputQueue* queue)
 
 void ANativeActivity_onCreate(ANativeActivity* activity, void* savedState, size_t savedStateSize)
 {
-    // Create an activity states (will make use known events we care about)
+    // Create an activity states (will make us known about events we care)
     sf::priv::ActivityStates* states = NULL;
     states = new sf::priv::ActivityStates;
 
