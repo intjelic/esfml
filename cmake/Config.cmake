@@ -35,6 +35,8 @@ elseif(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
 elseif(${CMAKE_SYSTEM_NAME} MATCHES "FreeBSD")
     # FreeBSD compile path is the same as Linux
     set(LINUX 1)
+elseif(${CMAKE_SYSTEM_NAME} MATCHES "Android")
+	set(ANDROID 1)
 elseif(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
     set(MACOSX 1)
 

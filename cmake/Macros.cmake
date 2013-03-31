@@ -114,6 +114,7 @@ macro(sfml_add_library target)
     # parse the arguments
     sfml_parse_arguments(THIS "SOURCES;DEPENDS;EXTERNAL_LIBS" "" ${ARGN})
 
+if(NOT ANDROID)
     # create the target
     add_library(${target} ${THIS_SOURCES})
 
@@ -204,7 +205,79 @@ macro(sfml_add_library target)
             LIBRARY DESTINATION lib${LIB_SUFFIX} COMPONENT bin 
             ARCHIVE DESTINATION lib${LIB_SUFFIX} COMPONENT devel
             FRAMEWORK DESTINATION ${CMAKE_INSTALL_FRAMEWORK_PREFIX} COMPONENT bin)
+else()
+    # create an empty target added to the default build
+    add_custom_target(${target} ALL)
 
+    # get the name module (extract 'network' from 'sfml-network' for example)
+    string(SUBSTRING ${target} 5 -1 MODULE_NAME)
+    
+    set(APPLICATION_MK ${CMAKE_BINARY_DIR}/src/sfml/${MODULE_NAME}/Application.mk)
+
+    set(INCLUDE_DIR ${PROJECT_SOURCE_DIR}/include)
+    set(SRC_DIR ${PROJECT_SOURCE_DIR}/src)
+    
+    # BUILD rules
+    add_custom_command(TARGET ${target} PRE_BUILD COMMAND touch ${APPLICATION_MK})
+    add_custom_command(TARGET ${target} PRE_BUILD COMMAND echo "APP_PLATFORM := android-9" >> ${APPLICATION_MK})
+    add_custom_command(TARGET ${target} PRE_BUILD COMMAND echo "APP_STL := stlport_static" >> ${APPLICATION_MK})
+    add_custom_command(TARGET ${target} PRE_BUILD COMMAND echo "APP_BUILD_SCRIPT := Android.mk" >> ${APPLICATION_MK})
+    add_custom_command(TARGET ${target} PRE_BUILD COMMAND echo "APP_MODULES := ${target}" >> ${APPLICATION_MK})
+    add_custom_command(TARGET ${target} PRE_BUILD COMMAND echo "APP_CPPFLAGS += -I${INCLUDE_DIR}" >> ${APPLICATION_MK})
+    add_custom_command(TARGET ${target} PRE_BUILD COMMAND echo "APP_CPPFLAGS += -I${SRC_DIR}" >> ${APPLICATION_MK})
+    add_custom_command(TARGET ${target} PRE_BUILD COMMAND echo "APP_CPPFLAGS += -DSFML_EMBEDDED_SYSTEM" >> ${APPLICATION_MK})
+    add_custom_command(TARGET ${target} PRE_BUILD COMMAND echo "APP_CPPFLAGS += -DSFML_DEBUG" >> ${APPLICATION_MK})
+    
+    if (ANDROID_ABI_ARM)
+    add_custom_command(TARGET ${target} PRE_BUILD COMMAND echo "APP_ABI += armeabi" >> ${APPLICATION_MK})
+    endif()
+    
+    if (ANDROID_ABI_ARMv7)
+    add_custom_command(TARGET ${target} PRE_BUILD COMMAND echo "APP_ABI += armeabi-v7a" >> ${APPLICATION_MK})
+    endif()
+
+    if (ANDROID_ABI_MIPS)
+    add_custom_command(TARGET ${target} PRE_BUILD COMMAND echo "APP_ABI += mips" >> ${APPLICATION_MK})
+    endif()
+    
+    if (ANDROID_ABI_x86)
+    add_custom_command(TARGET ${target} PRE_BUILD COMMAND echo "APP_ABI += x86" >> ${APPLICATION_MK})
+    endif()
+
+    set(DIR ${PROJECT_SOURCE_DIR}/src/sfml/${MODULE_NAME})
+    set(NDK_MODULE_PATH NDK_MODULE_PATH=${PROJECT_SOURCE_DIR}/extlibs/android)
+    set(NDK_PROJECT_PATH NDK_PROJECT_PATH=${PROJECT_SOURCE_DIR}/src/sfml/${MODULE_NAME})
+    set(NDK_BUILD ${ANDROID_NDK_PATH}/ndk-build)
+    set(NDK_APPLICATION_MK NDK_APPLICATION_MK=${APPLICATION_MK})
+
+    # it should invoke the ndk-build scripts from the ndk with the right parameters
+    # e.g: NDK_PROJECT_PATH=/home/sonkun/Desktop/esfml/src/sfml/main
+    #   $NDK/ndk-build -C /home/sonkun/Desktop/esfml/src/sfml/main
+    #   NDK_APPLICATION_MK=/home/sonkun/Desktop/esfml/src/sfml/main/Application.mk
+    add_custom_command(TARGET ${target} POST_BUILD COMMAND ${NDK_PROJECT_PATH} ${NDK_MODULE_PATH} ${NDK_BUILD} -C ${DIR} ${NDK_APPLICATION_MK})
+    add_custom_command(TARGET ${target} POST_BUILD COMMAND mv ${PROJECT_SOURCE_DIR}/src/sfml/${MODULE_NAME}/obj ${CMAKE_BINARY_DIR}/src/sfml/${MODULE_NAME})
+
+    ## CLEAN RULES (not working)
+    #LIST(APPEND ${CMAKE_BINARY_DIR}/jni ${FILES_TO_CLEAN})
+    #LIST(APPEND ${CMAKE_BINARY_DIR}/obj ${FILES_TO_CLEAN})
+    #set_directory_properties(PROPERTIES ADDITIONAL_MAKE_CLEAN_FILES ${CMAKE_BINARY_DIR}/obj)
+    #set_directory_properties(PROPERTIES ADDITIONAL_MAKE_CLEAN_FILES ${CMAKE_BINARY_DIR}/jni)
+
+    # INSTALL RULES
+    if (ANDROID_ABI_ARM)
+        install(DIRECTORY ${CMAKE_BINARY_DIR}/src/sfml/${MODULE_NAME}/obj/local/armeabi DESTINATION ${ANDROID_NDK_PATH}/sources/sfml/lib/)
+    endif()
+    if (ANDROID_ABI_ARMv7)
+        install(DIRECTORY ${CMAKE_BINARY_DIR}/src/sfml/${MODULE_NAME}/obj/local/armeabi-v7a DESTINATION ${ANDROID_NDK_PATH}/sources/sfml/lib)
+    endif()
+    if (ANDROID_ABI_MIPS)
+        install(DIRECTORY ${CMAKE_BINARY_DIR}/src/sfml/${MODULE_NAME}/obj/local/mips DESTINATION ${ANDROID_NDK_PATH}/sources/sfml/lib)
+    endif()
+    if (ANDROID_ABI_x86)
+        install(DIRECTORY ${CMAKE_BINARY_DIR}/src/sfml/${MODULE_NAME}/obj/local/x86 DESTINATION ${ANDROID_NDK_PATH}/sources/sfml/lib)
+    endif()
+
+endif()
 endmacro()
 
 # add a new target which is a SFML example
