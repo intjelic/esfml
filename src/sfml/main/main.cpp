@@ -86,8 +86,9 @@ static void terminateMain(ActivityStates* states)
     // Protect from concurent access
     sf::Lock lock(states->mutex);
 
-    // Nothing to do; will terminate things later
-    // ...
+    // The main thread is over, we must explicitly ask the activity to finish
+    states->mainOver = true;
+    ANativeActivity_finish(states->activity);
 }
 
 void* main(ActivityStates* states)
@@ -127,11 +128,16 @@ static void onDestroy(ANativeActivity* activity)
     // Send an event to warn people the activity is being destroyed
     {
         sf::Lock lock(states->mutex);
+        
+        // If the main thread hasn't yet finished, send the event and wait for
+        // it to finish.
+        if (!states->mainOver)
+        {
+            sf::Event event;
+            event.type = sf::Event::Closed;
 
-        sf::Event event;
-        event.type = sf::Event::Closed;
-
-        states->pendingEvents.push_back(event);
+            states->pendingEvents.push_back(event);
+        }
     }
     
     // Wait for the main thread to be terminated
@@ -243,6 +249,8 @@ void ANativeActivity_onCreate(ANativeActivity* activity, void* savedState, size_
         states->savedStateSize = savedStateSize;
         memcpy(states->savedState, savedState, savedStateSize);
     }
+    
+    states->mainOver = false;
     
     states->initialized = false;
     states->terminated = false;

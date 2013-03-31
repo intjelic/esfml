@@ -45,6 +45,8 @@ struct ActivityStates
 
     std::vector<sf::Event> pendingEvents;
     
+    bool mainOver;
+    
     bool initialized;
     bool terminated;
 };
