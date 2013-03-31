@@ -25,7 +25,9 @@
 
 
 #include <android/native_activity.h>
+#include <sfml/window/Event.hpp>
 #include <sfml/system/Mutex.hpp>
+#include <vector>
 
 namespace sf
 {
@@ -41,6 +43,8 @@ struct ActivityStates
 
     sf::Mutex mutex;
 
+    std::vector<sf::Event> pendingEvents;
+    
     bool initialized;
     bool terminated;
 };
