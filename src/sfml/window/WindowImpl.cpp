@@ -45,6 +45,11 @@
     #include <sfml/window/Linux/WindowImplX11.hpp>
     typedef sf::priv::WindowImplX11 WindowImplType;
 
+#elif defined(SFML_SYSTEM_ANDROID)
+
+    #include <sfml/window/Android/WindowImplAndroid.hpp>
+    typedef sf::priv::WindowImplAndroid WindowImplType;
+    
 #elif defined(SFML_SYSTEM_MACOS)
 
     #include <sfml/window/OSX/WindowImplCocoa.hpp>
