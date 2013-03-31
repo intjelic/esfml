@@ -124,6 +124,16 @@ static void onDestroy(ANativeActivity* activity)
     // Retrieve our activity states from the activity instance
     sf::priv::ActivityStates* states = sf::priv::retrieveStates(activity);
     
+    // Send an event to warn people the activity is being destroyed
+    {
+        sf::Lock lock(states->mutex);
+
+        sf::Event event;
+        event.type = sf::Event::Closed;
+
+        states->pendingEvents.push_back(event);
+    }
+    
     // Wait for the main thread to be terminated
     states->mutex.lock();
     
