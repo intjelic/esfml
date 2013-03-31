@@ -69,6 +69,15 @@ WindowHandle WindowImplAndroid::getSystemHandle() const
 ////////////////////////////////////////////////////////////////////////////////
 void WindowImplAndroid::processEvents()
 {
+    ActivityStates* states = getActivityStates(NULL);
+    sf::Lock lock(states->mutex);
+
+    while (!states->pendingEvents.empty())
+    {
+        sf::Event tempEvent = states->pendingEvents.back();            
+        states->pendingEvents.pop_back();
+        pushEvent(tempEvent);
+    }
 }
 
 
