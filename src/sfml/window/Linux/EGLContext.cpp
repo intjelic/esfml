@@ -31,6 +31,15 @@
 #include <sfml/window/Linux/Display.hpp>
 #include <sfml/window/EGLCheck.hpp>
 #include <sfml/system/error.hpp>
+#include <sfml/system/Mutex.hpp>
+#include <sfml/system/Lock.hpp>
+
+namespace
+{
+    // EGL resources counter and its mutex
+    unsigned int count = 0;
+    sf::Mutex mutex;
+}
 
 
 namespace sf
@@ -39,10 +48,14 @@ namespace priv
 {
 ////////////////////////////////////////////////////////////////////////////////
 _EGLContext::_EGLContext(_EGLContext* shared) :
-m_window    (0),
-m_eglContext   (NULL),
-m_ownsWindow(true)
+m_window     (0),
+m_eglContext (EGL_NO_CONTEXT),
+m_eglSurface (EGL_NO_SURFACE),
+m_ownsWindow (true)
 {
+	// Make sure the EGL display is initialized
+	initializeDisplay();
+	
     // Open a connection with the X server
     m_display = OpenDisplay();
 
@@ -58,7 +71,6 @@ m_ownsWindow(true)
                              DefaultVisual(m_display, screen),
                              0, NULL);
 
-    m_eglDisplay = eglCheck(eglGetDisplay(m_display));
 
     // Create the context
     createContext(shared, VideoMode::getDesktopMode().bitsPerPixel, ContextSettings());
@@ -68,17 +80,19 @@ m_ownsWindow(true)
 ////////////////////////////////////////////////////////////////////////////////
 _EGLContext::_EGLContext(_EGLContext* shared, const ContextSettings& settings, const WindowImpl* owner, unsigned int bitsPerPixel) :
 m_window    (0),
-m_eglContext(NULL),
+m_eglContext (EGL_NO_CONTEXT),
+m_eglSurface (EGL_NO_SURFACE),
 m_ownsWindow(false)
 {
+	// Make sure the EGL display is initialized
+	initializeDisplay();
+	
     // Open a connection with the X server
     // (important: must be the same display as the owner window)
     m_display = OpenDisplay();
 
     // Get the owner window and its device context
     m_window = static_cast< ::Window>(owner->getSystemHandle());
-
-    m_eglDisplay = eglCheck(eglGetDisplay(m_display));
 
     // Create the context
     if (m_window)
@@ -89,9 +103,13 @@ m_ownsWindow(false)
 ////////////////////////////////////////////////////////////////////////////////
 _EGLContext::_EGLContext(_EGLContext* shared, const ContextSettings& settings, unsigned int width, unsigned int height) :
 m_window    (0),
-m_eglContext(NULL),
+m_eglContext (EGL_NO_CONTEXT),
+m_eglSurface (EGL_NO_SURFACE),
 m_ownsWindow(true)
 {
+    // Make sure the EGL display is initialized
+    initializeDisplay();
+	
     // Open a connection with the X server
     m_display = OpenDisplay();
 
@@ -106,9 +124,7 @@ m_ownsWindow(true)
                              InputOutput,
                              DefaultVisual(m_display, screen),
                              0, NULL);
-
-    m_eglDisplay = eglCheck(eglGetDisplay(m_display));
-
+                             
     // Create the context
     createContext(shared, VideoMode::getDesktopMode().bitsPerPixel, settings);
 }
@@ -132,6 +148,9 @@ _EGLContext::~_EGLContext()
         XDestroyWindow(m_display, m_window);
         XFlush(m_display);
     }
+    
+    // Terminate the EGL display if needed
+	terminateDisplay();
 }
 
 
@@ -160,30 +179,27 @@ void _EGLContext::setVerticalSyncEnabled(bool enabled)
 ////////////////////////////////////////////////////////////////////////////////
 void _EGLContext::createContext(_EGLContext* shared, unsigned int bitsPerPixel, const ContextSettings& settings)
 {
-	// TODO: the following code create the context with the best setting but it
-	// should use the requested setting (it has to perform a best visual
-	// algorithm)
-
     // Save the creation settings
     m_settings = settings;
 
-    eglCheck(eglInitialize(m_eglDisplay, NULL, NULL));
-
     EGLint nConfigs;
-    EGLConfig	aEGLConfigs[1];
+    EGLConfig aEGLConfigs[1];
 
-    // Get the best configuration available
-    eglGetConfigs(m_eglDisplay, aEGLConfigs, 1, &nConfigs);
+    eglCheck(eglGetConfigs(m_eglDisplay, aEGLConfigs, 1, &nConfigs));
 
     if (nConfigs == 0) {
         err() << "No available configuration on the display returned" << std::endl;
         return;
     }
 
-    EGLint aEGLContextAttributes[] = {
-        EGL_CONTEXT_CLIENT_VERSION, 1,
-        EGL_NONE
-    };
+    EGLint aEGLContextAttrib[] = { EGL_CONTEXT_CLIENT_VERSION, 1, EGL_NONE };
+
+    EGLContext toShared;
+
+    if (shared)
+        toShared = shared->m_eglContext;
+    else
+        toShared = EGL_NO_CONTEXT;
 
     m_eglSurface = eglCheck(eglCreateWindowSurface(m_eglDisplay, aEGLConfigs[0], (EGLNativeWindowType)m_window, NULL));
 
@@ -192,8 +208,7 @@ void _EGLContext::createContext(_EGLContext* shared, unsigned int bitsPerPixel, 
         return;
     }
 
-    // Create the context
-    m_eglContext = eglCheck(eglCreateContext(m_eglDisplay, aEGLConfigs[0], EGL_NO_CONTEXT, aEGLContextAttributes));
+    m_eglContext = eglCheck(eglCreateContext(m_eglDisplay, aEGLConfigs[0], toShared, aEGLContextAttrib));
 
     if (m_eglContext == EGL_NO_CONTEXT) {
         err() << "Failed to create a EGL context" << std::endl;
@@ -201,6 +216,44 @@ void _EGLContext::createContext(_EGLContext* shared, unsigned int bitsPerPixel, 
     }
 }
 
-} // namespace priv
+void _EGLContext::initializeDisplay()
+{
+	// Protect from concurrent access
+	Lock lock(mutex);
 
+	// If this is the very first context, ...
+	if (count == 0)
+	{
+		// ... retrieve the default EGL display ...
+		m_eglDisplay = eglCheck(eglGetDisplay(EGL_DEFAULT_DISPLAY));
+		
+		// ... and initialize it
+		eglCheck(eglInitialize(m_eglDisplay, NULL, NULL));		
+
+		count++;
+	}
+}
+
+void _EGLContext::terminateDisplay()
+{
+    // Protect from concurrent access
+    Lock lock(mutex);
+
+    // Decrement the resources counter
+    count--;
+
+    // If there's no more context, ...
+    if (count == 0)
+    {
+		// we can terminate the EGL display ...
+		eglCheck(eglTerminate(m_eglDisplay));
+		
+		// and set it to EGL_NO_DISPLAY
+		m_eglDisplay = EGL_NO_DISPLAY;
+	}
+}
+
+EGLDisplay _EGLContext::m_eglDisplay = EGL_NO_DISPLAY;
+
+} // namespace priv
 } // namespace sf

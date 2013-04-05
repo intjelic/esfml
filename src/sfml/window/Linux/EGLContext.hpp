@@ -111,6 +111,9 @@ public :
 
 private :
 
+    static void initializeDisplay();
+    static void terminateDisplay();
+
     ////////////////////////////////////////////////////////////////////////////
     /// \brief Create the context
     ///
@@ -126,7 +129,7 @@ private :
     ////////////////////////////////////////////////////////////////////////////
     ::Display* m_display;    ///< Connection to the X server
     ::Window   m_window;     ///< Window to which the context is attached
-    EGLDisplay m_eglDisplay;
+    static EGLDisplay m_eglDisplay;
     EGLContext m_eglContext;
     EGLSurface m_eglSurface;
     bool       m_ownsWindow; ///< Do we own the window associated to the context?
