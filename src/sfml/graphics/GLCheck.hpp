@@ -31,10 +31,10 @@
 // Headers
 ////////////////////////////////////////////////////////////////////////////////
 #include <sfml/config.hpp>
-#include <sfml/opengl.hpp>
 #ifndef SFML_EMBEDDED_SYSTEM
     #include <GL/glew.h>
 #endif
+#include <sfml/opengl.hpp>
 #include <string>
 
 

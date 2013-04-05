@@ -32,9 +32,6 @@
 #include <sfml/system/Mutex.hpp>
 #include <sfml/system/Lock.hpp>
 #include <sfml/opengl.hpp>
-#ifndef SFML_EMBEDDED_SYSTEM
-    #include <sfml/window/glext/glext.h>
-#endif
 #include <set>
 #include <cstdlib>
 #include <cassert>
