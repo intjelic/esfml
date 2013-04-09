@@ -120,8 +120,20 @@ else() # MACOSX
 endif()
 
 # find external libraries
-find_package(OpenGL REQUIRED)
-include_directories(${OPENGL_INCLUDE_DIR})
+if(NOT SFML_EMBEDDED_SYSTEM)
+	find_package(OpenGL REQUIRED)
+else()
+	find_package(GLES REQUIRED)
+	find_package(EGL REQUIRED)
+endif()
+
+# add include directories
+if(NOT SFML_EMBEDDED_SYSTEM)
+	include_directories(${OPENGL_INCLUDE_DIR})
+else()
+	include_directories(${GLES_INCLUDE_DIR})
+	include_directories(${EGL_INCLUDE_DIR})
+endif()
 if(LINUX)
     find_package(X11 REQUIRED)
     if(NOT X11_Xrandr_FOUND)
@@ -131,7 +143,11 @@ if(LINUX)
 endif()
 
 # build the list of external libraries to link
-set(WINDOW_EXT_LIBS ${OPENGL_gl_LIBRARY})
+if(NOT SFML_EMBEDDED_SYSTEM)
+	set(WINDOW_EXT_LIBS ${OPENGL_gl_LIBRARY})
+else()
+	set(WINDOW_EXT_LIBS ${GLES_LIBRARY} ${EGL_LIBRARY})
+endif()
 if(WINDOWS)
     set(WINDOW_EXT_LIBS ${WINDOW_EXT_LIBS} winmm gdi32)
 elseif(LINUX)

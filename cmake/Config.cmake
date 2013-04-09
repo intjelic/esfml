@@ -15,6 +15,23 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
     endif()
 elseif(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
     set(LINUX 1)
+    if(${CMAKE_HOST_SYSTEM_PROCESSOR} MATCHES "arm")
+		# if the host has an ARM processor, then use OpenGL ES
+		set(SFML_EMBEDDED_SYSTEM 1)
+    else()
+		# else, check if we want to use an emulator
+		if(SFML_EMBEDDED_SYSTEM)
+			# the user must tell us where the emulator files are located
+			set(EGL_EMULATOR 1)
+			set(EGL_EMULATOR_INCLUDE_PATH $ENV{OPENGLES_EMULATOR}/include)
+			set(EGL_EMULATOR_LIBRARY $ENV{OPENGLES_EMULATOR}/bin/libEGL.so)
+			set(GLES_EMULATOR 1)
+			set(GLES_EMULATOR_INCLUDE_PATH $ENV{OPENGLES_EMULATOR}/include)
+			set(GLES_EMULATOR_LIBRARY $ENV{OPENGLES_EMULATOR}/bin/libGLESv1_CM.so)
+		endif()
+		
+    endif()
+    message(STATUS ${CMAKE_HOST_SYSTEM_PROCESSOR})
 elseif(${CMAKE_SYSTEM_NAME} MATCHES "FreeBSD")
     # FreeBSD compile path is the same as Linux
     set(LINUX 1)

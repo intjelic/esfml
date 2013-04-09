@@ -98,22 +98,35 @@ elseif(MACOSX)
 endif()
 
 # find external libraries
-find_package(OpenGL REQUIRED)
+if(NOT SFML_EMBEDDED_SYSTEM)
+	find_package(OpenGL REQUIRED)
+	find_package(GLEW REQUIRED)
+else()
+	find_package(GLES REQUIRED)
+	
+endif()
 find_package(Freetype REQUIRED)
-find_package(GLEW REQUIRED)
 find_package(JPEG REQUIRED)
 if(LINUX)
     find_package(X11 REQUIRED)
 endif()
 
 # add include paths of external libraries
-include_directories(${FREETYPE_INCLUDE_DIRS} ${GLEW_INCLUDE_PATH} ${JPEG_INCLUDE_DIR} ${OPENGL_INCLUDE_DIR})
+if(NOT SFML_EMBEDDED_SYSTEM)
+	include_directories(${FREETYPE_INCLUDE_DIRS} ${GLEW_INCLUDE_PATH} ${JPEG_INCLUDE_DIR} ${OPENGL_INCLUDE_DIR})
+else()
+	include_directories(${FREETYPE_INCLUDE_DIRS} ${JPEG_INCLUDE_DIR} ${GLES_INCLUDE_DIR})
+endif()
 
 # build the list of libraries to link
 # GL and X11 are only needed for shared build, as they are already linked by sfml-window
 set(GRAPHICS_EXT_LIBS ${FREETYPE_LIBRARY} ${GLEW_LIBRARY} ${JPEG_LIBRARY})
 if(BUILD_SHARED_LIBS)
-    set(GRAPHICS_EXT_LIBS ${GRAPHICS_EXT_LIBS} ${OPENGL_gl_LIBRARY})
+	if(NOT SFML_EMBEDDED_SYSTEM)
+		set(GRAPHICS_EXT_LIBS ${GRAPHICS_EXT_LIBS} ${OPENGL_gl_LIBRARY})
+	else()
+		set(GRAPHICS_EXT_LIBS ${GRAPHICS_EXT_LIBS} ${GLES_LIBRARY})
+	endif()
     if(LINUX)
         set(GRAPHICS_EXT_LIBS ${GRAPHICS_EXT_LIBS} ${X11_LIBRARIES})
     endif()
