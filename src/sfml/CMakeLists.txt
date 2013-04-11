@@ -41,9 +41,7 @@ if(NOT ANDROID) # the network module isn't ported yet
 add_subdirectory(network)
 endif()
 add_subdirectory(graphics)
-if(NOT ANDROID) # the audio module isn't ported yet
 add_subdirectory(audio)
-endif()
 if(WINDOWS OR ANDROID)
     add_subdirectory(main)
 endif()

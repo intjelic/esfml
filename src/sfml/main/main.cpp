@@ -50,6 +50,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, INT)
 #include <sfml/main/activity.hpp>
 
 extern int main(int argc, char *argv[]);
+JavaVM* javaVM;
 
 namespace sf
 {
@@ -309,6 +310,9 @@ static void onLowMemory(ANativeActivity* activity)
 
 void ANativeActivity_onCreate(ANativeActivity* activity, void* savedState, size_t savedStateSize)
 {
+    // Feed javaVM from openal lib to make it known about our vm instance
+    javaVM = activity->vm;
+
     // Create an activity states (will make us known about events we care)
     sf::priv::ActivityStates* states = NULL;
     states = new sf::priv::ActivityStates;

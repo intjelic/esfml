@@ -27,6 +27,16 @@ LOCAL_STATIC_LIBRARIES := jpeg freetype
 include $(PREBUILT_STATIC_LIBRARY)
 
 include $(CLEAR_VARS)
+LOCAL_MODULE := sfml-audio
+LOCAL_SRC_FILES := lib/$(TARGET_ARCH_ABI)/libsfml-audio.a
+LOCAL_EXPORT_C_INCLUDES := $(LOCAL_PATH)/include
+
+LOCAL_EXPORT_C_INCLUDES += $(LOCAL_PATH)/extlibs/include
+LOCAL_WHOLE_STATIC_LIBRARIES := ogg vorbis vorbisenc flac sndfile openal
+
+include $(PREBUILT_STATIC_LIBRARY)
+
+include $(CLEAR_VARS)
 LOCAL_MODULE := sfml-main
 LOCAL_SRC_FILES := lib/$(TARGET_ARCH_ABI)/libsfml-main.a
 LOCAL_EXPORT_C_INCLUDES := $(LOCAL_PATH)/include
