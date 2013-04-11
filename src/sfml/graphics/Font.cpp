@@ -30,6 +30,8 @@
 #include <sfml/graphics/GLCheck.hpp>
 #include <sfml/system/InputStream.hpp>
 #include <sfml/system/error.hpp>
+#include <sfml/system/Lock.hpp>
+#include <sfml/main/activity.hpp>
 #include <ft2build.h>
 #include FT_FREETYPE_H
 #include FT_GLYPH_H
@@ -101,6 +103,8 @@ Font::~Font()
 ////////////////////////////////////////////////////////////////////////////////
 bool Font::loadFromFile(const std::string& filename)
 {
+    #ifndef SFML_SYSTEM_ANDROID
+
     // Cleanup the previous resources
     cleanup();
     m_refCount = new int(1);
@@ -135,6 +139,27 @@ bool Font::loadFromFile(const std::string& filename)
     m_face = face;
 
     return true;
+
+    #else
+
+    priv::ActivityStates* states = priv::getActivityStates(NULL);
+    Lock lock(states->mutex);
+
+    AAsset* myfile = AAssetManager_open(states->activity->assetManager, filename.c_str(), AASSET_MODE_UNKNOWN);
+
+    off_t size = AAsset_getLength(myfile);
+    void* data = malloc(size);
+    int status = AAsset_read(myfile, data, size);
+
+    if (status == 0)
+    {
+        err() << "Failed to load font \"" << filename << "\" (couldn't find it)" << std::endl;
+        return false;
+    }
+
+    return loadFromMemory(data, size);
+
+    #endif
 }
 
 

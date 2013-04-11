@@ -29,6 +29,8 @@
 #include <sfml/graphics/Image.hpp>
 #include <sfml/graphics/ImageLoader.hpp>
 #include <sfml/system/error.hpp>
+#include <sfml/system/Lock.hpp>
+#include <sfml/main/activity.hpp>
 #include <algorithm>
 #include <cstring>
 
@@ -103,7 +105,28 @@ void Image::create(unsigned int width, unsigned int height, const Uint8* pixels)
 ////////////////////////////////////////////////////////////////////////////////
 bool Image::loadFromFile(const std::string& filename)
 {
-    return priv::ImageLoader::getInstance().loadImageFromFile(filename, m_pixels, m_size);
+    #ifndef SFML_SYSTEM_ANDROID
+        return priv::ImageLoader::getInstance().loadImageFromFile(filename, m_pixels, m_size);
+
+    #else
+        priv::ActivityStates* states = priv::getActivityStates(NULL);
+        Lock lock(states->mutex);
+
+        AAsset* myfile = AAssetManager_open(states->activity->assetManager, filename.c_str(), AASSET_MODE_UNKNOWN);
+
+        off_t size = AAsset_getLength(myfile);
+        void* data = malloc(size);
+        int status = AAsset_read(myfile, data, size);
+
+        if (status == 0)
+        {
+            err() << "Failed to load image \"" << filename << "\" (couldn't find it)" << std::endl;
+            return false;
+        }
+
+        return loadFromMemory(data, size);
+
+    #endif
 }
 
 
