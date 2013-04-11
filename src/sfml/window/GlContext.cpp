@@ -51,6 +51,11 @@
         typedef sf::priv::_EGLContext ContextType;
     #endif
 
+#elif defined(SFML_SYSTEM_ANDROID)
+
+    #include <sfml/window/Android/EGLContext.hpp>
+    typedef sf::priv::_EGLContext ContextType;
+
 #elif defined(SFML_SYSTEM_MACOS)
 
     #include <sfml/window/OSX/SFContext.hpp>
@@ -260,6 +265,7 @@ void GlContext::initialize()
     // Activate the context
     setActive(true);
 
+    #ifndef SFML_SYSTEM_ANDROID
     // Retrieve the context version number
     //const GLubyte* version = glCheck(glGetString(GL_VERSION));
     const GLubyte* version = glGetString(GL_VERSION);
@@ -275,6 +281,7 @@ void GlContext::initialize()
         m_settings.majorVersion = 2;
         m_settings.minorVersion = 0;
     }
+    #endif
 
     #ifndef SFML_EMBEDDED_SYSTEM
     // Enable antialiasing if needed
