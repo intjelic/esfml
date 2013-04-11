@@ -120,6 +120,40 @@ void* main(ActivityStates* states)
 } // namespace priv
 } // namespace sf
 
+static void onStart(ANativeActivity* activity)
+{
+}
+
+static void onResume(ANativeActivity* activity)
+{
+    // Retrieve our activity states from the activity instance
+    sf::priv::ActivityStates* states = sf::priv::retrieveStates(activity);
+	sf::Lock lock(states->mutex);
+	
+	// Send an event to warn people the activity has been resumed
+    sf::Event event;
+    event.type = sf::Event::MouseEntered;
+
+    states->pendingEvents.push_back(event);
+}
+
+static void onPause(ANativeActivity* activity)
+{
+    // Retrieve our activity states from the activity instance
+    sf::priv::ActivityStates* states = sf::priv::retrieveStates(activity);
+	sf::Lock lock(states->mutex);
+	
+	// Send an event to warn people the activity has been paused
+    sf::Event event;
+    event.type = sf::Event::MouseLeft;
+
+    states->pendingEvents.push_back(event);
+}
+
+static void onStop(ANativeActivity* activity)
+{
+}
+
 static void onDestroy(ANativeActivity* activity)
 {
     // Retrieve our activity states from the activity instance
@@ -158,59 +192,6 @@ static void onDestroy(ANativeActivity* activity)
     // The application should now terminate
 }
 
-static void onStart(ANativeActivity* activity)
-{
-}
-
-static void onResume(ANativeActivity* activity)
-{
-    // Retrieve our activity states from the activity instance
-    sf::priv::ActivityStates* states = sf::priv::retrieveStates(activity);
-	sf::Lock lock(states->mutex);
-	
-	// Send an event to warn people the activity has been resumed
-    sf::Event event;
-    event.type = sf::Event::MouseEntered;
-
-    states->pendingEvents.push_back(event);
-}
-
-static void* onSaveInstanceState(ANativeActivity* activity, size_t* outLen)
-{
-    *outLen = 0;
-    
-    return NULL;
-}
-
-static void onPause(ANativeActivity* activity)
-{
-    // Retrieve our activity states from the activity instance
-    sf::priv::ActivityStates* states = sf::priv::retrieveStates(activity);
-	sf::Lock lock(states->mutex);
-	
-	// Send an event to warn people the activity has been paused
-    sf::Event event;
-    event.type = sf::Event::MouseLeft;
-
-    states->pendingEvents.push_back(event);
-}
-
-static void onStop(ANativeActivity* activity)
-{
-}
-
-static void onConfigurationChanged(ANativeActivity* activity)
-{
-}
-
-static void onLowMemory(ANativeActivity* activity)
-{
-}
-
-static void onWindowFocusChanged(ANativeActivity* activity, int focused)
-{
-}
-
 static void onNativeWindowCreated(ANativeActivity* activity, ANativeWindow* window)
 {
     sf::priv::ActivityStates* states = sf::priv::retrieveStates(activity);
@@ -227,11 +208,42 @@ static void onNativeWindowDestroyed(ANativeActivity* activity, ANativeWindow* wi
     states->window = NULL;
 }
 
+static void onNativeWindowRedrawNeeded(ANativeActivity* activity, ANativeWindow* window)
+{
+}
+
+static void onNativeWindowResized(ANativeActivity* activity, ANativeWindow* window)
+{
+}
+
 static void onInputQueueCreated(ANativeActivity* activity, AInputQueue* queue)
 {
 }
 
 static void onInputQueueDestroyed(ANativeActivity* activity, AInputQueue* queue)
+{
+}
+
+static void onWindowFocusChanged(ANativeActivity* activity, int focused)
+{
+}
+
+static void onContentRectChanged(ANativeActivity* activity, const ARect* rect)
+{
+}
+
+static void onConfigurationChanged(ANativeActivity* activity)
+{
+}
+
+static void* onSaveInstanceState(ANativeActivity* activity, size_t* outLen)
+{
+    *outLen = 0;
+    
+    return NULL;
+}
+
+static void onLowMemory(ANativeActivity* activity)
 {
 }
 
@@ -260,19 +272,26 @@ void ANativeActivity_onCreate(ANativeActivity* activity, void* savedState, size_
     
     // These functions will update the activity states and then keep the SFML
     // in the know
+    activity->callbacks->onStart   = onStart;
+    activity->callbacks->onResume  = onResume;
+    activity->callbacks->onPause   = onPause;
+    activity->callbacks->onStop    = onStop;
     activity->callbacks->onDestroy = onDestroy;
-    activity->callbacks->onStart = onStart;
-    activity->callbacks->onResume = onResume;
-    activity->callbacks->onSaveInstanceState = onSaveInstanceState;
-    activity->callbacks->onPause = onPause;
-    activity->callbacks->onStop = onStop;
-    activity->callbacks->onConfigurationChanged = onConfigurationChanged;
-    activity->callbacks->onLowMemory = onLowMemory;
-    activity->callbacks->onWindowFocusChanged = onWindowFocusChanged;
+
     activity->callbacks->onNativeWindowCreated = onNativeWindowCreated;
     activity->callbacks->onNativeWindowDestroyed = onNativeWindowDestroyed;
+    activity->callbacks->onNativeWindowRedrawNeeded = onNativeWindowRedrawNeeded;    
+    activity->callbacks->onNativeWindowResized = onNativeWindowResized;
+    
     activity->callbacks->onInputQueueCreated = onInputQueueCreated;
     activity->callbacks->onInputQueueDestroyed = onInputQueueDestroyed;
+    
+    activity->callbacks->onWindowFocusChanged = onWindowFocusChanged;
+    activity->callbacks->onContentRectChanged = onContentRectChanged;
+    activity->callbacks->onConfigurationChanged = onConfigurationChanged;
+    
+    activity->callbacks->onSaveInstanceState = onSaveInstanceState;
+    activity->callbacks->onLowMemory = onLowMemory;
     
     // Share this activity with the callback functions
     states->activity = activity;
