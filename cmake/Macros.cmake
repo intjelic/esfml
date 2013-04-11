@@ -173,17 +173,17 @@ if(NOT ANDROID)
     if(MACOSX AND BUILD_SHARED_LIBS)
         if(SFML_BUILD_FRAMEWORKS)
             # adapt target to build frameworks instead of dylibs
-            set_target_properties(${target} PROPERTIES 
+            set_target_properties(${target} PROPERTIES
                                   FRAMEWORK TRUE
                                   FRAMEWORK_VERSION ${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH}
                                   MACOSX_FRAMEWORK_IDENTIFIER org.sfml-dev.${target}
                                   MACOSX_FRAMEWORK_SHORT_VERSION_STRING ${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH}
                                   MACOSX_FRAMEWORK_BUNDLE_VERSION ${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH})
         endif()
-        
+
         # adapt install directory to allow distributing dylibs/frameworks in user’s frameworks/application bundle
-        set_target_properties(${target} PROPERTIES 
-                              BUILD_WITH_INSTALL_RPATH 1 
+        set_target_properties(${target} PROPERTIES
+                              BUILD_WITH_INSTALL_RPATH 1
                               INSTALL_NAME_DIR "@executable_path/../Frameworks")
     endif()
 
@@ -202,7 +202,7 @@ if(NOT ANDROID)
     # add the install rule
     install(TARGETS ${target}
             RUNTIME DESTINATION bin COMPONENT bin
-            LIBRARY DESTINATION lib${LIB_SUFFIX} COMPONENT bin 
+            LIBRARY DESTINATION lib${LIB_SUFFIX} COMPONENT bin
             ARCHIVE DESTINATION lib${LIB_SUFFIX} COMPONENT devel
             FRAMEWORK DESTINATION ${CMAKE_INSTALL_FRAMEWORK_PREFIX} COMPONENT bin)
 else()
@@ -211,12 +211,13 @@ else()
 
     # get the name module (extract 'network' from 'sfml-network' for example)
     string(SUBSTRING ${target} 5 -1 MODULE_NAME)
-    
+
     set(APPLICATION_MK ${CMAKE_BINARY_DIR}/src/sfml/${MODULE_NAME}/Application.mk)
 
     set(INCLUDE_DIR ${PROJECT_SOURCE_DIR}/include)
     set(SRC_DIR ${PROJECT_SOURCE_DIR}/src)
-    
+    set(EXTLIBS_DIR ${PROJECT_SOURCE_DIR}/extlibs/android/extlibs)
+
     # BUILD rules
     add_custom_command(TARGET ${target} PRE_BUILD COMMAND touch ${APPLICATION_MK})
     add_custom_command(TARGET ${target} PRE_BUILD COMMAND echo "APP_PLATFORM := android-9" >> ${APPLICATION_MK})
@@ -225,13 +226,14 @@ else()
     add_custom_command(TARGET ${target} PRE_BUILD COMMAND echo "APP_MODULES := ${target}" >> ${APPLICATION_MK})
     add_custom_command(TARGET ${target} PRE_BUILD COMMAND echo "APP_CPPFLAGS += -I${INCLUDE_DIR}" >> ${APPLICATION_MK})
     add_custom_command(TARGET ${target} PRE_BUILD COMMAND echo "APP_CPPFLAGS += -I${SRC_DIR}" >> ${APPLICATION_MK})
+    add_custom_command(TARGET ${target} PRE_BUILD COMMAND echo "APP_CPPFLAGS += -I${EXTLIBS_DIR}/include" >> ${APPLICATION_MK})
     add_custom_command(TARGET ${target} PRE_BUILD COMMAND echo "APP_CPPFLAGS += -DSFML_EMBEDDED_SYSTEM" >> ${APPLICATION_MK})
     add_custom_command(TARGET ${target} PRE_BUILD COMMAND echo "APP_CPPFLAGS += -DSFML_DEBUG" >> ${APPLICATION_MK})
-    
+
     if (ANDROID_ABI_ARM)
     add_custom_command(TARGET ${target} PRE_BUILD COMMAND echo "APP_ABI += armeabi" >> ${APPLICATION_MK})
     endif()
-    
+
     if (ANDROID_ABI_ARMv7)
     add_custom_command(TARGET ${target} PRE_BUILD COMMAND echo "APP_ABI += armeabi-v7a" >> ${APPLICATION_MK})
     endif()
@@ -239,7 +241,7 @@ else()
     if (ANDROID_ABI_MIPS)
     add_custom_command(TARGET ${target} PRE_BUILD COMMAND echo "APP_ABI += mips" >> ${APPLICATION_MK})
     endif()
-    
+
     if (ANDROID_ABI_x86)
     add_custom_command(TARGET ${target} PRE_BUILD COMMAND echo "APP_ABI += x86" >> ${APPLICATION_MK})
     endif()

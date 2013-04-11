@@ -83,6 +83,7 @@ set(STB_SRC
 )
 source_group("stb_image" FILES ${STB_SRC})
 
+if(NOT ANDROID)
 # let CMake know about our additional graphics libraries paths (on Windows and OSX)
 if(WINDOWS OR MACOSX)
     set(CMAKE_INCLUDE_PATH ${CMAKE_INCLUDE_PATH} "${PROJECT_SOURCE_DIR}/extlibs/headers/jpeg")
@@ -100,11 +101,11 @@ endif()
 
 # find external libraries
 if(NOT SFML_EMBEDDED_SYSTEM)
-	find_package(OpenGL REQUIRED)
-	find_package(GLEW REQUIRED)
+    find_package(OpenGL REQUIRED)
+    find_package(GLEW REQUIRED)
 else()
-	find_package(GLES REQUIRED)
-	
+    find_package(GLES REQUIRED)
+
 endif()
 find_package(Freetype REQUIRED)
 find_package(JPEG REQUIRED)
@@ -114,20 +115,20 @@ endif()
 
 # add include paths of external libraries
 if(NOT SFML_EMBEDDED_SYSTEM)
-	include_directories(${FREETYPE_INCLUDE_DIRS} ${GLEW_INCLUDE_PATH} ${JPEG_INCLUDE_DIR} ${OPENGL_INCLUDE_DIR})
+    include_directories(${FREETYPE_INCLUDE_DIRS} ${GLEW_INCLUDE_PATH} ${JPEG_INCLUDE_DIR} ${OPENGL_INCLUDE_DIR})
 else()
-	include_directories(${FREETYPE_INCLUDE_DIRS} ${JPEG_INCLUDE_DIR} ${GLES_INCLUDE_DIR})
+    include_directories(${FREETYPE_INCLUDE_DIRS} ${JPEG_INCLUDE_DIR} ${GLES_INCLUDE_DIR})
 endif()
 
 # build the list of libraries to link
 # GL and X11 are only needed for shared build, as they are already linked by sfml-window
 set(GRAPHICS_EXT_LIBS ${FREETYPE_LIBRARY} ${GLEW_LIBRARY} ${JPEG_LIBRARY})
 if(BUILD_SHARED_LIBS)
-	if(NOT SFML_EMBEDDED_SYSTEM)
-		set(GRAPHICS_EXT_LIBS ${GRAPHICS_EXT_LIBS} ${OPENGL_gl_LIBRARY})
-	else()
-		set(GRAPHICS_EXT_LIBS ${GRAPHICS_EXT_LIBS} ${GLES_LIBRARY})
-	endif()
+    if(NOT SFML_EMBEDDED_SYSTEM)
+        set(GRAPHICS_EXT_LIBS ${GRAPHICS_EXT_LIBS} ${OPENGL_gl_LIBRARY})
+    else()
+        set(GRAPHICS_EXT_LIBS ${GRAPHICS_EXT_LIBS} ${GLES_LIBRARY})
+    endif()
     if(LINUX)
         set(GRAPHICS_EXT_LIBS ${GRAPHICS_EXT_LIBS} ${X11_LIBRARIES})
     endif()
@@ -140,6 +141,7 @@ add_definitions(-DGLEW_STATIC -DSTBI_FAILURE_USERMSG)
 # when gcc is used; otherwise saving PNGs may crash in stb_image_write
 if(COMPILER_GCC)
     set_source_files_properties(${SRCROOT}/ImageLoader.cpp PROPERTIES COMPILE_FLAGS -fno-strict-aliasing)
+endif()
 endif()
 
 # define the sfml-graphics target
