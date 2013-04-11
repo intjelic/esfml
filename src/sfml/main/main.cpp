@@ -307,7 +307,10 @@ void ANativeActivity_onCreate(ANativeActivity* activity, void* savedState, size_
     states = new sf::priv::ActivityStates;
 
     // Initialize the states value
-    states->window = NULL;
+    states->activity   = NULL;
+    states->window     = NULL;
+    states->looper     = NULL;
+    states->inputQueue = NULL;
 
     if (savedState != NULL) {
         states->savedState = malloc(savedStateSize);
