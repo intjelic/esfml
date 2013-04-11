@@ -103,7 +103,6 @@ ActivityStates* retrieveStates(ANativeActivity* activity)
     return (sf::priv::ActivityStates*)activity->instance;
 }
 
-
 static void initializeMain(ActivityStates* states)
 {
     // Protect from concurent access
@@ -112,6 +111,11 @@ static void initializeMain(ActivityStates* states)
     // Prepare and share the looper to be read later
     ALooper* looper = ALooper_prepare(ALOOPER_PREPARE_ALLOW_NON_CALLBACKS);
     states->looper = looper;
+
+    // Get the default configuration
+    states->config = AConfiguration_new();
+    AConfiguration_fromAssetManager(states->config, states->activity->assetManager);
+
 }
 
 static void terminateMain(ActivityStates* states)
@@ -311,6 +315,7 @@ void ANativeActivity_onCreate(ANativeActivity* activity, void* savedState, size_
     states->window     = NULL;
     states->looper     = NULL;
     states->inputQueue = NULL;
+    states->config     = NULL;
 
     if (savedState != NULL) {
         states->savedState = malloc(savedStateSize);

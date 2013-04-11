@@ -25,6 +25,7 @@
 
 
 #include <android/native_activity.h>
+#include <android/configuration.h>
 #include <sfml/window/Event.hpp>
 #include <sfml/system/Mutex.hpp>
 #include <vector>
@@ -37,16 +38,20 @@ struct ActivityStates
 {
     ANativeActivity* activity;
     ANativeWindow* window;
-    
+
+    ALooper*        looper;
+    AInputQueue*    inputQueue;
+    AConfiguration* config;
+
     void* savedState;
     size_t savedStateSize;
 
     sf::Mutex mutex;
 
     std::vector<sf::Event> pendingEvents;
-    
+
     bool mainOver;
-    
+
     bool initialized;
     bool terminated;
 };
