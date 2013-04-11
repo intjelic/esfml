@@ -223,6 +223,9 @@ static void onDestroy(ANativeActivity* activity)
 
     states->mutex.unlock();
 
+    // Terminate EGL display
+    eglCheck(eglTerminate(states->display));
+
     // Delete our allocated states
     delete states;
 
@@ -317,6 +320,8 @@ void ANativeActivity_onCreate(ANativeActivity* activity, void* savedState, size_
     states->inputQueue = NULL;
     states->config     = NULL;
 
+    states->display = eglCheck(eglGetDisplay(EGL_DEFAULT_DISPLAY));
+
     if (savedState != NULL) {
         states->savedState = malloc(savedStateSize);
         states->savedStateSize = savedStateSize;
@@ -356,6 +361,9 @@ void ANativeActivity_onCreate(ANativeActivity* activity, void* savedState, size_
 
     // Share this activity with the callback functions
     states->activity = activity;
+
+    // Initialize the display
+    eglCheck(eglInitialize(states->display, NULL, NULL));
 
     // Launch the main thread
     sf::Thread* thread = new sf::Thread(sf::priv::main, states);

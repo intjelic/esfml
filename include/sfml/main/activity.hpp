@@ -26,6 +26,7 @@
 
 #include <android/native_activity.h>
 #include <android/configuration.h>
+#include <sfml/window/EGLCheck.hpp>
 #include <sfml/window/Event.hpp>
 #include <sfml/system/Mutex.hpp>
 #include <vector>
@@ -42,6 +43,8 @@ struct ActivityStates
     ALooper*        looper;
     AInputQueue*    inputQueue;
     AConfiguration* config;
+
+    EGLDisplay display;
 
     void* savedState;
     size_t savedStateSize;
