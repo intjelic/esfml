@@ -72,9 +72,17 @@ void WindowImplAndroid::processEvents()
     ActivityStates* states = getActivityStates(NULL);
     sf::Lock lock(states->mutex);
 
+    int ident, events;
+    void (*addEventToQueue)(ActivityStates*);
+
+    while ((ident=ALooper_pollAll(0, NULL, &events, (void**)&addEventToQueue)) >= 0)
+    {
+        addEventToQueue(states);
+    }
+
     while (!states->pendingEvents.empty())
     {
-        sf::Event tempEvent = states->pendingEvents.back();            
+        sf::Event tempEvent = states->pendingEvents.back();
         states->pendingEvents.pop_back();
         pushEvent(tempEvent);
     }

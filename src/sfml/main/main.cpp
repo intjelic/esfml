@@ -55,13 +55,45 @@ namespace sf
 {
 namespace priv
 {
+void processEvent(ActivityStates* states)
+{
+    // The caller must ensure states can be safely accessed!
+
+    AInputEvent* event = NULL;
+
+    if (AInputQueue_getEvent(states->inputQueue, &event) >= 0)
+    {
+        if (AInputQueue_preDispatchEvent(states->inputQueue, event))
+            return;
+
+        int32_t handled = 0;
+
+        if (AInputEvent_getType(event) == AINPUT_EVENT_TYPE_MOTION)
+        {
+
+            float x = AMotionEvent_getX(event, 0);
+            float y = AMotionEvent_getY(event, 0);
+
+            sf::Event event;
+            event.type        = sf::Event::MouseMoved;
+            event.mouseMove.x = x;
+            event.mouseMove.y = y;
+            states->pendingEvents.push_back(event);
+
+            handled = 1;
+        }
+
+        AInputQueue_finishEvent(states->inputQueue, event, handled);
+    }
+}
+
 ActivityStates* getActivityStates(ActivityStates* initializedStates)
 {
     static ActivityStates* states = NULL;
 
     if (!states)
         states = initializedStates;
-        
+
     return states;
 }
 
@@ -77,8 +109,9 @@ static void initializeMain(ActivityStates* states)
     // Protect from concurent access
     sf::Lock lock(states->mutex);
 
-    // Nothing to do; will initialize things later
-    // ...
+    // Prepare and share the looper to be read later
+    ALooper* looper = ALooper_prepare(ALOOPER_PREPARE_ALLOW_NON_CALLBACKS);
+    states->looper = looper;
 }
 
 static void terminateMain(ActivityStates* states)
@@ -95,10 +128,10 @@ void* main(ActivityStates* states)
 {
     // Initialize the thread before giving the hand
     initializeMain(states);
-   
+
     {
         sf::Lock lock(states->mutex);
-        
+
         states->initialized = true;
     }
 
@@ -110,7 +143,7 @@ void* main(ActivityStates* states)
 
     {
         sf::Lock lock(states->mutex);
-        
+
         states->terminated = true;
     }
 
@@ -128,9 +161,9 @@ static void onResume(ANativeActivity* activity)
 {
     // Retrieve our activity states from the activity instance
     sf::priv::ActivityStates* states = sf::priv::retrieveStates(activity);
-	sf::Lock lock(states->mutex);
-	
-	// Send an event to warn people the activity has been resumed
+    sf::Lock lock(states->mutex);
+
+    // Send an event to warn people the activity has been resumed
     sf::Event event;
     event.type = sf::Event::MouseEntered;
 
@@ -141,9 +174,9 @@ static void onPause(ANativeActivity* activity)
 {
     // Retrieve our activity states from the activity instance
     sf::priv::ActivityStates* states = sf::priv::retrieveStates(activity);
-	sf::Lock lock(states->mutex);
-	
-	// Send an event to warn people the activity has been paused
+    sf::Lock lock(states->mutex);
+
+    // Send an event to warn people the activity has been paused
     sf::Event event;
     event.type = sf::Event::MouseLeft;
 
@@ -158,11 +191,11 @@ static void onDestroy(ANativeActivity* activity)
 {
     // Retrieve our activity states from the activity instance
     sf::priv::ActivityStates* states = sf::priv::retrieveStates(activity);
-    
+
     // Send an event to warn people the activity is being destroyed
     {
         sf::Lock lock(states->mutex);
-        
+
         // If the main thread hasn't yet finished, send the event and wait for
         // it to finish.
         if (!states->mainOver)
@@ -173,22 +206,22 @@ static void onDestroy(ANativeActivity* activity)
             states->pendingEvents.push_back(event);
         }
     }
-    
+
     // Wait for the main thread to be terminated
     states->mutex.lock();
-    
+
     while (!states->terminated)
     {
         states->mutex.unlock();
         sf::sleep(sf::milliseconds(20));
         states->mutex.lock();
     }
-    
+
     states->mutex.unlock();
 
     // Delete our allocated states
     delete states;
-    
+
     // The application should now terminate
 }
 
@@ -204,7 +237,7 @@ static void onNativeWindowDestroyed(ANativeActivity* activity, ANativeWindow* wi
 {
     sf::priv::ActivityStates* states = sf::priv::retrieveStates(activity);
     sf::Lock lock(states->mutex);
-    
+
     states->window = NULL;
 }
 
@@ -218,10 +251,30 @@ static void onNativeWindowResized(ANativeActivity* activity, ANativeWindow* wind
 
 static void onInputQueueCreated(ANativeActivity* activity, AInputQueue* queue)
 {
+    // Retrieve our activity states from the activity instance
+    sf::priv::ActivityStates* states = sf::priv::retrieveStates(activity);
+
+    // Attach the input queue
+    {
+        sf::Lock lock(states->mutex);
+
+        AInputQueue_attachLooper(queue, states->looper, 1, NULL, (void*)&sf::priv::processEvent);
+        states->inputQueue = queue;
+    }
 }
 
 static void onInputQueueDestroyed(ANativeActivity* activity, AInputQueue* queue)
 {
+    // Retrieve our activity states from the activity instance
+    sf::priv::ActivityStates* states = sf::priv::retrieveStates(activity);
+
+    // Detach the input queue
+    {
+        sf::Lock lock(states->mutex);
+
+        states->inputQueue = NULL;
+        AInputQueue_detachLooper(queue);
+    }
 }
 
 static void onWindowFocusChanged(ANativeActivity* activity, int focused)
@@ -239,7 +292,7 @@ static void onConfigurationChanged(ANativeActivity* activity)
 static void* onSaveInstanceState(ANativeActivity* activity, size_t* outLen)
 {
     *outLen = 0;
-    
+
     return NULL;
 }
 
@@ -255,21 +308,21 @@ void ANativeActivity_onCreate(ANativeActivity* activity, void* savedState, size_
 
     // Initialize the states value
     states->window = NULL;
-    
+
     if (savedState != NULL) {
         states->savedState = malloc(savedStateSize);
         states->savedStateSize = savedStateSize;
         memcpy(states->savedState, savedState, savedStateSize);
     }
-    
+
     states->mainOver = false;
-    
+
     states->initialized = false;
     states->terminated = false;
 
     // Share it across the SFML modules
     sf::priv::getActivityStates(states);
-    
+
     // These functions will update the activity states and then keep the SFML
     // in the know
     activity->callbacks->onStart   = onStart;
@@ -280,36 +333,36 @@ void ANativeActivity_onCreate(ANativeActivity* activity, void* savedState, size_
 
     activity->callbacks->onNativeWindowCreated = onNativeWindowCreated;
     activity->callbacks->onNativeWindowDestroyed = onNativeWindowDestroyed;
-    activity->callbacks->onNativeWindowRedrawNeeded = onNativeWindowRedrawNeeded;    
+    activity->callbacks->onNativeWindowRedrawNeeded = onNativeWindowRedrawNeeded;
     activity->callbacks->onNativeWindowResized = onNativeWindowResized;
-    
+
     activity->callbacks->onInputQueueCreated = onInputQueueCreated;
     activity->callbacks->onInputQueueDestroyed = onInputQueueDestroyed;
-    
+
     activity->callbacks->onWindowFocusChanged = onWindowFocusChanged;
     activity->callbacks->onContentRectChanged = onContentRectChanged;
     activity->callbacks->onConfigurationChanged = onConfigurationChanged;
-    
+
     activity->callbacks->onSaveInstanceState = onSaveInstanceState;
     activity->callbacks->onLowMemory = onLowMemory;
-    
+
     // Share this activity with the callback functions
     states->activity = activity;
-    
+
     // Launch the main thread
     sf::Thread* thread = new sf::Thread(sf::priv::main, states);
     thread->launch();
-    
+
     // Wait for the main thread to be initialized
     states->mutex.lock();
-    
+
     while (!states->initialized)
     {
         states->mutex.unlock();
         sf::sleep(sf::milliseconds(20));
         states->mutex.lock();
     }
-    
+
     states->mutex.unlock();
 
     // Share this state with the callback functions
