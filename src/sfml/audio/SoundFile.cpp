@@ -29,6 +29,8 @@
 #include <sfml/audio/SoundFile.hpp>
 #include <sfml/system/InputStream.hpp>
 #include <sfml/system/error.hpp>
+#include <sfml/system/Lock.hpp>
+#include <sfml/main/activity.hpp>
 #include <cstring>
 #include <cctype>
 
@@ -92,6 +94,8 @@ unsigned int SoundFile::getSampleRate() const
 ////////////////////////////////////////////////////////////////////////////////
 bool SoundFile::openRead(const std::string& filename)
 {
+    #ifndef SFML_SYSTEM_ANDROID
+
     // If the file is already opened, first close it
     if (m_file)
         sf_close(m_file);
@@ -110,6 +114,27 @@ bool SoundFile::openRead(const std::string& filename)
     initialize(fileInfo);
 
     return true;
+
+    #else
+
+    priv::ActivityStates* states = priv::getActivityStates(NULL);
+    Lock lock(states->mutex);
+
+    AAsset* myfile = AAssetManager_open(states->activity->assetManager, filename.c_str(), AASSET_MODE_UNKNOWN);
+
+    off_t size = AAsset_getLength(myfile);
+    void* data = malloc(size);
+    int status = AAsset_read(myfile, data, size);
+
+    if (status == 0)
+    {
+        err() << "Failed to open sound file \"" << filename << "\" (couldn't find it)" << std::endl;
+        return false;
+    }
+
+    return openRead(data, size);
+
+    #endif
 }
 
 
