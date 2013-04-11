@@ -34,8 +34,8 @@
 #include <sfml/system/String.hpp>
 #include <sfml/window/Event.hpp>
 #ifndef SFML_SYSTEM_ANDROID
-	#include <sfml/window/Joystick.hpp>
-	#include <sfml/window/JoystickImpl.hpp>
+    #include <sfml/window/Joystick.hpp>
+    #include <sfml/window/JoystickImpl.hpp>
 #endif
 #include <sfml/window/VideoMode.hpp>
 #include <sfml/window/WindowHandle.hpp>

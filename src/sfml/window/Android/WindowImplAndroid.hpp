@@ -53,7 +53,7 @@ public :
     virtual Vector2u getSize() const;
     virtual void setSize(const Vector2u& size);
 
-    virtual void setTitle(const std::string& title);
+    virtual void setTitle(const String& title);
 
     virtual void setIcon(unsigned int width, unsigned int height, const Uint8* pixels);
 

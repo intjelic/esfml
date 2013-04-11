@@ -116,7 +116,7 @@ void WindowImplAndroid::setSize(const Vector2u& size)
 
 
 ////////////////////////////////////////////////////////////////////////////////
-void WindowImplAndroid::setTitle(const std::string& title)
+void WindowImplAndroid::setTitle(const String& title)
 {
 }
 
