@@ -123,6 +123,7 @@ else() # MACOSX
     source_group("mac" FILES ${PLATFORM_SRC})
 endif()
 
+if(NOT ANDROID)
 # find external libraries
 if(NOT SFML_EMBEDDED_SYSTEM)
 	find_package(OpenGL REQUIRED)
@@ -158,6 +159,7 @@ elseif(LINUX)
     set(WINDOW_EXT_LIBS ${WINDOW_EXT_LIBS} ${X11_X11_LIB} ${X11_Xrandr_LIB})
 elseif(MACOSX)
     set(WINDOW_EXT_LIBS ${WINDOW_EXT_LIBS} "-framework Foundation -framework AppKit -framework IOKit -framework Carbon")
+endif()
 endif()
 
 # define the sfml-window target

@@ -36,8 +36,8 @@ set(LIBRARY_OUTPUT_PATH "${PROJECT_BINARY_DIR}/lib")
 
 # add the modules subdirectories
 add_subdirectory(system)
-if(NOT ANDROID) # window, network, audio and graphics module aren't ported yet
 add_subdirectory(window)
+if(NOT ANDROID) # network, audio and graphics module aren't ported yet
 add_subdirectory(network)
 add_subdirectory(graphics)
 add_subdirectory(audio)
