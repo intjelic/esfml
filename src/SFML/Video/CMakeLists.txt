@@ -6,6 +6,9 @@ set(SRCROOT ${PROJECT_SOURCE_DIR}/src/SFML/Video)
 set(SRC
     ${SRCROOT}/VideoFile.cpp
     ${SRCROOT}/VideoFile.hpp
+    ${SRCROOT}/VideoBuffer.cpp
+    ${INCROOT}/VideoBuffer.hpp
+    ${INCROOT}/Video.hpp
 )
 
 source_group("" FILES ${SRC})
