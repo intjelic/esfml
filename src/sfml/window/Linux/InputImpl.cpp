@@ -1,14 +1,15 @@
-////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 //
 // SFML - Simple and Fast Multimedia Library
 // Copyright (C) 2007-2013 Laurent Gomila (laurent.gom@gmail.com)
 //
 // This software is provided 'as-is', without any express or implied warranty.
-// In no event will the authors be held liable for any damages arising from the use of this software.
+// In no event will the authors be held liable for any damages arising from the
+// use of this software.
 //
 // Permission is granted to anyone to use this software for any purpose,
-// including commercial applications, and to alter it and redistribute it freely,
-// subject to the following restrictions:
+// including commercial applications, and to alter it and redistribute it
+// freely, subject to the following restrictions:
 //
 // 1. The origin of this software must not be misrepresented;
 //    you must not claim that you wrote the original software.
@@ -20,11 +21,11 @@
 //
 // 3. This notice may not be removed or altered from any source distribution.
 //
-////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 
-////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 // Headers
-////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 #include <sfml/window/Linux/InputImpl.hpp>
 #include <sfml/window/Window.hpp>
 #include <sfml/window/Linux/Display.hpp>
@@ -36,7 +37,7 @@ namespace sf
 {
 namespace priv
 {
-////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 bool InputImpl::isKeyPressed(Keyboard::Key key)
 {
     // Get the corresponding X11 keysym
@@ -174,7 +175,7 @@ bool InputImpl::isKeyPressed(Keyboard::Key key)
 }
 
 
-////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 bool InputImpl::isMouseButtonPressed(Mouse::Button button)
 {
     // Open a connection with the X server
@@ -205,7 +206,7 @@ bool InputImpl::isMouseButtonPressed(Mouse::Button button)
 }
 
 
-////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 Vector2i InputImpl::getMousePosition()
 {
     // Open a connection with the X server
@@ -227,7 +228,7 @@ Vector2i InputImpl::getMousePosition()
 }
 
 
-////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 Vector2i InputImpl::getMousePosition(const Window& relativeTo)
 {
     WindowHandle handle = relativeTo.getSystemHandle();
@@ -257,7 +258,7 @@ Vector2i InputImpl::getMousePosition(const Window& relativeTo)
 }
 
 
-////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 void InputImpl::setMousePosition(const Vector2i& position)
 {
     // Open a connection with the X server
@@ -271,7 +272,7 @@ void InputImpl::setMousePosition(const Vector2i& position)
 }
 
 
-////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 void InputImpl::setMousePosition(const Vector2i& position, const Window& relativeTo)
 {
     // Open a connection with the X server

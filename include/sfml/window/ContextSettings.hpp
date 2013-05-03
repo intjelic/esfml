@@ -1,14 +1,15 @@
-////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 //
 // SFML - Simple and Fast Multimedia Library
 // Copyright (C) 2007-2013 Laurent Gomila (laurent.gom@gmail.com)
 //
 // This software is provided 'as-is', without any express or implied warranty.
-// In no event will the authors be held liable for any damages arising from the use of this software.
+// In no event will the authors be held liable for any damages arising from the
+// use of this software.
 //
 // Permission is granted to anyone to use this software for any purpose,
-// including commercial applications, and to alter it and redistribute it freely,
-// subject to the following restrictions:
+// including commercial applications, and to alter it and redistribute it
+// freely, subject to the following restrictions:
 //
 // 1. The origin of this software must not be misrepresented;
 //    you must not claim that you wrote the original software.
@@ -20,7 +21,7 @@
 //
 // 3. This notice may not be removed or altered from any source distribution.
 //
-////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 
 #ifndef SFML_CONTEXTSETTINGS_HPP
 #define SFML_CONTEXTSETTINGS_HPP
@@ -28,14 +29,14 @@
 
 namespace sf
 {
-////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 /// \brief Structure defining the settings of the OpenGL
 ///        context attached to a window
 ///
-////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 struct ContextSettings
 {
-    ////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////
     /// \brief Default constructor
     ///
     /// \param depth        Depth buffer bits
@@ -44,7 +45,7 @@ struct ContextSettings
     /// \param major        Major number of the context version
     /// \param minor        Minor number of the context version
     ///
-    ////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////
     explicit ContextSettings(unsigned int depth = 0, unsigned int stencil = 0, unsigned int antialiasing = 0, unsigned int major = 2, unsigned int minor = 0) :
     depthBits        (depth),
     stencilBits      (stencil),
@@ -54,9 +55,9 @@ struct ContextSettings
     {
     }
 
-    ////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////
     // Member data
-    ////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////
     unsigned int depthBits;         ///< Bits of the depth buffer
     unsigned int stencilBits;       ///< Bits of the stencil buffer
     unsigned int antialiasingLevel; ///< Level of antialiasing
@@ -70,7 +71,7 @@ struct ContextSettings
 #endif // SFML_CONTEXTSETTINGS_HPP
 
 
-////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 /// \class sf::ContextSettings
 /// \ingroup window
 ///
@@ -101,4 +102,4 @@ struct ContextSettings
 /// settings that the window actually used to create its context,
 /// with Window::getSettings().
 ///
-////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////

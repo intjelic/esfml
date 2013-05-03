@@ -1,14 +1,15 @@
-////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 //
 // SFML - Simple and Fast Multimedia Library
 // Copyright (C) 2007-2013 Laurent Gomila (laurent.gom@gmail.com)
 //
 // This software is provided 'as-is', without any express or implied warranty.
-// In no event will the authors be held liable for any damages arising from the use of this software.
+// In no event will the authors be held liable for any damages arising from the
+// use of this software.
 //
 // Permission is granted to anyone to use this software for any purpose,
-// including commercial applications, and to alter it and redistribute it freely,
-// subject to the following restrictions:
+// including commercial applications, and to alter it and redistribute it
+// freely, subject to the following restrictions:
 //
 // 1. The origin of this software must not be misrepresented;
 //    you must not claim that you wrote the original software.
@@ -20,11 +21,11 @@
 //
 // 3. This notice may not be removed or altered from any source distribution.
 //
-////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 
-////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 // Headers
-////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 #include <sfml/graphics/ImageLoader.hpp>
 #include <sfml/system/InputStream.hpp>
 #include <sfml/system/error.hpp>
@@ -72,7 +73,7 @@ namespace sf
 {
 namespace priv
 {
-////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 ImageLoader& ImageLoader::getInstance()
 {
     static ImageLoader Instance;
@@ -81,21 +82,21 @@ ImageLoader& ImageLoader::getInstance()
 }
 
 
-////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 ImageLoader::ImageLoader()
 {
     // Nothing to do
 }
 
 
-////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 ImageLoader::~ImageLoader()
 {
     // Nothing to do
 }
 
 
-////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 bool ImageLoader::loadImageFromFile(const std::string& filename, std::vector<Uint8>& pixels, Vector2u& size)
 {
     // Clear the array (just in case)
@@ -130,7 +131,7 @@ bool ImageLoader::loadImageFromFile(const std::string& filename, std::vector<Uin
 }
 
 
-////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 bool ImageLoader::loadImageFromMemory(const void* data, std::size_t dataSize, std::vector<Uint8>& pixels, Vector2u& size)
 {
     // Check input parameters
@@ -175,7 +176,7 @@ bool ImageLoader::loadImageFromMemory(const void* data, std::size_t dataSize, st
 }
 
 
-////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 bool ImageLoader::loadImageFromStream(InputStream& stream, std::vector<Uint8>& pixels, Vector2u& size)
 {
     // Clear the array (just in case)
@@ -216,7 +217,7 @@ bool ImageLoader::loadImageFromStream(InputStream& stream, std::vector<Uint8>& p
 }
 
 
-////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 bool ImageLoader::saveImageToFile(const std::string& filename, const std::vector<Uint8>& pixels, const Vector2u& size)
 {
     // Make sure the image is not empty
@@ -260,7 +261,7 @@ bool ImageLoader::saveImageToFile(const std::string& filename, const std::vector
 }
 
 
-////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 bool ImageLoader::writeJpg(const std::string& filename, const std::vector<Uint8>& pixels, unsigned int width, unsigned int height)
 {
     // Open the file to write in

@@ -1,14 +1,15 @@
-////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 //
 // SFML - Simple and Fast Multimedia Library
 // Copyright (C) 2007-2013 Laurent Gomila (laurent.gom@gmail.com)
 //
 // This software is provided 'as-is', without any express or implied warranty.
-// In no event will the authors be held liable for any damages arising from the use of this software.
+// In no event will the authors be held liable for any damages arising from the
+// use of this software.
 //
 // Permission is granted to anyone to use this software for any purpose,
-// including commercial applications, and to alter it and redistribute it freely,
-// subject to the following restrictions:
+// including commercial applications, and to alter it and redistribute it
+// freely, subject to the following restrictions:
 //
 // 1. The origin of this software must not be misrepresented;
 //    you must not claim that you wrote the original software.
@@ -20,11 +21,11 @@
 //
 // 3. This notice may not be removed or altered from any source distribution.
 //
-////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 
-////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 // Headers
-////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 #include <sfml/window/WindowImpl.hpp> // included first to avoid a warning about macro redefinition
 #include <sfml/window/Win32/WglContext.hpp>
 #include <sfml/window/glext/wglext.h>
@@ -37,7 +38,7 @@ namespace sf
 {
 namespace priv
 {
-////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 WglContext::WglContext(WglContext* shared) :
 m_window       (NULL),
 m_deviceContext(NULL),
@@ -59,7 +60,7 @@ m_ownsWindow   (true)
 }
 
 
-////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 WglContext::WglContext(WglContext* shared, const ContextSettings& settings, const WindowImpl* owner, unsigned int bitsPerPixel) :
 m_window       (NULL),
 m_deviceContext(NULL),
@@ -76,7 +77,7 @@ m_ownsWindow   (false)
 }
 
 
-////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 WglContext::WglContext(WglContext* shared, const ContextSettings& settings, unsigned int width, unsigned int height) :
 m_window       (NULL),
 m_deviceContext(NULL),
@@ -99,7 +100,7 @@ m_ownsWindow   (true)
 }
 
 
-////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 WglContext::~WglContext()
 {
     // Destroy the OpenGL context
@@ -120,14 +121,14 @@ WglContext::~WglContext()
 }
 
 
-////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 bool WglContext::makeCurrent()
 {
     return m_deviceContext && m_context && wglMakeCurrent(m_deviceContext, m_context);
 }
 
 
-////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 void WglContext::display()
 {
     if (m_deviceContext && m_context)
@@ -135,7 +136,7 @@ void WglContext::display()
 }
 
 
-////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 void WglContext::setVerticalSyncEnabled(bool enabled)
 {
     PFNWGLSWAPINTERVALEXTPROC wglSwapIntervalEXT = reinterpret_cast<PFNWGLSWAPINTERVALEXTPROC>(wglGetProcAddress("wglSwapIntervalEXT"));
@@ -144,7 +145,7 @@ void WglContext::setVerticalSyncEnabled(bool enabled)
 }
 
 
-////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 void WglContext::createContext(WglContext* shared, unsigned int bitsPerPixel, const ContextSettings& settings)
 {
     // Save the creation settings

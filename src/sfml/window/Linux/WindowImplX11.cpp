@@ -1,14 +1,15 @@
-////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 //
 // SFML - Simple and Fast Multimedia Library
 // Copyright (C) 2007-2013 Laurent Gomila (laurent.gom@gmail.com)
 //
 // This software is provided 'as-is', without any express or implied warranty.
-// In no event will the authors be held liable for any damages arising from the use of this software.
+// In no event will the authors be held liable for any damages arising from the
+// use of this software.
 //
 // Permission is granted to anyone to use this software for any purpose,
-// including commercial applications, and to alter it and redistribute it freely,
-// subject to the following restrictions:
+// including commercial applications, and to alter it and redistribute it
+// freely, subject to the following restrictions:
 //
 // 1. The origin of this software must not be misrepresented;
 //    you must not claim that you wrote the original software.
@@ -20,11 +21,11 @@
 //
 // 3. This notice may not be removed or altered from any source distribution.
 //
-////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 
-////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 // Headers
-////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 #include <sfml/window/WindowStyle.hpp> // important to be included first (conflict with None)
 #include <sfml/window/Linux/WindowImplX11.hpp>
 #include <sfml/window/Linux/Display.hpp>
@@ -39,9 +40,9 @@
 #include <iterator>
 
 
-////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 // Private data
-////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 namespace
 {
     sf::priv::WindowImplX11* fullscreenWindow = NULL;
@@ -63,7 +64,7 @@ namespace sf
 {
 namespace priv
 {
-////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 WindowImplX11::WindowImplX11(WindowHandle handle) :
 m_window      (0),
 m_inputMethod (NULL),
@@ -92,7 +93,7 @@ m_keyRepeat   (true)
 }
 
 
-////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 WindowImplX11::WindowImplX11(VideoMode mode, const String& title, unsigned long style) :
 m_window      (0),
 m_inputMethod (NULL),
@@ -159,7 +160,7 @@ m_keyRepeat   (true)
         {
             static const unsigned long MWM_HINTS_FUNCTIONS   = 1 << 0;
             static const unsigned long MWM_HINTS_DECORATIONS = 1 << 1;
-    
+
             //static const unsigned long MWM_DECOR_ALL         = 1 << 0;
             static const unsigned long MWM_DECOR_BORDER      = 1 << 1;
             static const unsigned long MWM_DECOR_RESIZEH     = 1 << 2;
@@ -174,7 +175,7 @@ m_keyRepeat   (true)
             static const unsigned long MWM_FUNC_MINIMIZE     = 1 << 3;
             static const unsigned long MWM_FUNC_MAXIMIZE     = 1 << 4;
             static const unsigned long MWM_FUNC_CLOSE        = 1 << 5;
-    
+
             struct WMHints
             {
                 unsigned long Flags;
@@ -183,7 +184,7 @@ m_keyRepeat   (true)
                 long          InputMode;
                 unsigned long State;
             };
-    
+
             WMHints hints;
             hints.Flags       = MWM_HINTS_FUNCTIONS | MWM_HINTS_DECORATIONS;
             hints.Decorations = 0;
@@ -216,7 +217,7 @@ m_keyRepeat   (true)
             sizeHints.flags      = PMinSize | PMaxSize;
             sizeHints.min_width  = sizeHints.max_width  = width;
             sizeHints.min_height = sizeHints.max_height = height;
-            XSetWMNormalHints(m_display, m_window, &sizeHints); 
+            XSetWMNormalHints(m_display, m_window, &sizeHints);
         }
     }
 
@@ -232,7 +233,7 @@ m_keyRepeat   (true)
 }
 
 
-////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 WindowImplX11::~WindowImplX11()
 {
     // Cleanup graphical resources
@@ -262,14 +263,14 @@ WindowImplX11::~WindowImplX11()
 }
 
 
-////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 WindowHandle WindowImplX11::getSystemHandle() const
 {
     return m_window;
 }
 
 
-////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 void WindowImplX11::processEvents()
 {
     XEvent event;
@@ -280,7 +281,7 @@ void WindowImplX11::processEvents()
 }
 
 
-////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 Vector2i WindowImplX11::getPosition() const
 {
     XWindowAttributes attributes;
@@ -289,7 +290,7 @@ Vector2i WindowImplX11::getPosition() const
 }
 
 
-////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 void WindowImplX11::setPosition(const Vector2i& position)
 {
     XMoveWindow(m_display, m_window, position.x, position.y);
@@ -297,7 +298,7 @@ void WindowImplX11::setPosition(const Vector2i& position)
 }
 
 
-////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 Vector2u WindowImplX11::getSize() const
 {
     XWindowAttributes attributes;
@@ -306,7 +307,7 @@ Vector2u WindowImplX11::getSize() const
 }
 
 
-////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 void WindowImplX11::setSize(const Vector2u& size)
 {
     XResizeWindow(m_display, m_window, size.x, size.y);
@@ -314,28 +315,28 @@ void WindowImplX11::setSize(const Vector2u& size)
 }
 
 
-////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 void WindowImplX11::setTitle(const String& title)
 {
     // Bare X11 has no Unicode window title support.
     // There is however an option to tell the window manager your unicode title via hints.
-    
+
     // Convert to UTF-8 encoding.
     std::basic_string<sf::Uint8> utf8Title;
     sf::Utf32::toUtf8(title.begin(), title.end(), std::back_inserter(utf8Title));
-    
+
     // Set the _NET_WM_NAME atom, which specifies a UTF-8 encoded window title.
     Atom wmName = XInternAtom(m_display, "_NET_WM_NAME", False);
     Atom useUtf8 = XInternAtom(m_display, "UTF8_STRING", False);
     XChangeProperty(m_display, m_window, wmName, useUtf8, 8,
                     PropModeReplace, utf8Title.c_str(), utf8Title.size());
-    
+
     // Set the non-Unicode title as a fallback for window managers who don't support _NET_WM_NAME.
     XStoreName(m_display, m_window, title.toAnsiString().c_str());
 }
 
 
-////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 void WindowImplX11::setIcon(unsigned int width, unsigned int height, const Uint8* pixels)
 {
     // X11 wants BGRA pixels : swap red and blue channels
@@ -377,7 +378,7 @@ void WindowImplX11::setIcon(unsigned int width, unsigned int height, const Uint8
                 if (i * 8 + k < width)
                 {
                     Uint8 opacity = (pixels[(i * 8 + k + j * width) * 4 + 3] > 0) ? 1 : 0;
-                    maskPixels[i + j * pitch] |= (opacity << k);                    
+                    maskPixels[i + j * pitch] |= (opacity << k);
                 }
             }
         }
@@ -396,7 +397,7 @@ void WindowImplX11::setIcon(unsigned int width, unsigned int height, const Uint8
 }
 
 
-////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 void WindowImplX11::setVisible(bool visible)
 {
     if (visible)
@@ -408,7 +409,7 @@ void WindowImplX11::setVisible(bool visible)
 }
 
 
-////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 void WindowImplX11::setMouseCursorVisible(bool visible)
 {
     XDefineCursor(m_display, m_window, visible ? None : m_hiddenCursor);
@@ -416,14 +417,14 @@ void WindowImplX11::setMouseCursorVisible(bool visible)
 }
 
 
-////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 void WindowImplX11::setKeyRepeatEnabled(bool enabled)
 {
     m_keyRepeat = enabled;
 }
 
 
-////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 void WindowImplX11::switchToFullscreen(const VideoMode& mode)
 {
     // Check if the XRandR extension is present
@@ -475,7 +476,7 @@ void WindowImplX11::switchToFullscreen(const VideoMode& mode)
 }
 
 
-////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 void WindowImplX11::initialize()
 {
     // Make sure the "last key release" is initialized with invalid values
@@ -516,7 +517,7 @@ void WindowImplX11::initialize()
 }
 
 
-////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 void WindowImplX11::createHiddenCursor()
 {
     // Create the cursor's pixmap (1x1 pixels)
@@ -536,7 +537,7 @@ void WindowImplX11::createHiddenCursor()
 }
 
 
-////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 void WindowImplX11::cleanup()
 {
     // Restore the previous video mode (in case we were running in fullscreen)
@@ -544,7 +545,7 @@ void WindowImplX11::cleanup()
     {
         // Get current screen info
         XRRScreenConfiguration* config = XRRGetScreenInfo(m_display, RootWindow(m_display, m_screen));
-        if (config) 
+        if (config)
         {
             // Get the current rotation
             Rotation currentRotation;
@@ -555,7 +556,7 @@ void WindowImplX11::cleanup()
 
             // Free the configuration instance
             XRRFreeScreenConfigInfo(config);
-        } 
+        }
 
         // Reset the fullscreen window
         fullscreenWindow = NULL;
@@ -566,7 +567,7 @@ void WindowImplX11::cleanup()
 }
 
 
-////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 bool WindowImplX11::processEvent(XEvent windowEvent)
 {
     // This function implements a workaround to properly discard
@@ -584,7 +585,7 @@ bool WindowImplX11::processEvent(XEvent windowEvent)
         // - If the state is "down", KeyReleased events must obviously be discarded
         // - KeyPress events are a little bit harder to handle: they depend on the KeyRepeatEnabled state,
         //   and we need to properly forward the first one
-        
+
         // Check if the key is currently down
         char keys[32];
         XQueryKeymap(m_display, keys);
@@ -658,7 +659,7 @@ bool WindowImplX11::processEvent(XEvent windowEvent)
         // Close event
         case ClientMessage :
         {
-            if ((windowEvent.xclient.format == 32) && (windowEvent.xclient.data.l[0]) == static_cast<long>(m_atomClose))  
+            if ((windowEvent.xclient.format == 32) && (windowEvent.xclient.data.l[0]) == static_cast<long>(m_atomClose))
             {
                 Event event;
                 event.type = Event::Closed;
@@ -764,7 +765,7 @@ bool WindowImplX11::processEvent(XEvent windowEvent)
                     case Button2 : event.mouseButton.button = Mouse::Middle;   break;
                     case Button3 : event.mouseButton.button = Mouse::Right;    break;
                     case 8 :       event.mouseButton.button = Mouse::XButton1; break;
-                    case 9 :       event.mouseButton.button = Mouse::XButton2; break;            
+                    case 9 :       event.mouseButton.button = Mouse::XButton2; break;
                 }
                 pushEvent(event);
             }
@@ -787,7 +788,7 @@ bool WindowImplX11::processEvent(XEvent windowEvent)
                     case Button2 : event.mouseButton.button = Mouse::Middle;   break;
                     case Button3 : event.mouseButton.button = Mouse::Right;    break;
                     case 8 :       event.mouseButton.button = Mouse::XButton1; break;
-                    case 9 :       event.mouseButton.button = Mouse::XButton2; break;            
+                    case 9 :       event.mouseButton.button = Mouse::XButton2; break;
                 }
                 pushEvent(event);
             }
@@ -843,7 +844,7 @@ bool WindowImplX11::processEvent(XEvent windowEvent)
 }
 
 
-////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 Keyboard::Key WindowImplX11::keysymToSF(KeySym symbol)
 {
     // First convert to uppercase (to avoid dealing with two different keysyms for the same key)

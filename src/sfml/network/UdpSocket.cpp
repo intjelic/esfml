@@ -1,14 +1,15 @@
-////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 //
 // SFML - Simple and Fast Multimedia Library
 // Copyright (C) 2007-2013 Laurent Gomila (laurent.gom@gmail.com)
 //
 // This software is provided 'as-is', without any express or implied warranty.
-// In no event will the authors be held liable for any damages arising from the use of this software.
+// In no event will the authors be held liable for any damages arising from the
+// use of this software.
 //
 // Permission is granted to anyone to use this software for any purpose,
-// including commercial applications, and to alter it and redistribute it freely,
-// subject to the following restrictions:
+// including commercial applications, and to alter it and redistribute it
+// freely, subject to the following restrictions:
 //
 // 1. The origin of this software must not be misrepresented;
 //    you must not claim that you wrote the original software.
@@ -20,11 +21,11 @@
 //
 // 3. This notice may not be removed or altered from any source distribution.
 //
-////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 
-////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 // Headers
-////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 #include <sfml/network/UdpSocket.hpp>
 #include <sfml/network/IpAddress.hpp>
 #include <sfml/network/Packet.hpp>
@@ -35,7 +36,7 @@
 
 namespace sf
 {
-////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 UdpSocket::UdpSocket() :
 Socket  (Udp),
 m_buffer(MaxDatagramSize)
@@ -44,7 +45,7 @@ m_buffer(MaxDatagramSize)
 }
 
 
-////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 unsigned short UdpSocket::getLocalPort() const
 {
     if (getHandle() != priv::SocketImpl::invalidSocket())
@@ -63,7 +64,7 @@ unsigned short UdpSocket::getLocalPort() const
 }
 
 
-////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 Socket::Status UdpSocket::bind(unsigned short port)
 {
     // Create the internal socket if it doesn't exist
@@ -81,7 +82,7 @@ Socket::Status UdpSocket::bind(unsigned short port)
 }
 
 
-////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 void UdpSocket::unbind()
 {
     // Simply close the socket
@@ -89,7 +90,7 @@ void UdpSocket::unbind()
 }
 
 
-////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 Socket::Status UdpSocket::send(const void* data, std::size_t size, const IpAddress& remoteAddress, unsigned short remotePort)
 {
     // Create the internal socket if it doesn't exist
@@ -117,7 +118,7 @@ Socket::Status UdpSocket::send(const void* data, std::size_t size, const IpAddre
 }
 
 
-////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 Socket::Status UdpSocket::receive(void* data, std::size_t size, std::size_t& received, IpAddress& remoteAddress, unsigned short& remotePort)
 {
     // First clear the variables to fill
@@ -152,7 +153,7 @@ Socket::Status UdpSocket::receive(void* data, std::size_t size, std::size_t& rec
 }
 
 
-////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 Socket::Status UdpSocket::send(Packet& packet, const IpAddress& remoteAddress, unsigned short remotePort)
 {
     // UDP is a datagram-oriented protocol (as opposed to TCP which is a stream protocol).
@@ -172,7 +173,7 @@ Socket::Status UdpSocket::send(Packet& packet, const IpAddress& remoteAddress, u
 }
 
 
-////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 Socket::Status UdpSocket::receive(Packet& packet, IpAddress& remoteAddress, unsigned short& remotePort)
 {
     // See the detailed comment in send(Packet) above.
