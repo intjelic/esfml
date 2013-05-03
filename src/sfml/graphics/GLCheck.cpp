@@ -2,6 +2,7 @@
 //
 // SFML - Simple and Fast Multimedia Library
 // Copyright (C) 2007-2013 Laurent Gomila (laurent.gom@gmail.com)
+// Copyright (C) 2013 Jonathan De Wachter (dewachter.jonathan@gmail.com)
 //
 // This software is provided 'as-is', without any express or implied warranty.
 // In no event will the authors be held liable for any damages arising from the
@@ -70,20 +71,6 @@ void glCheckError(const char* file, unsigned int line)
                 break;
             }
 
-            case GL_STACK_OVERFLOW :
-            {
-                error = "GL_STACK_OVERFLOW";
-                description = "this command would cause a stack overflow";
-                break;
-            }
-
-            case GL_STACK_UNDERFLOW :
-            {
-                error = "GL_STACK_UNDERFLOW";
-                description = "this command would cause a stack underflow";
-                break;
-            }
-
             case GL_OUT_OF_MEMORY :
             {
                 error = "GL_OUT_OF_MEMORY";
@@ -91,12 +78,31 @@ void glCheckError(const char* file, unsigned int line)
                 break;
             }
 
-            case GL_INVALID_FRAMEBUFFER_OPERATION_EXT :
-            {
-                error = "GL_INVALID_FRAMEBUFFER_OPERATION_EXT";
-                description = "the object bound to FRAMEBUFFER_BINDING_EXT is not \"framebuffer complete\"";
-                break;
-            }
+            #ifndef SFML_EMBEDDED_SYSTEM
+
+                case GL_STACK_OVERFLOW :
+                {
+                    error = "GL_STACK_OVERFLOW";
+                    description = "this command would cause a stack overflow";
+                    break;
+                }
+
+                case GL_STACK_UNDERFLOW :
+                {
+                    error = "GL_STACK_UNDERFLOW";
+                    description = "this command would cause a stack underflow";
+                    break;
+                }
+
+                case GL_INVALID_FRAMEBUFFER_OPERATION_EXT :
+                {
+                    error = "GL_INVALID_FRAMEBUFFER_OPERATION_EXT";
+                    description = "the object bound to FRAMEBUFFER_BINDING_EXT is not \"framebuffer complete\"";
+                    break;
+                }
+
+            #endif
+
         }
 
         // Log the error
@@ -108,6 +114,7 @@ void glCheckError(const char* file, unsigned int line)
 }
 
 
+#ifndef SFML_EMBEDDED_SYSTEM
 ////////////////////////////////////////////////////////////////////////////////
 void ensureGlewInit()
 {
@@ -125,7 +132,7 @@ void ensureGlewInit()
         }
     }
 }
+#endif
 
 } // namespace priv
-
 } // namespace sf

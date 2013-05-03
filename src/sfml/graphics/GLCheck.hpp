@@ -2,6 +2,7 @@
 //
 // SFML - Simple and Fast Multimedia Library
 // Copyright (C) 2007-2013 Laurent Gomila (laurent.gom@gmail.com)
+// Copyright (C) 2013 Jonathan De Wachter (dewachter.jonathan@gmail.com)
 //
 // This software is provided 'as-is', without any express or implied warranty.
 // In no event will the authors be held liable for any damages arising from the
@@ -30,7 +31,10 @@
 // Headers
 ////////////////////////////////////////////////////////////////////////////////
 #include <sfml/config.hpp>
-#include <GL/glew.h>
+#include <sfml/opengl.hpp>
+#ifndef SFML_EMBEDDED_SYSTEM
+    #include <GL/glew.h>
+#endif
 #include <string>
 
 
@@ -62,12 +66,13 @@ namespace priv
 ////////////////////////////////////////////////////////////////////////////////
 void glCheckError(const char* file, unsigned int line);
 
+#ifndef SFML_EMBEDDED_SYSTEM
 ////////////////////////////////////////////////////////////////////////////////
 /// \brief Make sure that GLEW is initialized
 ///
 ////////////////////////////////////////////////////////////////////////////////
 void ensureGlewInit();
-
+#endif
 } // namespace priv
 
 } // namespace sf
