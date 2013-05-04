@@ -10,6 +10,8 @@ set(SRC
     ${INCROOT}/VideoBuffer.hpp
     ${SRCROOT}/VideoStream.cpp
     ${INCROOT}/VideoStream.hpp
+    ${SRCROOT}/Movie.cpp
+    ${INCROOT}/Movie.hpp
     ${INCROOT}/Video.hpp
 )
 
