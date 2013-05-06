@@ -26,6 +26,7 @@
 // Headers
 ////////////////////////////////////////////////////////////
 #include <SFML/Video/VideoFile.hpp>
+#include <SFML/System/Err.hpp>
 
 
 namespace sf
@@ -34,17 +35,20 @@ namespace priv
 {
 ////////////////////////////////////////////////////////////
 VideoFile::VideoFile() :
-m_file           (NULL),
+m_formatContext  (NULL),
+m_streamIndex    (-1),
+m_codecContext   (NULL),
+m_codec          (NULL),
 m_frameCount     (0),
 m_size           (0, 0),
 m_framePerSecond (0)
 {
-
 }
 
 ////////////////////////////////////////////////////////////
 VideoFile::~VideoFile()
 {
+	close();
 }
 
 ////////////////////////////////////////////////////////////
@@ -71,7 +75,79 @@ unsigned int VideoFile::getFramePerSecond() const
 ////////////////////////////////////////////////////////////
 bool VideoFile::openRead(const std::string& filename)
 {
-	return false;
+	// Close any previous open multimedia file
+	close();
+
+	// Open a multimedia file
+	m_formatContext = avformat_alloc_context();
+
+	if (!m_formatContext)
+	{
+		err() << "Couldn't allocate a format context" << std::endl;
+		return false;
+	}
+
+	int ret = avformat_open_input(&m_formatContext, filename.c_str(), NULL, NULL);
+
+	if (ret < 0)
+	{
+		err() << "Couldn't open this multimedia file (" << filename << ")" << std::endl;
+		close();
+		return false;
+	}
+
+	// Read multimedia file info
+	ret = avformat_find_stream_info(m_formatContext, NULL);
+
+	if (ret < 0)
+	{
+		err() << "Couldn't get stream information" << std::endl;
+		close();
+		return false;
+	}
+
+	// TODO: if debug mode, dump stream information
+
+	// Find a video stream
+	m_streamIndex = 0;
+
+	while (m_formatContext->streams[m_streamIndex]->codec->codec_type != AVMEDIA_TYPE_VIDEO)
+	{
+		m_streamIndex++;
+	}
+
+	if (m_streamIndex >= m_formatContext->nb_streams)
+	{
+		err() << "Couldn't find a video stream in this multimedia file" << std::endl;
+		close();
+		return false;
+	}
+
+	// Retrieve the codec context
+	m_codecContext = m_formatContext->streams[m_streamIndex]->codec;
+
+	// Find and load the codec
+	m_codec = avcodec_find_decoder(m_codecContext->codec_id);
+
+	if (!m_codec)
+	{
+		err() << "Couldn't find a suitable codec for this video stream" << std::endl;
+		close();
+		return false;
+	}
+
+	// TODO: should avcodec_alloc_context3(m_context) be called ?
+
+	ret = avcodec_open2(m_codecContext, m_codec, NULL);
+	if (ret < 0)
+	{
+		err() << "Couldn't open the suitable codec for this video stream" << std::endl;
+		close();
+		return false;
+	}
+
+	// Get the video size
+	m_size = sf::Vector2i(m_codecContext->width, m_codecContext->height);
 }
 
 
@@ -113,6 +189,20 @@ void VideoFile::write(const Texture* data, std::size_t frameCount)
 void VideoFile::seek(Time timeOffset)
 {
 }
+
+////////////////////////////////////////////////////////////////////////////////
+void VideoFile::close()
+{
+	// Check if a file is actually open before closing it
+	if (!m_formatContext)
+		return;
+
+	avformat_free_context(m_formatContext);
+
+	m_streamIndex = -1;
+	m_size = Vector2i(0, 0);
+}
+
 
 } // namespace priv
 

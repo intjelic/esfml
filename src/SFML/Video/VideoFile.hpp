@@ -33,7 +33,9 @@
 #include <SFML/System/Time.hpp>
 #include <SFML/System/Vector2.hpp>
 #include <string>
-
+#include <libavformat/avformat.h>
+#include <libavcodec/avcodec.h>
+#include <libswscale/swscale.h>
 
 namespace sf
 {
@@ -153,10 +155,16 @@ public :
     void seek(Time timeOffset);
 
 private :
+	void close();
+
     ////////////////////////////////////////////////////////////////////////////
     // Member data
     ////////////////////////////////////////////////////////////////////////////
-    void*        m_file;           ///< File descriptor
+    AVFormatContext* m_formatContext;
+    unsigned int     m_streamIndex;
+    AVCodecContext*  m_codecContext;
+    AVCodec*         m_codec;
+
     std::size_t  m_frameCount;     ///< Total number of frames in the file
     Vector2i     m_size;           ///< Size of the video
     unsigned int m_framePerSecond; ///< Number of frame per second
