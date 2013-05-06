@@ -17,7 +17,10 @@ set(SRC
 
 source_group("" FILES ${SRC})
 
+find_package(FFMPEG REQUIRED)
+add_definitions(-D__STDC_CONSTANT_MACROS)
+
 # define the sfml-window target
 sfml_add_library(sfml-video
                  SOURCES ${SRC}
-                 DEPENDS sfml-system)
+                 DEPENDS ${FFMPEG_LIBRARIES} sfml-system)
