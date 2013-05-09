@@ -29,6 +29,7 @@
 #include <sfml/network/Ftp.hpp>
 #include <sfml/network/IpAddress.hpp>
 #include <algorithm>
+#include <cctype>
 #include <fstream>
 #include <iterator>
 #include <sstream>
