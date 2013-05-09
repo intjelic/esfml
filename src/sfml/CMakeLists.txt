@@ -37,9 +37,7 @@ set(LIBRARY_OUTPUT_PATH "${PROJECT_BINARY_DIR}/lib")
 # add the modules subdirectories
 add_subdirectory(system)
 add_subdirectory(window)
-if(NOT ANDROID) # the network module isn't ported yet
 add_subdirectory(network)
-endif()
 add_subdirectory(graphics)
 add_subdirectory(audio)
 if(WINDOWS OR ANDROID)
