@@ -9,6 +9,7 @@ set(SRC
     ${SRCROOT}/error.cpp
     ${INCROOT}/error.hpp
     ${INCROOT}/export.hpp
+    ${INCROOT}/InputStream.hpp
     ${SRCROOT}/Lock.cpp
     ${INCROOT}/Lock.hpp
     ${SRCROOT}/Mutex.cpp
