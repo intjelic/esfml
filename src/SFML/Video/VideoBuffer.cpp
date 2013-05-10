@@ -26,6 +26,7 @@
 // Headers
 ////////////////////////////////////////////////////////////
 #include <SFML/Video/VideoBuffer.hpp>
+#include <SFML/Video/VideoFile.hpp>
 
 
 namespace sf
@@ -36,6 +37,7 @@ m_frames  (),
 m_duration(),
 m_videos  ()
 {
+	av_register_all();
 }
 
 
@@ -54,10 +56,21 @@ VideoBuffer::~VideoBuffer()
 }
 
 
-////////////////////////////////////////////////////////////
-bool VideoBuffer::loadFromFile(const std::string& filename)
+bool VideoBuffer::loadFromFile(const std::string& filename, unsigned int frameCount)
 {
-	return false;
+    priv::VideoFile file;
+
+    if (!file.openRead(filename))
+		return false;
+
+	// TODO: retrieve the video parameters (frameCount, etc)
+
+	// Prepare our array to receive this amount of video frame
+	m_frames.clear();
+	m_frames.reserve(frameCount);
+
+	// Read the frames from the provided file
+	return file.read(m_frames, frameCount) == frameCount;
 }
 
 
@@ -129,12 +142,6 @@ VideoBuffer& VideoBuffer::operator =(const VideoBuffer& right)
 {
 }
 
-
-////////////////////////////////////////////////////////////
-bool VideoBuffer::initialize(priv::VideoFile& file)
-{
-	return false;
-}
 
 ////////////////////////////////////////////////////////////
 void VideoBuffer::attachVideo(Video* video) const

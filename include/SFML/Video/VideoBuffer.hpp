@@ -84,7 +84,7 @@ public :
     /// \see loadFromMemory, loadFromStream, loadFromFrames, saveToFile
     ///
     ////////////////////////////////////////////////////////////////////////////
-    bool loadFromFile(const std::string& filename);
+    bool loadFromFile(const std::string& filename, unsigned int frameCount);
 
     ////////////////////////////////////////////////////////////////////////////
     /// \brief Load the video buffer from a file in memory
@@ -214,16 +214,6 @@ public :
 private :
 
     friend class Video;
-
-    ////////////////////////////////////////////////////////////////////////////
-    /// \brief Initialize the internal state after loading a new video
-    ///
-    /// \param file Video file providing access to the new loaded video
-    ///
-    /// \return True on succesful initialization, false on failure
-    ///
-    ////////////////////////////////////////////////////////////////////////////
-    bool initialize(priv::VideoFile& file);
 
     ////////////////////////////////////////////////////////////////////////////
     /// \brief Add a video to the list of videos that use this buffer
