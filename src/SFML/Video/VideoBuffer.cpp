@@ -105,7 +105,7 @@ bool VideoBuffer::saveToFile(const std::string& filename) const
 ////////////////////////////////////////////////////////////
 const Image* VideoBuffer::getFrames() const
 {
-	return NULL;
+	return m_frames.empty() ? NULL : &m_frames[0];
 }
 
 
