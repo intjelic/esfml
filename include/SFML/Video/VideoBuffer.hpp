@@ -249,9 +249,9 @@ private :
     ////////////////////////////////////////////////////////////////////////////
     // Member data
     ////////////////////////////////////////////////////////////////////////////
-    std::vector<Image*> m_frames;   ///< Frame buffer
-    Time                m_duration; ///< Video duration
-    mutable VideoList   m_videos;   ///< List of videos that are using this buffer
+    std::vector<Image> m_frames;   ///< Frame buffer
+    Time               m_duration; ///< Video duration
+    mutable VideoList  m_videos;   ///< List of videos that are using this buffer
 };
 
 } // namespace sf

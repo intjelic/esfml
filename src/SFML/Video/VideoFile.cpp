@@ -39,6 +39,7 @@ m_formatContext  (NULL),
 m_streamIndex    (-1),
 m_codecContext   (NULL),
 m_codec          (NULL),
+m_swsContext     (NULL),
 m_frameCount     (0),
 m_size           (0, 0),
 m_framePerSecond (0)
@@ -148,6 +149,10 @@ bool VideoFile::openRead(const std::string& filename)
 
 	// Get the video size
 	m_size = sf::Vector2i(m_codecContext->width, m_codecContext->height);
+
+	// Initialize the scaling/color convertion context
+	m_swsContext = sws_getContext(m_size.x, m_size.y, m_codecContext->pix_fmt,
+		m_size.x, m_size.y, PIX_FMT_RGBA, SWS_FAST_BILINEAR, NULL, NULL, NULL);
 }
 
 
@@ -173,9 +178,83 @@ bool VideoFile::openWrite(const std::string& filename, unsigned int channelCount
 
 
 ////////////////////////////////////////////////////////////
-std::size_t VideoFile::read(const Texture* data, std::size_t frameCount)
+std::size_t VideoFile::read(std::vector<Image>& data, std::size_t frameCount)
 {
-	return 0;
+	// Abord if no multimedia file is open
+	if (!m_formatContext)
+	{
+		data.clear();
+		data.reserve(0);
+		return 0;
+	}
+
+	// Allocate space to store the x next images
+	data.resize(frameCount);
+
+	// Initialize the packet which will contain video frames
+	AVPacket pkt;
+
+	av_init_packet(&pkt);
+	pkt.data = NULL;
+	pkt.size = 0;
+
+	// Allocate the frames which will receive video frame data
+	AVFrame* rawFrame = avcodec_alloc_frame();
+	AVFrame* rgbaFrame = avcodec_alloc_frame();
+
+	if (!rawFrame || !rgbaFrame)
+	{
+		err() << "Couldn't allocate frames" << std::endl;
+		return false;
+	}
+
+	// Allocate two buffers to perform color format convertions
+	int rawSize = avpicture_get_size(m_codecContext->pix_fmt, m_size.x, m_size.y);
+	int rgbaSize = avpicture_get_size(PIX_FMT_RGBA, m_size.x, m_size.y);
+
+	uint8_t* rawPictureBuf = (uint8_t *)av_malloc(rawSize);
+	uint8_t* rgbaPictureBuf = (uint8_t *)av_malloc(rgbaSize);
+
+	avpicture_fill((AVPicture *)rawFrame, rawPictureBuf, m_codecContext->pix_fmt, m_size.x, m_size.y);
+	avpicture_fill((AVPicture *)rgbaFrame, rgbaPictureBuf, PIX_FMT_RGBA, m_size.x, m_size.y);
+
+	// Now we're decoding images one by one
+	int currentFrame = 0;
+	int frameDecoded;
+
+	while (currentFrame < frameCount)
+	{
+		// Read the next chunk of data
+		if (av_read_frame(m_formatContext, &pkt) < 0)
+		{
+			err() << "Couldn't read the next frame" << std::endl;
+			break;
+		}
+
+		// Skip if not a video frame
+		if (pkt.stream_index != m_streamIndex)
+			continue;
+
+		// Decode the video frame
+		avcodec_decode_video2(m_codecContext, rawFrame, &frameDecoded, &pkt);
+
+		// Convert color format to RGBA
+		sws_scale(m_swsContext, rawFrame->data, rawFrame->linesize, 0, m_size.y, rgbaFrame->data, rgbaFrame->linesize);
+
+		// Append our decoded and well formatted frame
+		data[currentFrame].create(m_size.x, m_size.y, (const sf::Uint8*)rgbaFrame->data[0]);
+
+		currentFrame++;
+	}
+
+	// Deallocate temporary resources
+	av_free(rawPictureBuf);
+	av_free(rgbaPictureBuf);
+
+	av_free(rawFrame);
+	av_free(rgbaFrame);
+
+	return currentFrame + 1;
 }
 
 

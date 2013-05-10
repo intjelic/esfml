@@ -135,7 +135,7 @@ public :
     /// \return Number of samples actually read (may be less than \a sampleCount)
     ///
     ////////////////////////////////////////////////////////////////////////////
-    std::size_t read(const Texture* data, std::size_t frameCount);
+    std::size_t read(std::vector<Image>& data, std::size_t frameCount);
 
     ////////////////////////////////////////////////////////////////////////////
     /// \brief Write video frames to the file
@@ -164,6 +164,7 @@ private :
     unsigned int     m_streamIndex;
     AVCodecContext*  m_codecContext;
     AVCodec*         m_codec;
+    SwsContext*      m_swsContext;
 
     std::size_t  m_frameCount;     ///< Total number of frames in the file
     Vector2i     m_size;           ///< Size of the video
