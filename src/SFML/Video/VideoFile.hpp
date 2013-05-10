@@ -33,9 +33,12 @@
 #include <SFML/System/Time.hpp>
 #include <SFML/System/Vector2.hpp>
 #include <string>
-#include <libavformat/avformat.h>
-#include <libavcodec/avcodec.h>
-#include <libswscale/swscale.h>
+
+extern "C" {
+	#include <libavformat/avformat.h>
+	#include <libavcodec/avcodec.h>
+	#include <libswscale/swscale.h>
+}
 
 namespace sf
 {

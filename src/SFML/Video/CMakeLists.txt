@@ -23,4 +23,5 @@ add_definitions(-D__STDC_CONSTANT_MACROS)
 # define the sfml-window target
 sfml_add_library(sfml-video
                  SOURCES ${SRC}
-                 DEPENDS ${FFMPEG_LIBRARIES} sfml-system)
+                 DEPENDS sfml-system
+                 EXTERNAL_LIBS ${FFMPEG_LIBRARIES} swscale avformat)
