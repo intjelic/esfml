@@ -6,6 +6,8 @@ set(SRCROOT ${PROJECT_SOURCE_DIR}/src/SFML/Video)
 set(SRC
     ${SRCROOT}/VideoFile.cpp
     ${SRCROOT}/VideoFile.hpp
+    ${INCROOT}/VideoSource.hpp
+    ${SRCROOT}/VideoSource.cpp
     ${SRCROOT}/VideoBuffer.cpp
     ${INCROOT}/VideoBuffer.hpp
     ${SRCROOT}/VideoStream.cpp
