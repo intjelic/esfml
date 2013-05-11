@@ -105,7 +105,10 @@ void WindowImplAndroid::setPosition(const Vector2i& position)
 ////////////////////////////////////////////////////////////////////////////////
 Vector2u WindowImplAndroid::getSize() const
 {
-    return Vector2u(640, 480);
+    ActivityStates* states = getActivityStates(NULL);
+    int w = ANativeWindow_getWidth(states->window);
+    int h = ANativeWindow_getHeight(states->window);
+    return Vector2u(static_cast<unsigned int>(w), static_cast<unsigned int>(h));
 }
 
 
