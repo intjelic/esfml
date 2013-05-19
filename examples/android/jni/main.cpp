@@ -1,6 +1,7 @@
 #include <sfml/system.hpp>
 #include <sfml/window.hpp>
 #include <sfml/graphics.hpp>
+#include <sfml/audio.hpp>
 
 int main(int argc, char *argv[])
 {
@@ -16,6 +17,11 @@ int main(int argc, char *argv[])
 
     sf::Vector2u screenSize = window.getSize();
     sprite.setPosition(screenSize.x/2, screenSize.y/2);
+
+    sf::Music music;
+    music.openFromFile("orchestral.ogg");
+
+    music.play();
 
     while (window.isOpen())
     {
