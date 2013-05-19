@@ -1,10 +1,21 @@
 #include <sfml/system.hpp>
 #include <sfml/window.hpp>
-#include <GLES/gl.h>
+#include <sfml/graphics.hpp>
 
 int main(int argc, char *argv[])
 {
-    sf::Window window(sf::VideoMode::getDesktopMode(), "");
+    sf::RenderWindow window(sf::VideoMode::getDesktopMode(), "");
+
+    sf::Texture texture;
+    texture.loadFromFile("image.png");
+
+    sf::Sprite sprite(texture);
+
+    sf::Vector2u imageSize = texture.getSize();
+    sprite.setOrigin(imageSize.x/2, imageSize.y/2);
+
+    sf::Vector2u screenSize = window.getSize();
+    sprite.setPosition(screenSize.x/2, screenSize.y/2);
 
     while (window.isOpen())
     {
@@ -15,10 +26,14 @@ int main(int argc, char *argv[])
             {
                 window.close();
             }
+            else if (event.type == sf::Event::MouseMoved)
+            {
+                sprite.setPosition(event.mouseMove.x, event.mouseMove.y);
+            }
         }
 
-        glClearColor(0.5, 0.5, 0.5, 1);
-        glClear(GL_COLOR_BUFFER_BIT);
+        window.clear(sf::Color::White);
+        window.draw(sprite);
         window.display();
     }
 }
