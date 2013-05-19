@@ -145,19 +145,36 @@ bool Font::loadFromFile(const std::string& filename)
     priv::ActivityStates* states = priv::getActivityStates(NULL);
     Lock lock(states->mutex);
 
-    AAsset* myfile = AAssetManager_open(states->activity->assetManager, filename.c_str(), AASSET_MODE_UNKNOWN);
+    // Open the file
+    AAsset* file = NULL;
+    file = AAssetManager_open(states->activity->assetManager, filename.c_str(), AASSET_MODE_UNKNOWN);
 
-    off_t size = AAsset_getLength(myfile);
-    void* data = malloc(size);
-    int status = AAsset_read(myfile, data, size);
-
-    if (status == 0)
+    if (!file)
     {
+        // File not found, abording...
         err() << "Failed to load font \"" << filename << "\" (couldn't find it)" << std::endl;
         return false;
     }
 
-    return loadFromMemory(data, size);
+    // Copy into memory
+    off_t size = AAsset_getLength(file);
+    void* data = malloc(size);
+    int status = AAsset_read(file, data, size);
+
+    if (status <= 0)
+    {
+        // Something went wrong while we were copying, reading error...
+        err() << "Failed to load font \"" << filename << "\" (couldn't read it)" << std::endl;
+        return false;
+    }
+
+    // Load from our fresh memory
+    bool ret = loadFromMemory(data, size);
+
+    // Close the file
+    AAsset_close(file);
+
+    return ret;
 
     #endif
 }
