@@ -3,12 +3,15 @@
 #include <sfml/graphics.hpp>
 #include <sfml/audio.hpp>
 
+#include <iostream>
+
 int main(int argc, char *argv[])
 {
     sf::RenderWindow window(sf::VideoMode::getDesktopMode(), "");
 
     sf::Texture texture;
-    texture.loadFromFile("image.png");
+    if(!texture.loadFromFile("image.png"))
+    	return EXIT_FAILURE;
 
     sf::Sprite sprite(texture);
 
@@ -19,7 +22,8 @@ int main(int argc, char *argv[])
     sprite.setPosition(screenSize.x/2, screenSize.y/2);
 
     sf::Music music;
-    music.openFromFile("orchestral.ogg");
+    if(!music.openFromFile("orchestral.ogg"))
+    	return EXIT_FAILURE;
 
     music.play();
 
