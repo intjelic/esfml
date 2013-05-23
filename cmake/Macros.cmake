@@ -219,6 +219,7 @@ else()
     set(EXTLIBS_DIR ${PROJECT_SOURCE_DIR}/extlibs/android/extlibs)
 
     file(WRITE ${APPLICATION_MK})
+    file(APPEND ${APPLICATION_MK} "NDK_APP_OUT := ${CMAKE_BINARY_DIR}/src/sfml/${MODULE_NAME}/obj\n")
     file(APPEND ${APPLICATION_MK} "APP_PLATFORM := android-9\n")
     file(APPEND ${APPLICATION_MK} "APP_STL := stlport_static\n")
     file(APPEND ${APPLICATION_MK} "APP_BUILD_SCRIPT := Android.mk\n")
@@ -257,7 +258,6 @@ else()
     #   $NDK/ndk-build -C /home/sonkun/Desktop/esfml/src/sfml/main
     #   NDK_APPLICATION_MK=/home/sonkun/Desktop/esfml/src/sfml/main/Application.mk
     add_custom_command(TARGET ${target} POST_BUILD COMMAND ${NDK_PROJECT_PATH} ${NDK_MODULE_PATH} ${NDK_BUILD} -C ${DIR} ${NDK_APPLICATION_MK})
-    add_custom_command(TARGET ${target} POST_BUILD COMMAND cp -r ${PROJECT_SOURCE_DIR}/src/sfml/${MODULE_NAME}/obj ${CMAKE_BINARY_DIR}/src/sfml/${MODULE_NAME})
 
     ## CLEAN RULES (not working)
     #LIST(APPEND ${CMAKE_BINARY_DIR}/jni ${FILES_TO_CLEAN})
