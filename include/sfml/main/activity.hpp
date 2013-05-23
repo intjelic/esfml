@@ -26,6 +26,7 @@
 
 #include <android/native_activity.h>
 #include <android/configuration.h>
+#include <android/sensor.h>
 #include <sfml/window/EGLCheck.hpp>
 #include <sfml/window/Event.hpp>
 #include <sfml/system/Mutex.hpp>
@@ -43,6 +44,10 @@ struct ActivityStates
     ALooper*        looper;
     AInputQueue*    inputQueue;
     AConfiguration* config;
+
+    ASensorManager* sensorManager;
+    const ASensor* accelerometerSensor;
+    ASensorEventQueue* sensorEventQueue;
 
     EGLDisplay display;
 
