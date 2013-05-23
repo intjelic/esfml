@@ -218,34 +218,34 @@ else()
     set(SRC_DIR ${PROJECT_SOURCE_DIR}/src)
     set(EXTLIBS_DIR ${PROJECT_SOURCE_DIR}/extlibs/android/extlibs)
 
-    # BUILD rules
-    add_custom_command(TARGET ${target} PRE_BUILD COMMAND touch ${APPLICATION_MK})
-    add_custom_command(TARGET ${target} PRE_BUILD COMMAND echo "APP_PLATFORM := android-9" >> ${APPLICATION_MK})
-    add_custom_command(TARGET ${target} PRE_BUILD COMMAND echo "APP_STL := stlport_static" >> ${APPLICATION_MK})
-    add_custom_command(TARGET ${target} PRE_BUILD COMMAND echo "APP_BUILD_SCRIPT := Android.mk" >> ${APPLICATION_MK})
-    add_custom_command(TARGET ${target} PRE_BUILD COMMAND echo "APP_MODULES := ${target}" >> ${APPLICATION_MK})
-    add_custom_command(TARGET ${target} PRE_BUILD COMMAND echo "APP_CPPFLAGS += -I${INCLUDE_DIR}" >> ${APPLICATION_MK})
-    add_custom_command(TARGET ${target} PRE_BUILD COMMAND echo "APP_CPPFLAGS += -I${SRC_DIR}" >> ${APPLICATION_MK})
-    add_custom_command(TARGET ${target} PRE_BUILD COMMAND echo "APP_CPPFLAGS += -I${EXTLIBS_DIR}/include" >> ${APPLICATION_MK})
-    add_custom_command(TARGET ${target} PRE_BUILD COMMAND echo "APP_CPPFLAGS += -DSFML_EMBEDDED_SYSTEM" >> ${APPLICATION_MK})
-    add_custom_command(TARGET ${target} PRE_BUILD COMMAND echo "APP_CPPFLAGS += -DSFML_DEBUG" >> ${APPLICATION_MK})
+    file(WRITE ${APPLICATION_MK})
+    file(APPEND ${APPLICATION_MK} "APP_PLATFORM := android-9\n")
+    file(APPEND ${APPLICATION_MK} "APP_STL := stlport_static\n")
+    file(APPEND ${APPLICATION_MK} "APP_BUILD_SCRIPT := Android.mk\n")
+    file(APPEND ${APPLICATION_MK} "APP_MODULES := ${target}\n")
+    file(APPEND ${APPLICATION_MK} "APP_CPPFLAGS += -I${INCLUDE_DIR}\n")
+    file(APPEND ${APPLICATION_MK} "APP_CPPFLAGS += -I${SRC_DIR}\n")
+    file(APPEND ${APPLICATION_MK} "APP_CPPFLAGS += -I${EXTLIBS_DIR}/include\n")
+    file(APPEND ${APPLICATION_MK} "APP_CPPFLAGS += -DSFML_EMBEDDED_SYSTEM\n")
+    file(APPEND ${APPLICATION_MK} "APP_CPPFLAGS += -DSFML_DEBUG\n")
 
     if (ANDROID_ABI_ARM)
-    add_custom_command(TARGET ${target} PRE_BUILD COMMAND echo "APP_ABI += armeabi" >> ${APPLICATION_MK})
+        file(APPEND ${APPLICATION_MK} "APP_ABI += armeabi\n")
     endif()
 
     if (ANDROID_ABI_ARMv7)
-    add_custom_command(TARGET ${target} PRE_BUILD COMMAND echo "APP_ABI += armeabi-v7a" >> ${APPLICATION_MK})
+        file(APPEND ${APPLICATION_MK} "APP_ABI += armeabi-v7a\n")
     endif()
 
     if (ANDROID_ABI_MIPS)
-    add_custom_command(TARGET ${target} PRE_BUILD COMMAND echo "APP_ABI += mips" >> ${APPLICATION_MK})
+        file(APPEND ${APPLICATION_MK} "APP_ABI += mips\n")
     endif()
 
     if (ANDROID_ABI_x86)
-    add_custom_command(TARGET ${target} PRE_BUILD COMMAND echo "APP_ABI += x86" >> ${APPLICATION_MK})
+        file(APPEND ${APPLICATION_MK} "APP_ABI += x86\n")
     endif()
 
+    # BUILD rules
     set(DIR ${PROJECT_SOURCE_DIR}/src/sfml/${MODULE_NAME})
     set(NDK_MODULE_PATH NDK_MODULE_PATH=${PROJECT_SOURCE_DIR}/extlibs/android)
     set(NDK_PROJECT_PATH NDK_PROJECT_PATH=${PROJECT_SOURCE_DIR}/src/sfml/${MODULE_NAME})
@@ -257,7 +257,7 @@ else()
     #   $NDK/ndk-build -C /home/sonkun/Desktop/esfml/src/sfml/main
     #   NDK_APPLICATION_MK=/home/sonkun/Desktop/esfml/src/sfml/main/Application.mk
     add_custom_command(TARGET ${target} POST_BUILD COMMAND ${NDK_PROJECT_PATH} ${NDK_MODULE_PATH} ${NDK_BUILD} -C ${DIR} ${NDK_APPLICATION_MK})
-    add_custom_command(TARGET ${target} POST_BUILD COMMAND mv ${PROJECT_SOURCE_DIR}/src/sfml/${MODULE_NAME}/obj ${CMAKE_BINARY_DIR}/src/sfml/${MODULE_NAME})
+    add_custom_command(TARGET ${target} POST_BUILD COMMAND cp -r ${PROJECT_SOURCE_DIR}/src/sfml/${MODULE_NAME}/obj ${CMAKE_BINARY_DIR}/src/sfml/${MODULE_NAME})
 
     ## CLEAN RULES (not working)
     #LIST(APPEND ${CMAKE_BINARY_DIR}/jni ${FILES_TO_CLEAN})
