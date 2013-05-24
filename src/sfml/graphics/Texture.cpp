@@ -36,7 +36,9 @@
 #include <sfml/system/error.hpp>
 #include <cassert>
 #include <cstring>
-#include <GLES/glext.h>
+#ifdef SFML_EMBEDDED_SYSTEM
+    #include <GLES/glext.h>
+#endif
 
 namespace
 {
