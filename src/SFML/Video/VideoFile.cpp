@@ -105,18 +105,22 @@ bool VideoFile::openRead(const std::string& filename)
 
 	// Find a video stream
 	m_streamIndex = 0;
+	ret = av_find_best_stream(m_formatContext, AVMEDIA_TYPE_VIDEO, -1, -1, &m_codec, 0);
 
-	while (m_formatContext->streams[m_streamIndex]->codec->codec_type != AVMEDIA_TYPE_VIDEO)
+	if (ret < 0)
 	{
-		m_streamIndex++;
-	}
+		if (ret == AVERROR_DECODER_NOT_FOUND)
+			err() << "Couldn't find a video stream in this multimedia file" << std::endl;
+		else if (ret == AVERROR_DECODER_NOT_FOUND)
+			err() << "Couldn't find a suitable codec for this video stream" << std::endl;
+		else
+			err() << "An unknown error occured while trying to find the video stream" << std::endl;
 
-	if (m_streamIndex >= m_formatContext->nb_streams)
-	{
-		err() << "Couldn't find a video stream in this multimedia file" << std::endl;
 		close();
 		return false;
 	}
+
+	m_streamIndex = ret;
 
 	// Retrieve the codec context
 	m_codecContext = m_formatContext->streams[m_streamIndex]->codec;
@@ -131,9 +135,8 @@ bool VideoFile::openRead(const std::string& filename)
 		return false;
 	}
 
-	// TODO: should avcodec_alloc_context3(m_context) be called ?
-
 	ret = avcodec_open2(m_codecContext, m_codec, NULL);
+
 	if (ret < 0)
 	{
 		err() << "Couldn't open the suitable codec for this video stream" << std::endl;
