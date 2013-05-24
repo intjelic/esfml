@@ -264,6 +264,7 @@ void VideoFile::seek(Time timeOffset)
 ////////////////////////////////////////////////////////////////////////////////
 void VideoFile::close()
 {
+    avcodec_close(m_codecContext);
     avformat_close_input(&m_formatContext);
 
 	m_streamIndex = -1;
