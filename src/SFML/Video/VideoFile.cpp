@@ -55,21 +55,21 @@ VideoFile::~VideoFile()
 ////////////////////////////////////////////////////////////
 std::size_t VideoFile::getFrameCount() const
 {
-    return m_frameCount;
+	return m_frameCount;
 }
 
 
 ////////////////////////////////////////////////////////////
 const Vector2i& VideoFile::getSize() const
 {
-    return m_size;
+	return m_size;
 }
 
 
 ////////////////////////////////////////////////////////////
 unsigned int VideoFile::getFramePerSecond() const
 {
-    return m_framePerSecond;
+	return m_framePerSecond;
 }
 
 
@@ -225,7 +225,10 @@ std::size_t VideoFile::read(std::vector<Image>& data, std::size_t frameCount)
 
 		// Skip if not a video frame
 		if (pkt.stream_index != m_streamIndex)
+		{
+			av_free_packet(&pkt);
 			continue;
+		}
 
 		// Decode the video frame
 		avcodec_decode_video2(m_codecContext, rawFrame, &frameDecoded, &pkt);
@@ -235,6 +238,8 @@ std::size_t VideoFile::read(std::vector<Image>& data, std::size_t frameCount)
 
 		// Append our decoded and well formatted frame
 		data[currentFrame].create(m_size.x, m_size.y, (const sf::Uint8*)rgbaFrame->data[0]);
+
+		av_free_packet(&pkt);
 
 		currentFrame++;
 	}
@@ -264,8 +269,8 @@ void VideoFile::seek(Time timeOffset)
 ////////////////////////////////////////////////////////////////////////////////
 void VideoFile::close()
 {
-    avcodec_close(m_codecContext);
-    avformat_close_input(&m_formatContext);
+	avcodec_close(m_codecContext);
+	avformat_close_input(&m_formatContext);
 
 	m_streamIndex = -1;
 	m_size = Vector2i(0, 0);
