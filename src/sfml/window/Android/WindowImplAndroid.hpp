@@ -67,6 +67,10 @@ protected :
 
 private:
     _EGLContext* m_context;
+    
+    // Cache the width and height, as calls to ANativeWindow_getWidth/Height can be slow
+    int m_width;
+    int m_height;
 };
 
 } // namespace priv

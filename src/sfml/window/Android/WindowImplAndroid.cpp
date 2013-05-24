@@ -84,6 +84,13 @@ void WindowImplAndroid::processEvents()
     {
         sf::Event tempEvent = states->pendingEvents.back();
         states->pendingEvents.pop_back();
+
+        if (tempEvent.type == sf::Event::Resized)
+        {
+            m_width = tempEvent.size.width;
+            m_height = tempEvent.size.height;
+        }
+
         pushEvent(tempEvent);
     }
 }
@@ -105,10 +112,7 @@ void WindowImplAndroid::setPosition(const Vector2i& position)
 ////////////////////////////////////////////////////////////////////////////////
 Vector2u WindowImplAndroid::getSize() const
 {
-    ActivityStates* states = getActivityStates(NULL);
-    int w = ANativeWindow_getWidth(states->window);
-    int h = ANativeWindow_getHeight(states->window);
-    return Vector2u(static_cast<unsigned int>(w), static_cast<unsigned int>(h));
+    return Vector2u(static_cast<unsigned int>(m_width), static_cast<unsigned int>(m_height));
 }
 
 
