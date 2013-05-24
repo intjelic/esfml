@@ -28,6 +28,7 @@
 #include <SFML/Video/VideoFile.hpp>
 #include <SFML/System/Err.hpp>
 
+#include <iostream>
 
 namespace sf
 {
@@ -76,8 +77,9 @@ unsigned int VideoFile::getFramePerSecond() const
 ////////////////////////////////////////////////////////////
 bool VideoFile::openRead(const std::string& filename)
 {
-	// Close any previous open multimedia file
-	close();
+	// If the file is already opened, first close it
+	if (m_formatContext)
+		close();
 
 	// Open a multimedia file
 	int ret = avformat_open_input(&m_formatContext, filename.c_str(), NULL, NULL);
@@ -145,6 +147,8 @@ bool VideoFile::openRead(const std::string& filename)
 	// Initialize the scaling/color convertion context
 	m_swsContext = sws_getContext(m_size.x, m_size.y, m_codecContext->pix_fmt,
 		m_size.x, m_size.y, PIX_FMT_RGBA, SWS_FAST_BILINEAR, NULL, NULL, NULL);
+
+	std::cout << "Remove this print statement and you'll get a segmentation fault (O.o)" << std::endl;
 }
 
 
@@ -235,7 +239,6 @@ std::size_t VideoFile::read(std::vector<Image>& data, std::size_t frameCount)
 
 		// Convert color format to RGBA
 		sws_scale(m_swsContext, rawFrame->data, rawFrame->linesize, 0, m_size.y, rgbaFrame->data, rgbaFrame->linesize);
-
 		// Append our decoded and well formatted frame
 		data[currentFrame].create(m_size.x, m_size.y, (const sf::Uint8*)rgbaFrame->data[0]);
 
