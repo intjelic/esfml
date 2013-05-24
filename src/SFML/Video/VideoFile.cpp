@@ -80,14 +80,6 @@ bool VideoFile::openRead(const std::string& filename)
 	close();
 
 	// Open a multimedia file
-	m_formatContext = avformat_alloc_context();
-
-	if (!m_formatContext)
-	{
-		err() << "Couldn't allocate a format context" << std::endl;
-		return false;
-	}
-
 	int ret = avformat_open_input(&m_formatContext, filename.c_str(), NULL, NULL);
 
 	if (ret < 0)
@@ -272,11 +264,7 @@ void VideoFile::seek(Time timeOffset)
 ////////////////////////////////////////////////////////////////////////////////
 void VideoFile::close()
 {
-	// Check if a file is actually open before closing it
-	if (!m_formatContext)
-		return;
-
-	avformat_free_context(m_formatContext);
+    avformat_close_input(&m_formatContext);
 
 	m_streamIndex = -1;
 	m_size = Vector2i(0, 0);
