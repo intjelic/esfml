@@ -330,6 +330,17 @@ static void onWindowFocusChanged(ANativeActivity* activity, int focused)
 
 static void onContentRectChanged(ANativeActivity* activity, const ARect* rect)
 {
+    // Retrieve our activity states from the activity instance
+    sf::priv::ActivityStates* states = sf::priv::retrieveStates(activity);
+    sf::Lock lock(states->mutex);
+
+    // Send an event to warn people about the window move/resize
+    sf::Event event;
+    event.type = sf::Event::Resized;
+    event.size.width = ANativeWindow_getWidth(states->window);
+    event.size.height = ANativeWindow_getHeight(states->window);
+
+    states->pendingEvents.push_back(event);
 }
 
 static void onConfigurationChanged(ANativeActivity* activity)
