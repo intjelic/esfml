@@ -220,8 +220,7 @@ void RenderTarget::draw(const Vertex* vertices, unsigned int vertexCount,
             glCheck(glTexCoordPointer(2, GL_FLOAT, sizeof(Vertex), data + 12));
         }
 
-        // Find the OpenGL primitive type (GL_QUADS not available on ES)
-        #ifndef SFML_EMBEDDED_SYSTEM
+        // Find the OpenGL primitive type
         static const GLenum modes[] = {GL_POINTS, GL_LINES, GL_LINE_STRIP, GL_TRIANGLES,
                                        GL_TRIANGLE_STRIP, GL_TRIANGLE_FAN, GL_QUADS};
         #else
