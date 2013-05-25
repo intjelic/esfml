@@ -62,6 +62,8 @@ struct ActivityStates
 
     bool initialized;
     bool terminated;
+
+    bool updated;
 };
 
 ActivityStates* getActivityStates(ActivityStates* initializedStates=NULL);

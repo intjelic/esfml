@@ -62,12 +62,12 @@ public :
     virtual void setMouseCursorVisible(bool visible);
     virtual void setKeyRepeatEnabled(bool enabled);
 
+    _EGLContext* m_context;
+
 protected :
     virtual void processEvents();
 
 private:
-    _EGLContext* m_context;
-    
     // Cache the width and height, as calls to ANativeWindow_getWidth/Height can be slow
     int m_width;
     int m_height;

@@ -52,6 +52,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, INT)
 extern int main(int argc, char *argv[]);
 JavaVM* javaVM;
 
+
 namespace sf
 {
 namespace priv
@@ -257,7 +258,22 @@ static void onNativeWindowCreated(ANativeActivity* activity, ANativeWindow* wind
     sf::priv::ActivityStates* states = sf::priv::retrieveStates(activity);
     sf::Lock lock(states->mutex);
 
+    // Update the activity states
     states->window = window;
+
+    // Notify SFML mechanism
+    sf::Event event;
+    event.type = sf::Event::GainedFocus;
+    states->pendingEvents.push_back(event);
+
+    // Wait for the event to be taken into account by SFML
+    states->updated = false;
+    while(!states->updated)
+    {
+        states->mutex.unlock();
+        sf::sleep(sf::milliseconds(10));
+        states->mutex.lock();
+    }
 }
 
 static void onNativeWindowDestroyed(ANativeActivity* activity, ANativeWindow* window)
@@ -265,7 +281,22 @@ static void onNativeWindowDestroyed(ANativeActivity* activity, ANativeWindow* wi
     sf::priv::ActivityStates* states = sf::priv::retrieveStates(activity);
     sf::Lock lock(states->mutex);
 
+    // Update the activity states
     states->window = NULL;
+
+    // Notify SFML mechanism
+    sf::Event event;
+    event.type = sf::Event::LostFocus;
+    states->pendingEvents.push_back(event);
+
+    // Wait for the event to be taken into account by SFML
+    states->updated = false;
+    while(!states->updated)
+    {
+        states->mutex.unlock();
+        sf::sleep(sf::milliseconds(10));
+        states->mutex.lock();
+    }
 }
 
 static void onNativeWindowRedrawNeeded(ANativeActivity* activity, ANativeWindow* window)

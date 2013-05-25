@@ -31,7 +31,10 @@
 #include <sfml/window/WindowImpl.hpp>
 #include <sfml/system/sleep.hpp>
 #include <sfml/system/error.hpp>
-
+#ifdef SFML_SYSTEM_ANDROID
+    #include <sfml/window/Android/WindowImplAndroid.hpp>
+    #include <sfml/window/Android/EGLContext.hpp>
+#endif
 
 namespace
 {
@@ -119,6 +122,12 @@ void Window::create(VideoMode mode, const String& title, Uint32 style, const Con
 
     // Recreate the context
     m_context = priv::GlContext::create(settings, m_impl, mode.bitsPerPixel);
+
+    #ifdef SFML_SYSTEM_ANDROID
+        // On Android, the window needs its attached context to destroy/recreate
+        // it when the native window is created/destroyed.
+        static_cast<priv::WindowImplAndroid*>(m_impl)->m_context = (priv::_EGLContext*)m_context;
+    #endif
 
     // Perform common initializations
     initialize();

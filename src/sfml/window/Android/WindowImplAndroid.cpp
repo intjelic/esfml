@@ -29,6 +29,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 #include <sfml/window/WindowStyle.hpp> // important to be included first (conflict with None)
 #include <sfml/window/Android/WindowImplAndroid.hpp>
+#include <sfml/window/Event.hpp>
 #include <sfml/system/Lock.hpp>
 #include <sfml/main/activity.hpp>
 
@@ -89,6 +90,16 @@ void WindowImplAndroid::processEvents()
         {
             m_width = tempEvent.size.width;
             m_height = tempEvent.size.height;
+        }
+        else if (tempEvent.type == Event::GainedFocus)
+        {
+            m_context->createSurface(states->window);
+            states->updated = true;
+        }
+        else if (tempEvent.type == Event::LostFocus)
+        {
+            m_context->destroySurface();
+            states->updated = true;
         }
 
         pushEvent(tempEvent);

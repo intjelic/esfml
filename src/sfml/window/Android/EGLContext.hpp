@@ -55,6 +55,9 @@ public :
 
     void createContext(_EGLContext* shared, unsigned int bitsPerPixel, const EGLConfig settings);
 
+    void createSurface(ANativeWindow* window);
+    void destroySurface();
+
 private :
     EGLDisplay  m_display;
     EGLContext  m_context;

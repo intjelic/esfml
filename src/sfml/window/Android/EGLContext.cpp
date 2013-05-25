@@ -103,16 +103,6 @@ m_surface (EGL_NO_SURFACE)
     EGLConfig config[1];
     eglCheck(eglChooseConfig(m_display, attribs, &config[0], 1, &numConfigs));
 
-    // Wait for a window if there's none
-    while (!states->window)
-    {
-        states->mutex.unlock();
-        sf::sleep(sf::milliseconds(10));
-        states->mutex.lock();
-    }
-
-    m_surface = eglCheck(eglCreateWindowSurface(m_display, config[0], states->window, NULL));
-
     // Create the context
     createContext(shared, 0, config[0]);
 }
@@ -178,6 +168,32 @@ void _EGLContext::createContext(_EGLContext* shared, unsigned int bitsPerPixel, 
     // Create the EGL context
     m_context = eglCheck(eglCreateContext(m_display, settings, toShared, contextVersion));
 }
+
+
+void _EGLContext::createSurface(ANativeWindow* window)
+{
+    // Create the EGL surface
+    const EGLint attribs[] = {
+            EGL_SURFACE_TYPE, EGL_WINDOW_BIT | EGL_PBUFFER_BIT,
+            EGL_BLUE_SIZE, 8,
+            EGL_GREEN_SIZE, 8,
+            EGL_RED_SIZE, 8,
+            EGL_RENDERABLE_TYPE, EGL_OPENGL_ES_BIT,
+            EGL_NONE
+    };
+
+    EGLint numConfigs;
+    EGLConfig config[1];
+    eglCheck(eglChooseConfig(m_display, attribs, &config[0], 1, &numConfigs));
+
+    m_surface = eglCheck(eglCreateWindowSurface(m_display, config[0], window, NULL));
+}
+
+void _EGLContext::destroySurface()
+{
+    eglDestroySurface(m_display, m_surface);
+}
+
 } // namespace priv
 
 } // namespace sf
