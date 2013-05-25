@@ -41,7 +41,7 @@ m_font         (NULL),
 m_characterSize(30),
 m_style        (Regular),
 m_color        (255, 255, 255),
-m_vertices     (Quads),
+m_vertices     (Triangles),
 m_bounds       ()
 {
 
@@ -55,7 +55,7 @@ m_font         (&font),
 m_characterSize(characterSize),
 m_style        (Regular),
 m_color        (255, 255, 255),
-m_vertices     (Quads),
+m_vertices     (Triangles),
 m_bounds       ()
 {
     updateGeometry();
@@ -267,10 +267,14 @@ void Text::updateGeometry()
             float top = y + underlineOffset;
             float bottom = top + underlineThickness;
 
-            m_vertices.append(Vertex(Vector2f(0, top),    m_color, Vector2f(1, 1)));
-            m_vertices.append(Vertex(Vector2f(x, top),    m_color, Vector2f(1, 1)));
-            m_vertices.append(Vertex(Vector2f(x, bottom), m_color, Vector2f(1, 1)));
+            // Make a quad out of two triangles
+            m_vertices.append(Vertex(Vector2f(0, top),    m_color, Vector2f(1, 1))); // Triangle 1
             m_vertices.append(Vertex(Vector2f(0, bottom), m_color, Vector2f(1, 1)));
+            m_vertices.append(Vertex(Vector2f(x, top),    m_color, Vector2f(1, 1)));
+
+            m_vertices.append(Vertex(Vector2f(0, bottom), m_color, Vector2f(1, 1))); // Triangle 2
+            m_vertices.append(Vertex(Vector2f(x, bottom), m_color, Vector2f(1, 1)));
+            m_vertices.append(Vertex(Vector2f(x, top),    m_color, Vector2f(1, 1)));
         }
 
         // Handle special characters
@@ -295,11 +299,14 @@ void Text::updateGeometry()
         float u2 = static_cast<float>(glyph.textureRect.left + glyph.textureRect.width);
         float v2 = static_cast<float>(glyph.textureRect.top  + glyph.textureRect.height);
 
-        // Add a quad for the current character
-        m_vertices.append(Vertex(Vector2f(x + left  - italic * top,    y + top),    m_color, Vector2f(u1, v1)));
-        m_vertices.append(Vertex(Vector2f(x + right - italic * top,    y + top),    m_color, Vector2f(u2, v1)));
-        m_vertices.append(Vertex(Vector2f(x + right - italic * bottom, y + bottom), m_color, Vector2f(u2, v2)));
+        // Add a quad (formed by two triangles) for the current character
+        m_vertices.append(Vertex(Vector2f(x + left  - italic * top,    y + top),    m_color, Vector2f(u1, v1))); // Triangle 1
         m_vertices.append(Vertex(Vector2f(x + left  - italic * bottom, y + bottom), m_color, Vector2f(u1, v2)));
+        m_vertices.append(Vertex(Vector2f(x + right - italic * top,    y + top),    m_color, Vector2f(u2, v1)));
+
+        m_vertices.append(Vertex(Vector2f(x + left  - italic * bottom, y + bottom), m_color, Vector2f(u1, v2))); // Triangle 2
+        m_vertices.append(Vertex(Vector2f(x + right - italic * bottom, y + bottom), m_color, Vector2f(u2, v2)));
+        m_vertices.append(Vertex(Vector2f(x + right - italic * top,    y + top),    m_color, Vector2f(u2, v1)));
 
         // Advance to the next character
         x += glyph.advance;
@@ -311,10 +318,14 @@ void Text::updateGeometry()
         float top = y + underlineOffset;
         float bottom = top + underlineThickness;
 
-        m_vertices.append(Vertex(Vector2f(0, top),    m_color, Vector2f(1, 1)));
-        m_vertices.append(Vertex(Vector2f(x, top),    m_color, Vector2f(1, 1)));
-        m_vertices.append(Vertex(Vector2f(x, bottom), m_color, Vector2f(1, 1)));
+        // Make a quad out of two triangles
+        m_vertices.append(Vertex(Vector2f(0, top),    m_color, Vector2f(1, 1))); // Triangle 1
         m_vertices.append(Vertex(Vector2f(0, bottom), m_color, Vector2f(1, 1)));
+        m_vertices.append(Vertex(Vector2f(x, top),    m_color, Vector2f(1, 1)));
+
+        m_vertices.append(Vertex(Vector2f(0, bottom), m_color, Vector2f(1, 1))); // Triangle 2
+        m_vertices.append(Vertex(Vector2f(x, bottom), m_color, Vector2f(1, 1)));
+        m_vertices.append(Vertex(Vector2f(x, top),    m_color, Vector2f(1, 1)));
     }
 
     // Recompute the bounding rectangle

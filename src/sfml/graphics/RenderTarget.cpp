@@ -225,7 +225,7 @@ void RenderTarget::draw(const Vertex* vertices, unsigned int vertexCount,
                                        GL_TRIANGLE_STRIP, GL_TRIANGLE_FAN, GL_QUADS};
         #else
         static const GLenum modes[] = {GL_POINTS, GL_LINES, GL_LINE_STRIP, GL_TRIANGLES,
-                                       GL_TRIANGLE_STRIP, GL_TRIANGLE_FAN, GL_TRIANGLE_FAN};
+                                       GL_TRIANGLE_STRIP, GL_TRIANGLE_FAN, GL_POINTS};
         #endif
 
         GLenum mode = modes[type];
