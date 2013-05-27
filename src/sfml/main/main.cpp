@@ -97,10 +97,10 @@ void processSensorEvents(ActivityStates* states)
     while (ASensorEventQueue_getEvents(states->sensorEventQueue, &_event, 1) > 0)
     {
         sf::Event event;
-        event.type       = sf::Event::JoystickMoved;
-        event.joystickMove.joystickId = static_cast<unsigned int>(_event.acceleration.x);
-        event.joystickMove.axis       = static_cast<sf::Joystick::Axis>(_event.acceleration.y);
-        event.joystickMove.joystickId = static_cast<float>(_event.acceleration.z);
+        event.type       = sf::Event::MouseWheelMoved;
+        event.mouseWheel.delta = static_cast<int>(_event.acceleration.x*1000);
+        event.mouseWheel.x     = static_cast<int>(_event.acceleration.y*1000);
+        event.mouseWheel.y     = static_cast<int>(_event.acceleration.z*1000);
         states->pendingEvents.push_back(event);
     }
 }
