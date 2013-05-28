@@ -140,7 +140,7 @@ _EGLContext::~_EGLContext()
 ////////////////////////////////////////////////////////////
 bool _EGLContext::makeCurrent()
 {
-    return m_context && eglCheck(eglMakeCurrent(m_display, m_surface, m_surface, m_context));
+    return m_surface != EGL_NO_SURFACE && eglCheck(eglMakeCurrent(m_display, m_surface, m_surface, m_context));
 }
 
 
