@@ -68,7 +68,7 @@ m_surface (EGL_NO_SURFACE)
     eglCheck(eglChooseConfig(m_display, attribs, &config[0], 1, &numConfigs));
 
     // Note: removing attrib_list crashes the app... idk why
-    EGLint attrib_list[] = { EGL_TEXTURE_TARGET };
+    EGLint attrib_list[] = { EGL_TEXTURE_TARGET, EGL_NONE };
     m_surface = eglCheck(eglCreatePbufferSurface(m_display, config[0], attrib_list));
 
     // Create the context
