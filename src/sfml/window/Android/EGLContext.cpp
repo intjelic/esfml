@@ -130,10 +130,16 @@ _EGLContext::~_EGLContext()
     }
 
     // Destroy context
-    eglCheck(eglDestroyContext(m_display, m_context));
+    if (m_context != EGL_NO_CONTEXT)
+    {
+        eglCheck(eglDestroyContext(m_display, m_context));
+    }
 
     // Destroy surface
-    eglCheck(eglDestroySurface(m_display, m_surface));
+    if (m_surface != EGL_NO_SURFACE)
+    {
+        eglCheck(eglDestroySurface(m_display, m_surface));
+    }
 }
 
 
