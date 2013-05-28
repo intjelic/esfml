@@ -125,7 +125,9 @@ _EGLContext::~_EGLContext()
     EGLContext currentContext = eglCheck(eglGetCurrentContext());
 
     if (currentContext == m_context)
+    {
         eglCheck(eglMakeCurrent(m_display, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT));
+    }
 
     // Destroy context
     eglCheck(eglDestroyContext(m_display, m_context));
