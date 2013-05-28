@@ -192,7 +192,7 @@ void _EGLContext::createSurface(ANativeWindow* window)
 
 void _EGLContext::destroySurface()
 {
-    eglDestroySurface(m_display, m_surface);
+    eglCheck(eglDestroySurface(m_display, m_surface));
 }
 
 } // namespace priv
