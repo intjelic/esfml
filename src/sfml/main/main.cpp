@@ -61,31 +61,67 @@ void processEvent(ActivityStates* states)
 {
     // The caller must ensure states can be safely accessed!
 
-    AInputEvent* event = NULL;
+    AInputEvent* _event = NULL;
 
-    if (AInputQueue_getEvent(states->inputQueue, &event) >= 0)
+    if (AInputQueue_getEvent(states->inputQueue, &_event) >= 0)
     {
-        if (AInputQueue_preDispatchEvent(states->inputQueue, event))
+        if (AInputQueue_preDispatchEvent(states->inputQueue, _event))
             return;
 
         int32_t handled = 0;
+        int32_t action = AMotionEvent_getAction(_event);
 
-        if (AInputEvent_getType(event) == AINPUT_EVENT_TYPE_MOTION)
+        switch (action & AMOTION_EVENT_ACTION_MASK)
         {
+            case AMOTION_EVENT_ACTION_MOVE:
+            {
+                float x = AMotionEvent_getX(_event, 0);
+                float y = AMotionEvent_getY(_event, 0);
 
-            float x = AMotionEvent_getX(event, 0);
-            float y = AMotionEvent_getY(event, 0);
+                sf::Event event;
+                event.type = Event::MouseMoved;
+                event.mouseMove.x = x;
+                event.mouseMove.y = y;
+                states->pendingEvents.push_back(event);
 
-            sf::Event event;
-            event.type        = sf::Event::MouseMoved;
-            event.mouseMove.x = x;
-            event.mouseMove.y = y;
-            states->pendingEvents.push_back(event);
+                break;
+            }
+
+            case AMOTION_EVENT_ACTION_DOWN:
+            {
+                float x = AMotionEvent_getX(_event, 0);
+                float y = AMotionEvent_getY(_event, 0);
+
+                sf::Event event;
+                event.type = Event::MouseButtonPressed;
+                event.mouseButton.button = static_cast<Mouse::Button>(0);
+                event.mouseButton.x = x;
+                event.mouseButton.y = y;
+                states->pendingEvents.push_back(event);
+
+                break;
+            }
+
+            case AMOTION_EVENT_ACTION_UP:
+            case AMOTION_EVENT_ACTION_CANCEL:
+            {
+                float x = AMotionEvent_getX(_event, 0);
+                float y = AMotionEvent_getY(_event, 0);
+
+                sf::Event event;
+                event.type = Event::MouseButtonReleased;
+                event.mouseButton.button = static_cast<Mouse::Button>(0);
+                event.mouseButton.x = x;
+                event.mouseButton.y = y;
+                states->pendingEvents.push_back(event);
+
+                break;
+            }
 
             handled = 1;
         }
 
-        AInputQueue_finishEvent(states->inputQueue, event, handled);
+        AInputQueue_finishEvent(states->inputQueue, _event, handled);
     }
 }
 
