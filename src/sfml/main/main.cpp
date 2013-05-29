@@ -224,26 +224,40 @@ void processEvent(ActivityStates* states)
             {
                 case AMOTION_EVENT_ACTION_MOVE:
                 {
-                    float x = AMotionEvent_getX(_event, 0);
-                    float y = AMotionEvent_getY(_event, 0);
+                     int historySize = AMotionEvent_getHistorySize(_event);
+                     int pointerCount = AMotionEvent_getPointerCount(_event);
+                     for (int h = 0; h < historySize; h++)
+                     {
+                        for (int p = 0; p < pointerCount; p++)
+                        {
+                            int id = AMotionEvent_getPointerId(_event, p);
+                            float x = AMotionEvent_getHistoricalX(_event, p, h);
+                            float y = AMotionEvent_getHistoricalY(_event, p, h);
 
-                    sf::Event event;
-                    event.type = Event::MouseMoved;
-                    event.mouseMove.x = x;
-                    event.mouseMove.y = y;
-                    states->pendingEvents.push_back(event);
+                            sf::Event event;
+                            event.type = Event::MouseMoved;
+                            event.mouseButton.button = static_cast<Mouse::Button>(id);
+                            event.mouseButton.x = x;
+                            event.mouseButton.y = y;
+                            states->pendingEvents.push_back(event);
+                        }
+                     }
 
                     break;
                 }
 
+                case AMOTION_EVENT_ACTION_POINTER_DOWN:
                 case AMOTION_EVENT_ACTION_DOWN:
                 {
+                    int index = (action & AMOTION_EVENT_ACTION_POINTER_INDEX_MASK) >> AMOTION_EVENT_ACTION_POINTER_INDEX_SHIFT;
+                    int id = AMotionEvent_getPointerId(_event, index);
+
                     float x = AMotionEvent_getX(_event, 0);
                     float y = AMotionEvent_getY(_event, 0);
 
                     sf::Event event;
                     event.type = Event::MouseButtonPressed;
-                    event.mouseButton.button = static_cast<Mouse::Button>(0);
+                    event.mouseButton.button = static_cast<Mouse::Button>(id);
                     event.mouseButton.x = x;
                     event.mouseButton.y = y;
                     states->pendingEvents.push_back(event);
@@ -251,26 +265,30 @@ void processEvent(ActivityStates* states)
                     break;
                 }
 
+                case AMOTION_EVENT_ACTION_POINTER_UP:
                 case AMOTION_EVENT_ACTION_UP:
                 case AMOTION_EVENT_ACTION_CANCEL:
                 {
+                    int index = (action & AMOTION_EVENT_ACTION_POINTER_INDEX_MASK) >> AMOTION_EVENT_ACTION_POINTER_INDEX_SHIFT;
+                    int id = AMotionEvent_getPointerId(_event, index);
+
                     float x = AMotionEvent_getX(_event, 0);
                     float y = AMotionEvent_getY(_event, 0);
 
                     sf::Event event;
                     event.type = Event::MouseButtonReleased;
-                    event.mouseButton.button = static_cast<Mouse::Button>(0);
+                    event.mouseButton.button = static_cast<Mouse::Button>(id);
                     event.mouseButton.x = x;
                     event.mouseButton.y = y;
                     states->pendingEvents.push_back(event);
 
                     break;
                 }
-
-                handled = 1;
             }
+
         }
 
+        handled = 1;
         AInputQueue_finishEvent(states->inputQueue, _event, handled);
     }
 }
