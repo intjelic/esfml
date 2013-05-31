@@ -23,17 +23,29 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#ifndef SFML_GUI_HPP
-#define SFML_GUI_HPP
+#ifndef SFML_BUTTON_HPP
+#define SFML_BUTTON_HPP
 
 ////////////////////////////////////////////////////////////////////////////////
 // Headers
 ////////////////////////////////////////////////////////////////////////////////
-
-#include <sfml/graphics.hpp>
+#include <sfml/gui/export.hpp>
 #include <sfml/gui/Widget.hpp>
 #include <sfml/gui/Button.hpp>
-#include <sfml/gui/GuiWindow.hpp>
 
 
-#endif // SFML_GUI_HPP
+namespace sf
+{
+class SFML_GUI_API Button : public Widget
+{
+public :
+
+    Button();
+    ~Button();
+
+};
+
+} // namespace sf
+
+
+#endif // SFML_BUTTON_HPP

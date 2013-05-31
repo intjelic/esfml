@@ -9,6 +9,8 @@ set(SRC
     ${INCROOT}/GuiWindow.hpp
     ${SRCROOT}/Widget.cpp
     ${INCROOT}/Widget.hpp
+    ${SRCROOT}/Button.cpp
+    ${INCROOT}/Button.hpp
 )
 source_group("" FILES ${SRC})
 
