@@ -10,8 +10,14 @@ set(SRC
 )
 source_group("" FILES ${SRC})
 
+# find external libraries
+find_package(GTK2 REQUIRED)
+
+# add include paths of external libraries
+include_directories(${GTK2_INCLUDE_DIRS})
+
 # define the sfml-audio target
 sfml_add_library(sfml-gui
                  SOURCES ${SRC}
-                 DEPENDS sfml-system sfml-window sfml-graphics
-                 EXTERNAL_LIBS "")
+                 DEPENDS sfml-graphics sfml-window sfml-system
+                 EXTERNAL_LIBS ${GTK2_LIBRARIES})
