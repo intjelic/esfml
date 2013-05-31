@@ -50,6 +50,10 @@ public :
     void setSize(unsigned int, unsigned int);
     void setSize(const sf::Vector2u&);
 
+protected :
+
+    virtual void onSizeChanged(const sf::Vector2u& newSize, const sf::Vector2u& oldSize);
+
 private :
 
     sf::Vector2i m_position;

@@ -77,6 +77,8 @@ const sf::Vector2u& Widget::getSize() const
 ////////////////////////////////////////////////////////////////////////////////
 void Widget::setSize(unsigned int width, unsigned int height)
 {
+    onSizeChanged(Vector2u(width, height), m_size);
+
     m_size.x = width;
     m_size.y = height;
 }
@@ -86,6 +88,12 @@ void Widget::setSize(unsigned int width, unsigned int height)
 void Widget::setSize(const sf::Vector2u& size)
 {
     setSize(size.x, size.y);
+}
+
+
+////////////////////////////////////////////////////////////////////////////////
+void Widget::onSizeChanged(const sf::Vector2u& newSize, const sf::Vector2u& oldSize)
+{
 }
 
 } // namespace sf
