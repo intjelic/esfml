@@ -40,10 +40,12 @@ m_window(NULL)
     g_signal_connect(m_window, "destroy", G_CALLBACK(gtk_main_quit), NULL);
 }
 
+
 ////////////////////////////////////////////////////////////////////////////////
 GuiWindow::~GuiWindow()
 {
 }
+
 
 ////////////////////////////////////////////////////////////////////////////////
 void GuiWindow::main()
@@ -51,4 +53,12 @@ void GuiWindow::main()
     gtk_widget_show(m_window);
     gtk_main();
 }
+
+
+////////////////////////////////////////////////////////////////////////////////
+void GuiWindow::onSizeChanged(const sf::Vector2u& newSize, const sf::Vector2u& oldSize)
+{
+    gtk_window_resize((GtkWindow*)m_window, newSize.x, newSize.y);
+}
+
 } // namespace sf

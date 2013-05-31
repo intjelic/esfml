@@ -30,11 +30,12 @@
 // Headers
 ////////////////////////////////////////////////////////////////////////////////
 #include <sfml/gui/export.hpp>
+#include <sfml/gui/Widget.hpp>
 #include <gtk/gtk.h>
 
 namespace sf
 {
-class SFML_GUI_API GuiWindow
+class SFML_GUI_API GuiWindow : public Widget
 {
 public :
 
@@ -42,6 +43,10 @@ public :
     ~GuiWindow();
 
     void main();
+
+protected :
+
+    virtual void onSizeChanged(const sf::Vector2u& newSize, const sf::Vector2u& oldSize);
 
 private :
 
