@@ -7,6 +7,8 @@ set(SRC
     ${INCROOT}/export.hpp
     ${SRCROOT}/GuiWindow.cpp
     ${INCROOT}/GuiWindow.hpp
+    ${SRCROOT}/Widget.cpp
+    ${INCROOT}/Widget.hpp
 )
 source_group("" FILES ${SRC})
 

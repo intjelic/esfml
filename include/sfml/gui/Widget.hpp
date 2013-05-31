@@ -23,16 +23,26 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#ifndef SFML_GUI_HPP
-#define SFML_GUI_HPP
+#ifndef SFML_WIDGET_HPP
+#define SFML_WIDGET_HPP
 
 ////////////////////////////////////////////////////////////////////////////////
 // Headers
 ////////////////////////////////////////////////////////////////////////////////
-
-#include <sfml/graphics.hpp>
-#include <sfml/gui/Widget.hpp>
-#include <sfml/gui/GuiWindow.hpp>
+#include <sfml/gui/export.hpp>
 
 
-#endif // SFML_GUI_HPP
+namespace sf
+{
+class SFML_GUI_API Widget
+{
+public :
+
+    Widget();
+    ~Widget();
+};
+
+} // namespace sf
+
+
+#endif // SFML_WIDGET_HPP
