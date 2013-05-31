@@ -32,3 +32,4 @@
 #include <sfml/graphics.hpp>
 #include <sfml/audio.hpp>
 #include <sfml/network.hpp>
+#include <sfml/gui.hpp>
