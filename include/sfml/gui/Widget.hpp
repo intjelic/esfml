@@ -30,6 +30,7 @@
 // Headers
 ////////////////////////////////////////////////////////////////////////////////
 #include <sfml/gui/export.hpp>
+#include <sfml/system/Vector2.hpp>
 
 
 namespace sf
@@ -40,6 +41,19 @@ public :
 
     Widget();
     ~Widget();
+
+    const sf::Vector2i& getPosition() const;
+    void setPosition(int, int);
+    void setPosition(const sf::Vector2i&);
+
+    const sf::Vector2u& getSize() const;
+    void setSize(unsigned int, unsigned int);
+    void setSize(const sf::Vector2u&);
+
+private :
+
+    sf::Vector2i m_position;
+    sf::Vector2u m_size;
 };
 
 } // namespace sf
