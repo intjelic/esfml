@@ -30,7 +30,7 @@
 // Headers
 ////////////////////////////////////////////////////////////////////////////////
 #include <sfml/gui/export.hpp>
-
+#include <gtk/gtk.h>
 
 namespace sf
 {
@@ -42,6 +42,10 @@ public :
     ~GuiWindow();
 
     void main();
+
+private :
+
+    GtkWidget* m_window;
 };
 
 } // namespace sf

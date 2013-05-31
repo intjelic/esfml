@@ -32,8 +32,12 @@
 namespace sf
 {
 ////////////////////////////////////////////////////////////////////////////////
-GuiWindow::GuiWindow()
+GuiWindow::GuiWindow() :
+m_window(NULL)
 {
+    gtk_init (NULL, NULL);
+    m_window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
+    g_signal_connect(m_window, "destroy", G_CALLBACK(gtk_main_quit), NULL);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -44,5 +48,7 @@ GuiWindow::~GuiWindow()
 ////////////////////////////////////////////////////////////////////////////////
 void GuiWindow::main()
 {
+    gtk_widget_show(m_window);
+    gtk_main();
 }
 } // namespace sf
