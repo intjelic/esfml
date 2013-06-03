@@ -31,7 +31,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 #include <sfml/gui/export.hpp>
 #include <sfml/gui/Widget.hpp>
-#include <sfml/gui/Button.hpp>
 
 
 namespace sf
