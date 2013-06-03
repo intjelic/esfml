@@ -49,7 +49,14 @@ Button::~Button()
 ////////////////////////////////////////////////////////////////////////////////
 GtkWidget* Button::getWidgetHandler()
 {
-    return m_handler
+    return m_handler;
+}
+
+
+////////////////////////////////////////////////////////////////////////////////
+void Button::onSizeChanged(const Vector2u& newSize, const Vector2u& oldSize)
+{
+    gtk_widget_set_size_request(m_handler, newSize.x, newSize.y);
 }
 
 } // namespace sf

@@ -36,6 +36,8 @@ Widget::Widget() :
 m_position (0, 0),
 m_size     (0, 0)
 {
+    setPosition(0, 0);
+    setSize(0, 0);
 }
 
 
