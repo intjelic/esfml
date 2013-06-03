@@ -30,12 +30,12 @@
 // Headers
 ////////////////////////////////////////////////////////////////////////////////
 #include <sfml/gui/export.hpp>
-#include <sfml/gui/Widget.hpp>
+#include <sfml/gui/Container.hpp>
 #include <gtk/gtk.h>
 
 namespace sf
 {
-class SFML_GUI_API GuiWindow : public Widget
+class SFML_GUI_API GuiWindow : public Container
 {
 public :
 

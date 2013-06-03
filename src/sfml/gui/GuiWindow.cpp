@@ -33,7 +33,8 @@ namespace sf
 {
 ////////////////////////////////////////////////////////////////////////////////
 GuiWindow::GuiWindow() :
-m_window(NULL)
+Container (),
+m_window (NULL)
 {
     gtk_init (NULL, NULL);
     m_window = gtk_window_new(GTK_WINDOW_TOPLEVEL);

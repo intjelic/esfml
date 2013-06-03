@@ -37,10 +37,13 @@ namespace sf
 {
 class SFML_GUI_API Container : public Widget
 {
-protected :
+public :
 
     Container();
     ~Container();
+
+    void addWidget(Widget& widget);
+    void removeWidget(Widget& widget);
 
 };
 
