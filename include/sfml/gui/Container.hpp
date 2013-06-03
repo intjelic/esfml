@@ -23,18 +23,28 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#ifndef SFML_GUI_HPP
-#define SFML_GUI_HPP
+#ifndef SFML_CONTAINER_HPP
+#define SFML_CONTAINER_HPP
 
 ////////////////////////////////////////////////////////////////////////////////
 // Headers
 ////////////////////////////////////////////////////////////////////////////////
-
-#include <sfml/graphics.hpp>
+#include <sfml/gui/export.hpp>
 #include <sfml/gui/Widget.hpp>
-#include <sfml/gui/Container.hpp>
-#include <sfml/gui/Button.hpp>
-#include <sfml/gui/GuiWindow.hpp>
 
 
-#endif // SFML_GUI_HPP
+namespace sf
+{
+class SFML_GUI_API Container : public Widget
+{
+protected :
+
+    Container();
+    ~Container();
+
+};
+
+} // namespace sf
+
+
+#endif // SFML_CONTAINER_HPP
