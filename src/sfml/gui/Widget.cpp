@@ -46,7 +46,7 @@ Widget::~Widget()
 
 
 ////////////////////////////////////////////////////////////////////////////////
-const sf::Vector2i& Widget::getPosition() const
+const Vector2i& Widget::getPosition() const
 {
     return m_position;
 }
@@ -61,14 +61,14 @@ void Widget::setPosition(int x, int y)
 
 
 ////////////////////////////////////////////////////////////////////////////////
-void Widget::setPosition(const sf::Vector2i& position)
+void Widget::setPosition(const Vector2i& position)
 {
     setPosition(position.x, position.y);
 }
 
 
 ////////////////////////////////////////////////////////////////////////////////
-const sf::Vector2u& Widget::getSize() const
+const Vector2u& Widget::getSize() const
 {
     return m_size;
 }
@@ -85,14 +85,14 @@ void Widget::setSize(unsigned int width, unsigned int height)
 
 
 ////////////////////////////////////////////////////////////////////////////////
-void Widget::setSize(const sf::Vector2u& size)
+void Widget::setSize(const Vector2u& size)
 {
     setSize(size.x, size.y);
 }
 
 
 ////////////////////////////////////////////////////////////////////////////////
-void Widget::onSizeChanged(const sf::Vector2u& newSize, const sf::Vector2u& oldSize)
+void Widget::onSizeChanged(const Vector2u& newSize, const Vector2u& oldSize)
 {
 }
 

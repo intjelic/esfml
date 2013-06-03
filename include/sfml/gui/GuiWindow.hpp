@@ -46,7 +46,7 @@ public :
 
 protected :
 
-    virtual void onSizeChanged(const sf::Vector2u& newSize, const sf::Vector2u& oldSize);
+    virtual void onSizeChanged(const Vector2u& newSize, const Vector2u& oldSize);
 
 private :
 

@@ -42,22 +42,22 @@ public :
     Widget();
     ~Widget();
 
-    const sf::Vector2i& getPosition() const;
+    const Vector2i& getPosition() const;
     void setPosition(int, int);
-    void setPosition(const sf::Vector2i&);
+    void setPosition(const Vector2i&);
 
-    const sf::Vector2u& getSize() const;
+    const Vector2u& getSize() const;
     void setSize(unsigned int, unsigned int);
-    void setSize(const sf::Vector2u&);
+    void setSize(const Vector2u&);
 
 protected :
 
-    virtual void onSizeChanged(const sf::Vector2u& newSize, const sf::Vector2u& oldSize);
+    virtual void onSizeChanged(const Vector2u& newSize, const Vector2u& oldSize);
 
 private :
 
-    sf::Vector2i m_position;
-    sf::Vector2u m_size;
+    Vector2i m_position;
+    Vector2u m_size;
 };
 
 } // namespace sf

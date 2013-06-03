@@ -56,7 +56,7 @@ void GuiWindow::main()
 
 
 ////////////////////////////////////////////////////////////////////////////////
-void GuiWindow::onSizeChanged(const sf::Vector2u& newSize, const sf::Vector2u& oldSize)
+void GuiWindow::onSizeChanged(const Vector2u& newSize, const Vector2u& oldSize)
 {
     gtk_window_resize((GtkWindow*)m_window, newSize.x, newSize.y);
 }
