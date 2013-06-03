@@ -31,6 +31,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 #include <sfml/gui/export.hpp>
 #include <sfml/system/Vector2.hpp>
+#include <gtk/gtk.h>
 
 
 namespace sf
@@ -49,6 +50,8 @@ public :
     const Vector2u& getSize() const;
     void setSize(unsigned int, unsigned int);
     void setSize(const Vector2u&);
+
+    virtual GtkWidget* getWidgetHandler()=0;
 
 protected :
 

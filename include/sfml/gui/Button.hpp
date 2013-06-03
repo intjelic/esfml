@@ -43,6 +43,8 @@ public :
     Button();
     ~Button();
 
+     GtkWidget* getWidgetHandler();
+
 private :
 
     GtkWidget* m_handler;

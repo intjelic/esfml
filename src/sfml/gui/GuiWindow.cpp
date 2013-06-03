@@ -56,6 +56,13 @@ void GuiWindow::main()
 
 
 ////////////////////////////////////////////////////////////////////////////////
+GtkWidget* GuiWindow::getWidgetHandler()
+{
+    return m_window;
+}
+
+
+////////////////////////////////////////////////////////////////////////////////
 void GuiWindow::onSizeChanged(const Vector2u& newSize, const Vector2u& oldSize)
 {
     gtk_window_resize((GtkWindow*)m_window, newSize.x, newSize.y);

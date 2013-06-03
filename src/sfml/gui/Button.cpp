@@ -45,4 +45,11 @@ Button::~Button()
 {
 }
 
+
+////////////////////////////////////////////////////////////////////////////////
+GtkWidget* Button::getWidgetHandler()
+{
+    return m_handler
+}
+
 } // namespace sf

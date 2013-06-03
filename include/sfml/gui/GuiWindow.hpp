@@ -44,6 +44,8 @@ public :
 
     void main();
 
+     GtkWidget* getWidgetHandler();
+
 protected :
 
     virtual void onSizeChanged(const Vector2u& newSize, const Vector2u& oldSize);
