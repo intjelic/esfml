@@ -33,8 +33,10 @@ namespace sf
 {
 ////////////////////////////////////////////////////////////////////////////////
 Button::Button() :
-Widget ()
+Widget    (),
+m_handler (NULL)
 {
+    m_handler = gtk_button_new();
 }
 
 

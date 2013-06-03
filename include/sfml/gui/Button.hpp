@@ -43,6 +43,10 @@ public :
     Button();
     ~Button();
 
+private :
+
+    GtkWidget* m_handler;
+
 };
 
 } // namespace sf
