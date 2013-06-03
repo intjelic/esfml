@@ -34,10 +34,15 @@ namespace sf
 ////////////////////////////////////////////////////////////////////////////////
 GuiWindow::GuiWindow() :
 Container (),
-m_window (NULL)
+m_window  (NULL),
+m_fixed   (NULL)
 {
     gtk_init (NULL, NULL);
     m_window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
+
+    m_fixed = gtk_fixed_new();
+    gtk_container_add(GTK_CONTAINER(m_window), GTK_WIDGET(m_fixed));
+
     g_signal_connect(m_window, "destroy", G_CALLBACK(gtk_main_quit), NULL);
 }
 
@@ -59,7 +64,7 @@ void GuiWindow::main()
 ////////////////////////////////////////////////////////////////////////////////
 GtkWidget* GuiWindow::getWidgetHandler()
 {
-    return m_window;
+    return m_fixed;
 }
 
 

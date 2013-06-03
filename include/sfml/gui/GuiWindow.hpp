@@ -33,6 +33,7 @@
 #include <sfml/gui/Container.hpp>
 #include <gtk/gtk.h>
 
+
 namespace sf
 {
 class SFML_GUI_API GuiWindow : public Container
@@ -53,6 +54,7 @@ protected :
 private :
 
     GtkWidget* m_window;
+    GtkWidget* m_fixed;
 };
 
 } // namespace sf
