@@ -1,7 +1,7 @@
 
 # sources
 set(SRC
-    ${PROJECT_SOURCE_DIR}/src/sfml/main/sfml.cpp
+    ${PROJECT_SOURCE_DIR}/src/sfml/main/main.cpp
 )
 source_group("" FILES ${SRC})
 
