@@ -46,11 +46,17 @@ public :
 
 protected :
 
+    virtual void onPaint(RenderTarget& target, const RenderStates& states);
     virtual void onSizeChanged(const Vector2u& newSize, const Vector2u& oldSize);
 
 private :
 
+    static gboolean onDraw(GtkWidget *widget, cairo_t *cr, gpointer user_data);
+
     GtkWidget* m_handler;
+    RenderTexture m_paintingArea; ///< The off-screen to handle extra drawing
+    gulong m_paintingHandler;     ///< The handler id of our callback draw function
+    cairo_t* m_cairoContext;      ///< Temporary buffer to save the cairo context
 
 };
 
