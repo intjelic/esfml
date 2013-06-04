@@ -26,12 +26,12 @@
 ////////////////////////////////////////////////////////////////////////////////
 // Headers
 ////////////////////////////////////////////////////////////////////////////////
-#include <sfml/graphics/GLCheck.hpp>
 #include <sfml/window/GlContext.hpp>
 #include <sfml/system/ThreadLocalPtr.hpp>
 #include <sfml/system/Mutex.hpp>
 #include <sfml/system/Lock.hpp>
 #include <sfml/opengl.hpp>
+#include <sfml/window/glext/glext.h>
 #include <set>
 #include <cstdlib>
 #include <cassert>
@@ -280,7 +280,10 @@ void GlContext::initialize()
     #ifndef SFML_EMBEDDED_SYSTEM
     // Enable antialiasing if needed
     if (m_settings.antialiasingLevel > 0)
-        glCheck(glEnable(GL_MULTISAMPLE_ARB));
+    {
+        glEnable(GL_MULTISAMPLE_ARB);
+        //glCheck(glEnable(GL_MULTISAMPLE_ARB));
+    }
     #endif
 }
 
