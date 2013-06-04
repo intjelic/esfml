@@ -269,7 +269,7 @@ Image Texture::copyToImage() const
         // Texture is not padded nor flipped, we can use a direct copy
         glCheck(glBindTexture(GL_TEXTURE_2D, m_texture));
         #ifndef SFML_EMBEDDED_SYSTEM
-            glCheck(glGetTexImage(GL_TEXTURE_2D, 0, GL_RGBA8, GL_UNSIGNED_BYTE, &pixels[0]));
+            glCheck(glGetTexImage(GL_TEXTURE_2D, 0, GL_RGBA, GL_UNSIGNED_BYTE, &pixels[0]));
         #else
             GLuint tempFBO[1];
             glCheck(glGenFramebuffersOES(1, tempFBO));
@@ -287,13 +287,13 @@ Image Texture::copyToImage() const
         std::vector<Uint8> allPixels(m_actualSize.x * m_actualSize.y * 4);
         glCheck(glBindTexture(GL_TEXTURE_2D, m_texture));
         #ifndef SFML_EMBEDDED_SYSTEM
-            glCheck(glGetTexImage(GL_TEXTURE_2D, 0, GL_RGBA8, GL_UNSIGNED_BYTE, &allPixels[0]));
+            glCheck(glGetTexImage(GL_TEXTURE_2D, 0, GL_RGBA, GL_UNSIGNED_BYTE, &allPixels[0]));
         #else
             GLuint tempFBO[1];
             glCheck(glGenFramebuffersOES(1, tempFBO));
             glCheck(glBindFramebufferOES(GL_FRAMEBUFFER_OES, tempFBO[0]));
             glCheck(glFramebufferTexture2DOES(GL_FRAMEBUFFER_OES, GL_COLOR_ATTACHMENT0_OES, GL_TEXTURE_2D, m_texture, 0));
-            glCheck(glReadPixels(0, 0, m_size.x, m_size.y, GL_RGBA, GL_UNSIGNED_BYTE, &pixels[0]));
+            glCheck(glReadPixels(0, 0, m_size.x, m_size.y, GL_RGBA, GL_UNSIGNED_BYTE, &allPixels[0]));
             glCheck(glDeleteFramebuffersOES(1, tempFBO));
         #endif
 
