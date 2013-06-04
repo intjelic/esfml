@@ -89,6 +89,7 @@ if(WINDOWS OR MACOSX)
 endif()
 
 if(WINDOWS)
+    set(CMAKE_INCLUDE_PATH ${CMAKE_INCLUDE_PATH} "${PROJECT_SOURCE_DIR}/extlibs/headers/GL")
     set(CMAKE_INCLUDE_PATH ${CMAKE_INCLUDE_PATH} "${PROJECT_SOURCE_DIR}/extlibs/headers/libfreetype/windows")
     set(CMAKE_INCLUDE_PATH ${CMAKE_INCLUDE_PATH} "${PROJECT_SOURCE_DIR}/extlibs/headers/libfreetype/windows/freetype")
 elseif(MACOSX)

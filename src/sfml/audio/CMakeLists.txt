@@ -32,7 +32,7 @@ source_group("" FILES ${SRC})
 
 # let CMake know about our additional audio libraries paths (on Windows and OSX)
 if(WINDOWS)
-    set(CMAKE_INCLUDE_PATH ${CMAKE_INCLUDE_PATH} "${PROJECT_SOURCE_DIR}/extlibs/headers")
+    set(CMAKE_INCLUDE_PATH ${CMAKE_INCLUDE_PATH} "${PROJECT_SOURCE_DIR}/extlibs/headers/AL")
     set(CMAKE_INCLUDE_PATH ${CMAKE_INCLUDE_PATH} "${PROJECT_SOURCE_DIR}/extlibs/headers/libsndfile/windows")
 elseif (MACOSX)
     set(CMAKE_INCLUDE_PATH ${CMAKE_INCLUDE_PATH} "${PROJECT_SOURCE_DIR}/extlibs/headers/libsndfile/osx")
@@ -45,6 +45,7 @@ find_package(Sndfile REQUIRED)
 
 # add include paths of external libraries
 include_directories(${OPENAL_INCLUDE_DIR} ${SNDFILE_INCLUDE_DIR})
+include_directories(${PROJECT_SOURCE_DIR}/extlibs/headers)
 
 # define the sfml-audio target
 sfml_add_library(sfml-audio
