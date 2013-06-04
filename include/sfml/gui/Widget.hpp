@@ -30,6 +30,8 @@
 // Headers
 ////////////////////////////////////////////////////////////////////////////////
 #include <sfml/gui/export.hpp>
+#include <sfml/graphics/RenderTarget.hpp>
+#include <sfml/graphics/RenderTexture.hpp>
 #include <sfml/system/Vector2.hpp>
 #include <gtk/gtk.h>
 
@@ -55,6 +57,7 @@ public :
 
 protected :
 
+    virtual void onPaint(RenderTarget& target, const RenderStates& states);
     virtual void onSizeChanged(const Vector2u& newSize, const Vector2u& oldSize);
 
 private :
