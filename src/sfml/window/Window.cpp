@@ -45,7 +45,8 @@ namespace sf
 Window::Window() :
 m_impl          (NULL),
 m_context       (NULL),
-m_frameTimeLimit(Time::Zero)
+m_frameTimeLimit(Time::Zero),
+m_size          (0, 0)
 {
 
 }
@@ -55,7 +56,8 @@ m_frameTimeLimit(Time::Zero)
 Window::Window(VideoMode mode, const String& title, Uint32 style, const ContextSettings& settings) :
 m_impl          (NULL),
 m_context       (NULL),
-m_frameTimeLimit(Time::Zero)
+m_frameTimeLimit(Time::Zero),
+m_size          (0, 0)
 {
     create(mode, title, style, settings);
 }
@@ -65,7 +67,8 @@ m_frameTimeLimit(Time::Zero)
 Window::Window(WindowHandle handle, const ContextSettings& settings) :
 m_impl          (NULL),
 m_context       (NULL),
-m_frameTimeLimit(Time::Zero)
+m_frameTimeLimit(Time::Zero),
+m_size          (0, 0)
 {
     create(handle, settings);
 }
@@ -224,7 +227,7 @@ void Window::setPosition(const Vector2i& position)
 ////////////////////////////////////////////////////////////////////////////////
 Vector2u Window::getSize() const
 {
-    return m_impl ? m_impl->getSize() : Vector2u();
+    return m_size;
 }
 
 
@@ -366,7 +369,14 @@ bool Window::filterEvent(const Event& event)
 {
     // Notify resize events to the derived class
     if (event.type == Event::Resized)
+    {
+        // Cache the new size
+        m_size.x = event.size.width;
+        m_size.y = event.size.height;
+
+        // Notify the derived class
         onResize();
+    }
 
     return true;
 }
@@ -380,6 +390,9 @@ void Window::initialize()
     setMouseCursorVisible(true);
     setVerticalSyncEnabled(false);
     setKeyRepeatEnabled(true);
+
+    // Get and cache the initial size of the window
+    m_size = m_impl->getSize();
 
     // Reset frame time
     m_clock.restart();
