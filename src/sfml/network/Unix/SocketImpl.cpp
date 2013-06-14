@@ -91,6 +91,7 @@ Socket::Status SocketImpl::getErrorStatus()
         case ETIMEDOUT :    return Socket::Disconnected;
         case ENETRESET :    return Socket::Disconnected;
         case ENOTCONN :     return Socket::Disconnected;
+        case EPIPE :        return Socket::Disconnected;
         default :           return Socket::Error;
     }
 }
