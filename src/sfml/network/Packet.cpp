@@ -30,6 +30,7 @@
 #include <sfml/network/SocketImpl.hpp>
 #include <sfml/system/String.hpp>
 #include <cstring>
+#include <cwchar>
 
 
 namespace sf
@@ -405,9 +406,7 @@ Packet& Packet::operator <<(double data)
 Packet& Packet::operator <<(const char* data)
 {
     // First insert string length
-    Uint32 length = 0;
-    for (const char* c = data; *c != '\0'; ++c)
-        ++length;
+    Uint32 length = std::strlen(data);
     *this << length;
 
     // Then insert characters
@@ -426,9 +425,7 @@ Packet& Packet::operator <<(const std::string& data)
 
     // Then insert characters
     if (length > 0)
-    {
         append(data.c_str(), length * sizeof(std::string::value_type));
-    }
 
     return *this;
 }
@@ -438,9 +435,7 @@ Packet& Packet::operator <<(const std::string& data)
 Packet& Packet::operator <<(const wchar_t* data)
 {
     // First insert string length
-    Uint32 length = 0;
-    for (const wchar_t* c = data; *c != L'\0'; ++c)
-        ++length;
+    Uint32 length = std::wcslen(data);
     *this << length;
 
     // Then insert characters
