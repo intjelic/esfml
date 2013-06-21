@@ -29,6 +29,7 @@
 #include <sfml/network/IpAddress.hpp>
 #include <sfml/network/Http.hpp>
 #include <sfml/network/SocketImpl.hpp>
+#include <cstring>
 
 
 namespace
@@ -49,9 +50,19 @@ namespace
                 return ip;
 
             // Not a valid address, try to convert it as a host name
-            hostent* host = gethostbyname(address.c_str());
-            if (host)
-                return reinterpret_cast<in_addr*>(host->h_addr)->s_addr;
+            addrinfo hints;
+            std::memset(&hints, 0, sizeof(hints));
+            hints.ai_family = AF_INET;
+            addrinfo* result = NULL;
+            if (getaddrinfo(address.c_str(), NULL, &hints, &result) == 0)
+            {
+                if (result)
+                {
+                    ip = reinterpret_cast<sockaddr_in*>(result->ai_addr)->sin_addr.s_addr;
+                    freeaddrinfo(result);
+                    return ip;
+                }
+            }
 
             // Not a valid address nor a host name
             return 0;

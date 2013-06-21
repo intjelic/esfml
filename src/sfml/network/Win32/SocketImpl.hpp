@@ -31,6 +31,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 #include <sfml/network/Socket.hpp>
 #include <winsock2.h>
+#include <ws2tcpip.h>
 
 
 namespace sf
