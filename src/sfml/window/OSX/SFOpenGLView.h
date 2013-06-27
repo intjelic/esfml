@@ -1,8 +1,8 @@
 ////////////////////////////////////////////////////////////
 //
 // SFML - Simple and Fast Multimedia Library
-// Copyright (C) 2007-2012 Marco Antognini (antognini.marco@gmail.com), 
-//                         Laurent Gomila (laurent.gom@gmail.com), 
+// Copyright (C) 2007-2012 Marco Antognini (antognini.marco@gmail.com),
+//                         Laurent Gomila (laurent.gom@gmail.com),
 //
 // This software is provided 'as-is', without any express or implied warranty.
 // In no event will the authors be held liable for any damages arising from the use of this software.
@@ -34,8 +34,10 @@ namespace sf {
     }
 }
 
+@class SFSilentResponder;
+
 ////////////////////////////////////////////////////////////
-/// \brief Spesialized NSOpenGLView
+/// \brief Specialized NSOpenGLView
 ///
 /// Handle event and send them back to the requester.
 ///
@@ -55,7 +57,7 @@ namespace sf {
     NSTrackingRectTag             m_trackingTag;
     BOOL                          m_mouseIsIn;
     NSSize                        m_realSize;
-    
+
     /// 'modifiers' state
     BOOL m_rightShiftWasDown;
     BOOL m_leftShiftWasDown;
@@ -64,17 +66,22 @@ namespace sf {
     BOOL m_rightAlternateWasDown;
     BOOL m_leftAlternateWasDown;
     BOOL m_controlWasDown;
+
+    // Hidden text view use to convert key event to actual chars.
+    // To prevent sound alert we use a silent responder.
+    SFSilentResponder*  m_silentResponder;
+    NSTextView*         m_hiddenTextView;
 }
 
 ////////////////////////////////////////////////////////////
 /// Create the SFML opengl view to fit the given area.
-/// 
+///
 ////////////////////////////////////////////////////////////
 -(id)initWithFrame:(NSRect)frameRect;
 
 ////////////////////////////////////////////////////////////
 /// Apply the given resquester to the view.
-/// 
+///
 ////////////////////////////////////////////////////////////
 -(void)setRequesterTo:(sf::priv::WindowImplCocoa *)requester;
 
@@ -83,26 +90,26 @@ namespace sf {
 /// If not set, or set to its default value NSZeroSize, the view
 /// won't recompute the mouse coordinates before sending them
 /// to the requester.
-/// 
+///
 ////////////////////////////////////////////////////////////
 -(void)setRealSize:(NSSize)newSize;
 
 ////////////////////////////////////////////////////////////
 /// Move the mouse cursor to (x,y) (SFML Coordinates).
-/// 
+///
 ////////////////////////////////////////////////////////////
 -(void)setCursorPositionToX:(unsigned int)x Y:(unsigned int)y;
 
 ////////////////////////////////////////////////////////////
 /// Adjust key repeat configuration.
-/// 
+///
 ////////////////////////////////////////////////////////////
 -(void)enableKeyRepeat;
 -(void)disableKeyRepeat;
 
 ////////////////////////////////////////////////////////////
 /// Compute the position of the cursor.
-/// 
+///
 ////////////////////////////////////////////////////////////
 -(NSPoint)cursorPositionFromEvent:(NSEvent *)eventOrNil;
 
