@@ -83,7 +83,8 @@ WindowImplCocoa::WindowImplCocoa(WindowHandle handle)
 ////////////////////////////////////////////////////////////
 WindowImplCocoa::WindowImplCocoa(VideoMode mode,
                                  const String& title,
-                                 unsigned long style)
+                                 unsigned long style,
+                                 const ContextSettings& /*settings*/)
 : m_showCursor(true)
 {
     // Transform the app process.

@@ -31,12 +31,13 @@
 ////////////////////////////////////////////////////////////////////////////////
 #include <sfml/config.hpp>
 #include <sfml/system/NonCopyable.hpp>
+#include <sfml/system/String.hpp>
 #include <sfml/window/Event.hpp>
 #include <sfml/window/Joystick.hpp>
 #include <sfml/window/JoystickImpl.hpp>
 #include <sfml/window/VideoMode.hpp>
 #include <sfml/window/WindowHandle.hpp>
-#include <sfml/system/String.hpp>
+#include <sfml/window/ContextSettings.hpp>
 #include <queue>
 #include <set>
 
@@ -60,11 +61,12 @@ public :
     /// \param mode  Video mode to use
     /// \param title Title of the window
     /// \param style Window style
+    /// \param settings Additional settings for the underlying OpenGL context
     ///
     /// \return Pointer to the created window (don't forget to delete it)
     ///
     ////////////////////////////////////////////////////////////////////////////
-    static WindowImpl* create(VideoMode mode, const String& title, Uint32 style);
+    static WindowImpl* create(VideoMode mode, const String& title, Uint32 style, const ContextSettings& settings);
 
     ////////////////////////////////////////////////////////////////////////////
     /// \brief Create a new window depending on to the current OS

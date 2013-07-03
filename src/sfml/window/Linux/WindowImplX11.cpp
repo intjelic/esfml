@@ -28,6 +28,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 #include <sfml/window/WindowStyle.hpp> // important to be included first (conflict with None)
 #include <sfml/window/Linux/WindowImplX11.hpp>
+#include <sfml/window/Linux/GlxContext.hpp>
 #include <sfml/window/Linux/Display.hpp>
 #include <sfml/system/Utf.hpp>
 #include <sfml/system/error.hpp>
@@ -97,7 +98,7 @@ m_previousSize(-1, -1)
 {
     // Open a connection with the X server
     m_display = OpenDisplay();
-    m_screen  = DefaultScreen(m_display);
+    m_screen = DefaultScreen(m_display);
 
     // Save the window handle
     m_window = handle;
@@ -114,7 +115,7 @@ m_previousSize(-1, -1)
 
 
 ////////////////////////////////////////////////////////////////////////////////
-WindowImplX11::WindowImplX11(VideoMode mode, const String& title, unsigned long style) :
+WindowImplX11::WindowImplX11(VideoMode mode, const String& title, unsigned long style, const ContextSettings& settings) :
 m_window      (0),
 m_inputMethod (NULL),
 m_inputContext(NULL),
@@ -127,7 +128,8 @@ m_previousSize(-1, -1)
 {
     // Open a connection with the X server
     m_display = OpenDisplay();
-    m_screen  = DefaultScreen(m_display);
+    m_screen = DefaultScreen(m_display);
+    ::Window root = RootWindow(m_display, m_screen);
 
     // Compute position and size
     int left, top;
@@ -149,21 +151,25 @@ m_previousSize(-1, -1)
     if (fullscreen)
         switchToFullscreen(mode);
 
+    // Choose the visual according to the context settings
+    XVisualInfo visualInfo = GlxContext::selectBestVisual(m_display, mode.bitsPerPixel, settings);
+
     // Define the window attributes
     XSetWindowAttributes attributes;
-    attributes.event_mask        = eventMask;
     attributes.override_redirect = fullscreen;
+    attributes.event_mask = eventMask;
+    attributes.colormap = XCreateColormap(m_display, root, visualInfo.visual, AllocNone);
 
     // Create the window
     m_window = XCreateWindow(m_display,
-                             RootWindow(m_display, m_screen),
+                             root,
                              left, top,
                              width, height,
                              0,
-                             DefaultDepth(m_display, m_screen),
+                             visualInfo.depth,
                              InputOutput,
-                             DefaultVisual(m_display, m_screen),
-                             CWEventMask | CWOverrideRedirect, &attributes);
+                             visualInfo.visual,
+                             CWEventMask | CWOverrideRedirect | CWColormap, &attributes);
     if (!m_window)
     {
         err() << "Failed to create window" << std::endl;
