@@ -32,6 +32,7 @@
 #include <sfml/graphics/Texture.hpp>
 #include <sfml/graphics/VertexArray.hpp>
 #include <sfml/graphics/GLCheck.hpp>
+#include <sfml/system/error.hpp>
 
 
 namespace sf
@@ -248,11 +249,21 @@ void RenderTarget::pushGLStates()
 {
     if (activate(true))
     {
+#ifdef SFML_DEBUG
+        // make sure that the user didn't leave an unchecked OpenGL error
+        GLenum error = glGetError();
+        if (error != GL_NO_ERROR)
+        {
+            err() << "OpenGL error (" << error << ") detected in user code, "
+                  << "you should check for errors with glGetError()"
+                  << std::endl;
+        }
+#endif
+
         #ifndef SFML_EMBEDDED_SYSTEM
             glCheck(glPushClientAttrib(GL_CLIENT_ALL_ATTRIB_BITS));
             glCheck(glPushAttrib(GL_ALL_ATTRIB_BITS));
         #endif
-
         glCheck(glMatrixMode(GL_MODELVIEW));
         glCheck(glPushMatrix());
         glCheck(glMatrixMode(GL_PROJECTION));
@@ -467,5 +478,5 @@ void RenderTarget::applyShader(const Shader* shader)
 //   like matrices or textures. The only optimization that we
 //   do is that we avoid setting a null shader if there was
 //   already none for the previous draw.
-// 
+//
 ////////////////////////////////////////////////////////////////////////////////
