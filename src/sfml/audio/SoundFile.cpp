@@ -98,6 +98,7 @@ bool SoundFile::openRead(const std::string& filename)
 
     // Open the sound file
     SF_INFO fileInfo;
+    fileInfo.format = 0;
     m_file = sf_open(filename.c_str(), SFM_READ, &fileInfo);
     if (!m_file)
     {
@@ -133,6 +134,7 @@ bool SoundFile::openRead(const void* data, std::size_t sizeInBytes)
 
     // Open the sound file
     SF_INFO fileInfo;
+    fileInfo.format = 0;
     m_file = sf_open_virtual(&io, SFM_READ, &fileInfo, &m_memory);
     if (!m_file)
     {
@@ -170,6 +172,7 @@ bool SoundFile::openRead(InputStream& stream)
 
     // Open the sound file
     SF_INFO fileInfo;
+    fileInfo.format = 0;
     m_file = sf_open_virtual(&io, SFM_READ, &fileInfo, &m_stream);
     if (!m_file)
     {
