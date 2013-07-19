@@ -30,6 +30,7 @@
 // Headers
 ////////////////////////////////////////////////////////////////////////////////
 #include <sfml/gui/export.hpp>
+#include <sfml/gui/WidgetHandle.hpp>
 #include <sfml/gui/Container.hpp>
 #include <gtk/gtk.h>
 
@@ -45,7 +46,7 @@ public :
 
     void main();
 
-     GtkWidget* getWidgetHandler();
+     WidgetHandle getWidgetHandle();
 
 protected :
 

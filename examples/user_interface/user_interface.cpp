@@ -40,8 +40,8 @@ int main()
 
     button.setSize(55, 55);
 
-    gtk_widget_show(window.getWidgetHandler());
-    gtk_widget_show(button.getWidgetHandler());
+    gtk_widget_show(window.getWidgetHandle());
+    gtk_widget_show(button.getWidgetHandle());
 
     window.setSize(640, 480);
     window.main();

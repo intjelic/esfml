@@ -30,6 +30,7 @@
 // Headers
 ////////////////////////////////////////////////////////////////////////////////
 #include <sfml/gui/export.hpp>
+#include <sfml/gui/WidgetHandle.hpp>
 #include <sfml/gui/Widget.hpp>
 
 
@@ -42,7 +43,7 @@ public :
     Button();
     ~Button();
 
-     GtkWidget* getWidgetHandler();
+     WidgetHandle getWidgetHandle();
 
 protected :
 
@@ -53,7 +54,7 @@ private :
 
     static gboolean onDraw(GtkWidget *widget, cairo_t *cr, gpointer user_data);
 
-    GtkWidget* m_handler;
+    WidgetHandle m_handle;
     RenderTexture m_paintingArea; ///< The off-screen to handle extra drawing
     gulong m_paintingHandler;     ///< The handler id of our callback draw function
     cairo_t* m_cairoContext;      ///< Temporary buffer to save the cairo context

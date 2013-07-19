@@ -47,14 +47,14 @@ Container::~Container()
 ////////////////////////////////////////////////////////////////////////////////
 void Container::addWidget(Widget& widget)
 {
-    gtk_container_add(GTK_CONTAINER(getWidgetHandler()), widget.getWidgetHandler());
+    gtk_container_add(GTK_CONTAINER(getWidgetHandle()), widget.getWidgetHandle());
 }
 
 
 ////////////////////////////////////////////////////////////////////////////////
 void Container::removeWidget(Widget& widget)
 {
-    gtk_container_remove(GTK_CONTAINER(getWidgetHandler()), widget.getWidgetHandler());
+    gtk_container_remove(GTK_CONTAINER(getWidgetHandle()), widget.getWidgetHandle());
 }
 
 } // namespace sf

@@ -34,16 +34,16 @@ namespace sf
 ////////////////////////////////////////////////////////////////////////////////
 Button::Button() :
 Widget            (),
-m_handler         (NULL),
+m_handle          (NULL),
 m_paintingArea    (),
 m_paintingHandler (0),
 m_cairoContext    (NULL)
 {
-    m_handler = gtk_button_new();
+    m_handle = gtk_button_new();
 
     // Warn the SFML widget tree when it's being drawn, we'll need the handler
     // id later.
-    m_paintingHandler = g_signal_connect(m_handler, "draw", G_CALLBACK(&onDraw), (gpointer)this);
+    m_paintingHandler = g_signal_connect(m_handle, "draw", G_CALLBACK(&onDraw), (gpointer)this);
 }
 
 
@@ -54,9 +54,9 @@ Button::~Button()
 
 
 ////////////////////////////////////////////////////////////////////////////////
-GtkWidget* Button::getWidgetHandler()
+WidgetHandle Button::getWidgetHandle()
 {
-    return m_handler;
+    return m_handle;
 }
 
 
@@ -69,7 +69,7 @@ void Button::onSizeChanged(const Vector2u& newSize, const Vector2u& oldSize)
         m_paintingArea.create(newSize.x, newSize.y);
     }
 
-    gtk_widget_set_size_request(m_handler, newSize.x, newSize.y);
+    gtk_widget_set_size_request(m_handle, newSize.x, newSize.y);
 }
 
 
@@ -77,9 +77,9 @@ void Button::onSizeChanged(const Vector2u& newSize, const Vector2u& oldSize)
 void Button::onPaint(RenderTarget& target, const RenderStates& states)
 {
     // Draw the default appearance
-    g_signal_handler_disconnect(m_handler, m_paintingHandler);
-    gtk_widget_draw(m_handler, m_cairoContext);
-    m_paintingHandler = g_signal_connect(m_handler, "draw", G_CALLBACK(&onDraw), (gpointer)this);
+    g_signal_handler_disconnect(m_handle, m_paintingHandler);
+    gtk_widget_draw(m_handle, m_cairoContext);
+    m_paintingHandler = g_signal_connect(m_handle, "draw", G_CALLBACK(&onDraw), (gpointer)this);
 }
 
 

@@ -5,12 +5,13 @@ set(SRCROOT ${PROJECT_SOURCE_DIR}/src/sfml/gui)
 # all source files
 set(SRC
     ${INCROOT}/export.hpp
-    ${SRCROOT}/GuiWindow.cpp
-    ${INCROOT}/GuiWindow.hpp
+    ${INCROOT}/WidgetHandle.hpp
     ${SRCROOT}/Widget.cpp
     ${INCROOT}/Widget.hpp
     ${SRCROOT}/Container.cpp
     ${INCROOT}/Container.hpp
+    ${SRCROOT}/GuiWindow.cpp
+    ${INCROOT}/GuiWindow.hpp
     ${SRCROOT}/Button.cpp
     ${INCROOT}/Button.hpp
 )

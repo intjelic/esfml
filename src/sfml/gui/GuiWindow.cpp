@@ -62,7 +62,7 @@ void GuiWindow::main()
 
 
 ////////////////////////////////////////////////////////////////////////////////
-GtkWidget* GuiWindow::getWidgetHandler()
+WidgetHandle GuiWindow::getWidgetHandle()
 {
     return m_fixed;
 }

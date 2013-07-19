@@ -23,51 +23,36 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#ifndef SFML_WIDGET_HPP
-#define SFML_WIDGET_HPP
+#ifndef SFML_WIDGETHANDLE_HPP
+#define SFML_WIDGETHANDLE_HPP
 
 ////////////////////////////////////////////////////////////////////////////////
 // Headers
 ////////////////////////////////////////////////////////////////////////////////
-#include <sfml/gui/export.hpp>
-#include <sfml/gui/WidgetHandle.hpp>
-#include <sfml/graphics/RenderTarget.hpp>
-#include <sfml/graphics/RenderTexture.hpp>
-#include <sfml/system/Vector2.hpp>
-#include <gtk/gtk.h>
+#include <sfml/config.hpp>
+#include <sfml/widgets.hpp>
 
 
 namespace sf
 {
-class SFML_GUI_API Widget
-{
-public :
+////////////////////////////////////////////////////////////////////////////////
+// Define a low-level widget handle type, specific to each platform
+////////////////////////////////////////////////////////////////////////////////
+#if defined(SFML_SYSTEM_WINDOWS)
 
-    Widget();
-    ~Widget();
+    #error This operating system is not supported by SFML library
 
-    const Vector2i& getPosition() const;
-    void setPosition(int, int);
-    void setPosition(const Vector2i&);
+#elif defined(SFML_SYSTEM_LINUX) || defined(SFML_SYSTEM_FREEBSD)
 
-    const Vector2u& getSize() const;
-    void setSize(unsigned int, unsigned int);
-    void setSize(const Vector2u&);
+    // Widget handle is GtkWidget on Unix - GTK
+    typedef GtkWidget* WidgetHandle;
 
-    virtual WidgetHandle getWidgetHandle()=0;
+#elif defined(SFML_SYSTEM_MACOS)
 
-protected :
+    #error This operating system is not supported by SFML library
 
-    virtual void onPaint(RenderTarget& target, const RenderStates& states);
-    virtual void onSizeChanged(const Vector2u& newSize, const Vector2u& oldSize);
-
-private :
-
-    Vector2i m_position;
-    Vector2u m_size;
-};
+#endif
 
 } // namespace sf
 
-
-#endif // SFML_WIDGET_HPP
+#endif // SFML_WIDGETHANDLE_HPP
