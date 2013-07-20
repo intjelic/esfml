@@ -27,6 +27,7 @@
 // Headers
 ////////////////////////////////////////////////////////////////////////////////
 #include <sfml/gui/Widget.hpp>
+#include <sfml/gui/WidgetImpl.hpp>
 
 
 namespace sf
@@ -94,14 +95,43 @@ void Widget::setSize(const Vector2u& size)
 
 
 ////////////////////////////////////////////////////////////////////////////////
+WidgetHandle Widget::getWidgetHandle()
+{
+    return m_impl->getWidgetHandle();
+}
+
+
+////////////////////////////////////////////////////////////////////////////////
+Widget::Widget(priv::WidgetImpl* implementation) :
+m_impl (implementation)
+{
+}
+
+
+priv::WidgetImpl* Widget::getImplementation()
+{
+    return m_impl;
+}
+
+
+////////////////////////////////////////////////////////////////////////////////
 void Widget::onPaint(RenderTarget& target, const RenderStates& states)
 {
+    m_impl->paint(target, states);
 }
 
 
 ////////////////////////////////////////////////////////////////////////////////
 void Widget::onSizeChanged(const Vector2u& newSize, const Vector2u& oldSize)
 {
+    m_impl->size(newSize, oldSize);
+}
+
+
+////////////////////////////////////////////////////////////////////////////////
+void paintWidget(Widget* widget, RenderTarget& target, const RenderStates& states)
+{
+   widget->onPaint(target, states);
 }
 
 } // namespace sf

@@ -26,30 +26,37 @@
 ////////////////////////////////////////////////////////////////////////////////
 // Headers
 ////////////////////////////////////////////////////////////////////////////////
-#include <sfml/gui/GuiWindowImpl.hpp>
-#include <sfml/gui/GuiWindow.hpp>
+#include <sfml/gui/ContainerImpl.hpp>
 
 
 namespace sf
 {
+namespace priv
+{
 ////////////////////////////////////////////////////////////////////////////////
-GuiWindow::GuiWindow() :
-Container (new priv::GuiWindowImpl)
+ContainerImpl::ContainerImpl()
 {
 }
 
 
 ////////////////////////////////////////////////////////////////////////////////
-GuiWindow::~GuiWindow()
+ContainerImpl::~ContainerImpl()
 {
 }
 
 
 ////////////////////////////////////////////////////////////////////////////////
-void GuiWindow::main()
+void ContainerImpl::addWidget(Widget& widget)
 {
-    priv::GuiWindowImpl* impl = static_cast<priv::GuiWindowImpl*>(getImplementation());
-    impl->main();
+    gtk_container_add(GTK_CONTAINER(getWidgetHandle()), widget.getWidgetHandle());
 }
 
+
+////////////////////////////////////////////////////////////////////////////////
+void ContainerImpl::removeWidget(Widget& widget)
+{
+    gtk_container_remove(GTK_CONTAINER(getWidgetHandle()), widget.getWidgetHandle());
+}
+
+} // namespace priv
 } // namespace sf

@@ -23,33 +23,34 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
+#ifndef SFML_BUTTONIMPL_HPP
+#define SFML_BUTTONIMPL_HPP
+
 ////////////////////////////////////////////////////////////////////////////////
 // Headers
 ////////////////////////////////////////////////////////////////////////////////
-#include <sfml/gui/GuiWindowImpl.hpp>
-#include <sfml/gui/GuiWindow.hpp>
+#include <sfml/gui/WidgetImpl.hpp>
+#include <sfml/gui/Button.hpp>
 
 
 namespace sf
 {
-////////////////////////////////////////////////////////////////////////////////
-GuiWindow::GuiWindow() :
-Container (new priv::GuiWindowImpl)
+namespace priv
 {
-}
-
-
-////////////////////////////////////////////////////////////////////////////////
-GuiWindow::~GuiWindow()
+class ButtonImpl : public WidgetImpl
 {
-}
+public :
 
+    ButtonImpl(Button* parent);
+    ~ButtonImpl();
 
-////////////////////////////////////////////////////////////////////////////////
-void GuiWindow::main()
-{
-    priv::GuiWindowImpl* impl = static_cast<priv::GuiWindowImpl*>(getImplementation());
-    impl->main();
-}
+protected :
 
+    Button* m_parent;
+};
+
+} // namespace priv
 } // namespace sf
+
+
+#endif // SFML_BUTTONIMPL_HPP

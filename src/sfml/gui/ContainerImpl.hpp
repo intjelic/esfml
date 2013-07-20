@@ -23,33 +23,34 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
+#ifndef SFML_CONTAINERIMPL_HPP
+#define SFML_CONTAINERIMPL_HPP
+
 ////////////////////////////////////////////////////////////////////////////////
 // Headers
 ////////////////////////////////////////////////////////////////////////////////
-#include <sfml/gui/GuiWindowImpl.hpp>
-#include <sfml/gui/GuiWindow.hpp>
+#include <sfml/gui/WidgetImpl.hpp>
+#include <sfml/gui/Widget.hpp>
 
 
 namespace sf
 {
-////////////////////////////////////////////////////////////////////////////////
-GuiWindow::GuiWindow() :
-Container (new priv::GuiWindowImpl)
+namespace priv
 {
-}
-
-
-////////////////////////////////////////////////////////////////////////////////
-GuiWindow::~GuiWindow()
+class ContainerImpl : public WidgetImpl
 {
-}
+public :
 
+    ContainerImpl();
+    ~ContainerImpl();
 
-////////////////////////////////////////////////////////////////////////////////
-void GuiWindow::main()
-{
-    priv::GuiWindowImpl* impl = static_cast<priv::GuiWindowImpl*>(getImplementation());
-    impl->main();
-}
+    void addWidget(Widget& widget);
+    void removeWidget(Widget& widget);
 
+};
+
+} // namespace priv
 } // namespace sf
+
+
+#endif // SFML_CONTAINERIMPL_HPP

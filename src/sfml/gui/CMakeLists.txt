@@ -12,8 +12,21 @@ set(SRC
     ${INCROOT}/Container.hpp
     ${SRCROOT}/GuiWindow.cpp
     ${INCROOT}/GuiWindow.hpp
+
     ${SRCROOT}/Button.cpp
     ${INCROOT}/Button.hpp
+
+    ${SRCROOT}/WidgetImpl.hpp
+    ${SRCROOT}/GTK/ContainerImplGTK.cpp
+    ${SRCROOT}/ContainerImpl.hpp
+    ${SRCROOT}/GTK/GuiWindowImplGTK.cpp
+    ${SRCROOT}/GuiWindowImpl.hpp
+
+    ${SRCROOT}/ButtonImpl.hpp
+    ${SRCROOT}/ButtonImpl.cpp
+    ${SRCROOT}/GTK/ButtonImplGTK.hpp
+    ${SRCROOT}/GTK/ButtonImplGTK.cpp
+
 )
 source_group("" FILES ${SRC})
 

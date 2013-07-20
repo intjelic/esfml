@@ -35,6 +35,11 @@
 
 namespace sf
 {
+namespace priv
+{
+    class ContainerImpl;
+}
+
 class SFML_GUI_API Container : public Widget
 {
 public :
@@ -45,6 +50,13 @@ public :
     void addWidget(Widget& widget);
     void removeWidget(Widget& widget);
 
+protected :
+
+    Container(priv::ContainerImpl* implementation);
+
+private :
+
+    priv::ContainerImpl* m_impl;
 };
 
 } // namespace sf

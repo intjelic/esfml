@@ -23,33 +23,35 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
+#ifndef SFML_WIDGETIMPL_HPP
+#define SFML_WIDGETIMPL_HPP
+
 ////////////////////////////////////////////////////////////////////////////////
 // Headers
 ////////////////////////////////////////////////////////////////////////////////
-#include <sfml/gui/GuiWindowImpl.hpp>
-#include <sfml/gui/GuiWindow.hpp>
+#include <sfml/gui/WidgetHandle.hpp>
+#include <sfml/graphics/RenderTarget.hpp>
+#include <sfml/graphics/RenderStates.hpp>
+#include <sfml/system/Vector2.hpp>
 
 
 namespace sf
 {
-////////////////////////////////////////////////////////////////////////////////
-GuiWindow::GuiWindow() :
-Container (new priv::GuiWindowImpl)
+namespace priv
 {
-}
-
-
-////////////////////////////////////////////////////////////////////////////////
-GuiWindow::~GuiWindow()
+class WidgetImpl
 {
-}
+public :
 
+    virtual void size(const Vector2u& newSize, const Vector2u& oldSize)=0;
+    virtual void paint(RenderTarget& target, const RenderStates& states)=0;
 
-////////////////////////////////////////////////////////////////////////////////
-void GuiWindow::main()
-{
-    priv::GuiWindowImpl* impl = static_cast<priv::GuiWindowImpl*>(getImplementation());
-    impl->main();
-}
+    virtual WidgetHandle getWidgetHandle()=0;
 
+};
+
+} // namespace priv
 } // namespace sf
+
+
+#endif // SFML_WIDGETIMPL_HPP

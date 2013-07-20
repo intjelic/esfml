@@ -30,13 +30,16 @@
 // Headers
 ////////////////////////////////////////////////////////////////////////////////
 #include <sfml/gui/export.hpp>
-#include <sfml/gui/WidgetHandle.hpp>
 #include <sfml/gui/Container.hpp>
-#include <gtk/gtk.h>
 
 
 namespace sf
 {
+namespace priv
+{
+    class GuiWindowImpl;
+}
+
 class SFML_GUI_API GuiWindow : public Container
 {
 public :
@@ -46,16 +49,6 @@ public :
 
     void main();
 
-     WidgetHandle getWidgetHandle();
-
-protected :
-
-    virtual void onSizeChanged(const Vector2u& newSize, const Vector2u& oldSize);
-
-private :
-
-    GtkWidget* m_window;
-    GtkWidget* m_fixed;
 };
 
 } // namespace sf

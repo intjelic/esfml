@@ -23,33 +23,45 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
+#ifndef SFML_BUTTONIMPLGTK_HPP
+#define SFML_BUTTONIMPLGTK_HPP
+
 ////////////////////////////////////////////////////////////////////////////////
 // Headers
 ////////////////////////////////////////////////////////////////////////////////
-#include <sfml/gui/GuiWindowImpl.hpp>
-#include <sfml/gui/GuiWindow.hpp>
+#include <sfml/widgets.hpp>
+#include <sfml/gui/WidgetHandle.hpp>
+#include <sfml/gui/ButtonImpl.hpp>
 
 
 namespace sf
 {
-////////////////////////////////////////////////////////////////////////////////
-GuiWindow::GuiWindow() :
-Container (new priv::GuiWindowImpl)
+namespace priv
 {
-}
-
-
-////////////////////////////////////////////////////////////////////////////////
-GuiWindow::~GuiWindow()
+class ButtonImplGTK : public ButtonImpl
 {
-}
+public :
 
+    ButtonImplGTK(Button* parent);
+    ~ButtonImplGTK();
 
-////////////////////////////////////////////////////////////////////////////////
-void GuiWindow::main()
-{
-    priv::GuiWindowImpl* impl = static_cast<priv::GuiWindowImpl*>(getImplementation());
-    impl->main();
-}
+     WidgetHandle getWidgetHandle();
 
+    void size(const Vector2u& newSize, const Vector2u& oldSize);
+    void paint(RenderTarget& target, const RenderStates& states);
+
+private :
+
+    static gboolean onDraw(GtkWidget *widget, cairo_t *cr, gpointer user_data);
+
+    GtkWidget* m_handle;
+    RenderTexture m_paintingArea; ///< The off-screen to handle extra drawing
+    gulong m_paintingHandler;     ///< The handler id of our callback draw function
+    cairo_t* m_cairoContext;      ///< Temporary buffer to save the cairo context
+};
+
+} // namespace priv
 } // namespace sf
+
+
+#endif // SFML_BUTTONIMPLGTK_HPP

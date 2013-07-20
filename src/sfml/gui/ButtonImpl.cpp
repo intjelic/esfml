@@ -26,30 +26,27 @@
 ////////////////////////////////////////////////////////////////////////////////
 // Headers
 ////////////////////////////////////////////////////////////////////////////////
-#include <sfml/gui/GuiWindowImpl.hpp>
-#include <sfml/gui/GuiWindow.hpp>
+#include <sfml/gui/ButtonImpl.hpp>
+#include <sfml/gui/Button.hpp>
 
 
 namespace sf
 {
+namespace priv
+{
 ////////////////////////////////////////////////////////////////////////////////
-GuiWindow::GuiWindow() :
-Container (new priv::GuiWindowImpl)
+ButtonImpl::ButtonImpl(Button* parent) :
+WidgetImpl (),
+m_parent   (parent)
 {
 }
 
 
 ////////////////////////////////////////////////////////////////////////////////
-GuiWindow::~GuiWindow()
+ButtonImpl::~ButtonImpl()
 {
 }
 
 
-////////////////////////////////////////////////////////////////////////////////
-void GuiWindow::main()
-{
-    priv::GuiWindowImpl* impl = static_cast<priv::GuiWindowImpl*>(getImplementation());
-    impl->main();
-}
-
+} // namespace priv
 } // namespace sf

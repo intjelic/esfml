@@ -30,34 +30,22 @@
 // Headers
 ////////////////////////////////////////////////////////////////////////////////
 #include <sfml/gui/export.hpp>
-#include <sfml/gui/WidgetHandle.hpp>
 #include <sfml/gui/Widget.hpp>
 
 
 namespace sf
 {
+namespace priv
+{
+    class ButtonImpl;
+}
+
 class SFML_GUI_API Button : public Widget
 {
 public :
 
     Button();
     ~Button();
-
-     WidgetHandle getWidgetHandle();
-
-protected :
-
-    virtual void onPaint(RenderTarget& target, const RenderStates& states);
-    virtual void onSizeChanged(const Vector2u& newSize, const Vector2u& oldSize);
-
-private :
-
-    static gboolean onDraw(GtkWidget *widget, cairo_t *cr, gpointer user_data);
-
-    WidgetHandle m_handle;
-    RenderTexture m_paintingArea; ///< The off-screen to handle extra drawing
-    gulong m_paintingHandler;     ///< The handler id of our callback draw function
-    cairo_t* m_cairoContext;      ///< Temporary buffer to save the cairo context
 
 };
 

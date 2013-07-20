@@ -27,6 +27,7 @@
 // Headers
 ////////////////////////////////////////////////////////////////////////////////
 #include <sfml/gui/Container.hpp>
+#include <sfml/gui/ContainerImpl.hpp>
 
 
 namespace sf
@@ -47,14 +48,22 @@ Container::~Container()
 ////////////////////////////////////////////////////////////////////////////////
 void Container::addWidget(Widget& widget)
 {
-    gtk_container_add(GTK_CONTAINER(getWidgetHandle()), widget.getWidgetHandle());
+    m_impl->addWidget(widget);
 }
 
 
 ////////////////////////////////////////////////////////////////////////////////
 void Container::removeWidget(Widget& widget)
 {
-    gtk_container_remove(GTK_CONTAINER(getWidgetHandle()), widget.getWidgetHandle());
+    m_impl->removeWidget(widget);
+}
+
+
+////////////////////////////////////////////////////////////////////////////////
+Container::Container(priv::ContainerImpl* implementation) :
+Widget (implementation),
+m_impl (implementation)
+{
 }
 
 } // namespace sf

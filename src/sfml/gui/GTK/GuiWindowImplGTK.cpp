@@ -27,29 +27,60 @@
 // Headers
 ////////////////////////////////////////////////////////////////////////////////
 #include <sfml/gui/GuiWindowImpl.hpp>
-#include <sfml/gui/GuiWindow.hpp>
 
 
 namespace sf
 {
+namespace priv
+{
 ////////////////////////////////////////////////////////////////////////////////
-GuiWindow::GuiWindow() :
-Container (new priv::GuiWindowImpl)
+GuiWindowImpl::GuiWindowImpl() :
+ContainerImpl (),
+m_window  (NULL),
+m_fixed   (NULL)
+{
+    gtk_init (NULL, NULL);
+    m_window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
+
+    m_fixed = gtk_fixed_new();
+    gtk_container_add(GTK_CONTAINER(m_window), GTK_WIDGET(m_fixed));
+
+    g_signal_connect(m_window, "destroy", G_CALLBACK(gtk_main_quit), NULL);
+}
+
+
+////////////////////////////////////////////////////////////////////////////////
+GuiWindowImpl::~GuiWindowImpl()
 {
 }
 
 
 ////////////////////////////////////////////////////////////////////////////////
-GuiWindow::~GuiWindow()
+void GuiWindowImpl::main()
 {
+    gtk_widget_show(m_window);
+    gtk_main();
 }
 
 
 ////////////////////////////////////////////////////////////////////////////////
-void GuiWindow::main()
+WidgetHandle GuiWindowImpl::getWidgetHandle()
 {
-    priv::GuiWindowImpl* impl = static_cast<priv::GuiWindowImpl*>(getImplementation());
-    impl->main();
+    return m_fixed;
 }
 
+
+////////////////////////////////////////////////////////////////////////////////
+void GuiWindowImpl::size(const Vector2u& newSize, const Vector2u& oldSize)
+{
+    gtk_window_resize((GtkWindow*)m_window, newSize.x, newSize.y);
+}
+
+
+////////////////////////////////////////////////////////////////////////////////
+void GuiWindowImpl::paint(RenderTarget& target, const RenderStates& states)
+{
+}
+
+} // namespace priv
 } // namespace sf

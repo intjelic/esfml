@@ -34,11 +34,15 @@
 #include <sfml/graphics/RenderTarget.hpp>
 #include <sfml/graphics/RenderTexture.hpp>
 #include <sfml/system/Vector2.hpp>
-#include <gtk/gtk.h>
 
 
 namespace sf
 {
+namespace priv
+{
+    class WidgetImpl;
+}
+
 class SFML_GUI_API Widget
 {
 public :
@@ -54,17 +58,24 @@ public :
     void setSize(unsigned int, unsigned int);
     void setSize(const Vector2u&);
 
-    virtual WidgetHandle getWidgetHandle()=0;
+    WidgetHandle getWidgetHandle();
 
 protected :
+
+    Widget(priv::WidgetImpl* implementation);
+
+    priv::WidgetImpl* getImplementation();
 
     virtual void onPaint(RenderTarget& target, const RenderStates& states);
     virtual void onSizeChanged(const Vector2u& newSize, const Vector2u& oldSize);
 
 private :
 
-    Vector2i m_position;
-    Vector2u m_size;
+    priv::WidgetImpl* m_impl;
+    Vector2i          m_position;
+    Vector2u          m_size;
+
+    friend void paintWidget(Widget* widget, RenderTarget& target, const RenderStates& states);
 };
 
 } // namespace sf

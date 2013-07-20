@@ -23,33 +23,42 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
+#ifndef SFML_GUIWINDOWIMPL_HPP
+#define SFML_GUIWINDOWIMPL_HPP
+
 ////////////////////////////////////////////////////////////////////////////////
 // Headers
 ////////////////////////////////////////////////////////////////////////////////
-#include <sfml/gui/GuiWindowImpl.hpp>
-#include <sfml/gui/GuiWindow.hpp>
+#include <sfml/gui/WidgetHandle.hpp>
+#include <sfml/gui/ContainerImpl.hpp>
 
 
 namespace sf
 {
-////////////////////////////////////////////////////////////////////////////////
-GuiWindow::GuiWindow() :
-Container (new priv::GuiWindowImpl)
+namespace priv
 {
-}
-
-
-////////////////////////////////////////////////////////////////////////////////
-GuiWindow::~GuiWindow()
+class GuiWindowImpl : public ContainerImpl
 {
-}
+public :
 
+    GuiWindowImpl();
+    ~GuiWindowImpl();
 
-////////////////////////////////////////////////////////////////////////////////
-void GuiWindow::main()
-{
-    priv::GuiWindowImpl* impl = static_cast<priv::GuiWindowImpl*>(getImplementation());
-    impl->main();
-}
+    void main();
 
+     WidgetHandle getWidgetHandle();
+
+    void size(const Vector2u& newSize, const Vector2u& oldSize);
+    void paint(RenderTarget& target, const RenderStates& states);
+
+private :
+
+    GtkWidget* m_window;
+    GtkWidget* m_fixed;
+};
+
+} // namespace priv
 } // namespace sf
+
+
+#endif // SFML_GUIWINDOWIMPL_HPP
