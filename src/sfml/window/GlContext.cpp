@@ -31,7 +31,6 @@
 #include <sfml/system/Mutex.hpp>
 #include <sfml/system/Lock.hpp>
 #include <sfml/opengl.hpp>
-#include <sfml/window/glext/glext.h>
 #include <set>
 #include <cstdlib>
 #include <cassert>
