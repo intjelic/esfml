@@ -42,7 +42,7 @@ class WindowImplAndroid : public WindowImpl
 public :
 
     WindowImplAndroid(WindowHandle handle);
-    WindowImplAndroid(VideoMode mode, const std::string& title, unsigned long style);
+    WindowImplAndroid(VideoMode mode, const std::string& title, unsigned long style, const ContextSettings& settings);
     ~WindowImplAndroid();
 
     virtual WindowHandle getSystemHandle() const;

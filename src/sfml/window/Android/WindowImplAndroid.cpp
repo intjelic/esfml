@@ -49,7 +49,7 @@ m_context (NULL)
 
 
 ////////////////////////////////////////////////////////////////////////////////
-WindowImplAndroid::WindowImplAndroid(VideoMode mode, const std::string& title, unsigned long style) :
+WindowImplAndroid::WindowImplAndroid(VideoMode mode, const std::string& title, unsigned long style, const ContextSettings& settings) :
 m_context (NULL)
 {
 }
