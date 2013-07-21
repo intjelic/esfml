@@ -594,6 +594,7 @@ void Shader::bindTextures() const
 ////////////////////////////////////////////////////////////////////////////////
 int Shader::getParamLocation(const std::string& name)
 {
+    #ifndef SFML_EMBEDDED_SYSTEM
     // Check the cache
     ParamTable::const_iterator it = m_params.find(name);
     if (it != m_params.end())
@@ -618,6 +619,10 @@ int Shader::getParamLocation(const std::string& name)
 
         return location;
     }
+
+    #else
+        return 0;
+    #endif
 }
 
 } // namespace sf
