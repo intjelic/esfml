@@ -218,6 +218,17 @@ else()
     set(SRC_DIR ${PROJECT_SOURCE_DIR}/src)
     set(EXTLIBS_DIR ${PROJECT_SOURCE_DIR}/extlibs/android/extlibs)
 
+	# support for windows, under cygwin (add  C:/cygwin64 to path)
+	execute_process(COMMAND uname -o OUTPUT_VARIABLE UNAME_RESULT)
+	if (UNAME_RESULT MATCHES Cygwin)
+		execute_process(COMMAND cygpath --mixed / OUTPUT_VARIABLE CYGPATH)
+		string(STRIP ${CYGPATH} CYGPATH)
+		
+		set(INCLUDE_DIR ${CYGPATH}${PROJECT_SOURCE_DIR}/include)
+		set(SRC_DIR ${CYGPATH}${PROJECT_SOURCE_DIR}/src)
+		set(EXTLIBS_DIR ${CYGPATH}${PROJECT_SOURCE_DIR}/extlibs/android/extlibs)
+	endif()
+	
     file(WRITE ${APPLICATION_MK})
     file(APPEND ${APPLICATION_MK} "NDK_APP_OUT := ${CMAKE_BINARY_DIR}/src/sfml/${MODULE_NAME}/obj\n")
     file(APPEND ${APPLICATION_MK} "APP_PLATFORM := android-9\n")
