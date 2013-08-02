@@ -1,3 +1,4 @@
+#include <map>
 #include <sfml/system.hpp>
 #include <sfml/window.hpp>
 #include <sfml/graphics.hpp>
@@ -12,17 +13,16 @@ int main(int argc, char *argv[])
     if(!texture.loadFromFile("image.png"))
         return EXIT_FAILURE;
 
-    sf::Sprite sprite(texture);
-
-    sf::Vector2u imageSize = texture.getSize();
-    sprite.setOrigin(imageSize.x/2, imageSize.y/2);
+    // An array of sprites, one for each finger touching the screen
+    std::map<int, sf::Sprite> sprites;
+    std::map<int, sf::Sprite>::iterator sprite;
 
     sf::Music music;
     if(!music.openFromFile("orchestral.ogg"))
         return EXIT_FAILURE;
 
     music.play();
-    
+
     // Set the world's center to the center of the screen
     sf::View view = window.getView();
     view.setCenter(0, 0);
@@ -37,12 +37,30 @@ int main(int argc, char *argv[])
             {
                 window.close();
             }
+            else if (event.type == sf::Event::MouseButtonPressed)
+            {
+            	int index = static_cast<int>(event.mouseButton.button);
+            	sprites[index] = sf::Sprite(texture);
+
+                sf::Vector2u imageSize = texture.getSize();
+                sprites[index].setOrigin(imageSize.x/2, imageSize.y/2);
+
+            	sprites[index].setPosition(event.mouseButton.x, event.mouseButton.y);
+            }
+            else if (event.type == sf::Event::MouseButtonReleased)
+            {
+            	int index = static_cast<int>(event.mouseButton.button);
+            	sprites.erase(index);
+            }
             else if (event.type == sf::Event::MouseMoved)
             {
+                int index = static_cast<int>(event.mouseButton.button);
+
                 // Move the sprite to the finger's location
                 sf::Vector2i pixelPos(event.mouseButton.x, event.mouseButton.y);
                 sf::Vector2f worldPos = window.mapPixelToCoords(pixelPos);
-                sprite.setPosition(worldPos);
+
+                sprites[index].setPosition(worldPos);
             }
             else if (event.type == sf::Event::Resized)
             {
@@ -54,7 +72,11 @@ int main(int argc, char *argv[])
         }
 
         window.clear(sf::Color::White);
-        window.draw(sprite);
+
+        for (std::map<int, sf::Sprite>::iterator it=sprites.begin(); it!=sprites.end(); ++it)
+        	window.draw(it->second);
+
         window.display();
     }
 }
+
