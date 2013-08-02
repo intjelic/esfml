@@ -3,7 +3,6 @@
 #include <sfml/graphics.hpp>
 #include <sfml/audio.hpp>
 
-#include <iostream>
 
 int main(int argc, char *argv[])
 {
@@ -41,7 +40,7 @@ int main(int argc, char *argv[])
             else if (event.type == sf::Event::MouseMoved)
             {
                 // Move the sprite to the finger's location
-                sf::Vector2i pixelPos(event.mouseMove.x, event.mouseMove.y);
+                sf::Vector2i pixelPos(event.mouseButton.x, event.mouseButton.y);
                 sf::Vector2f worldPos = window.mapPixelToCoords(pixelPos);
                 sprite.setPosition(worldPos);
             }
