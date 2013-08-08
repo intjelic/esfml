@@ -30,7 +30,9 @@
 #include <sfml/graphics/ImageLoader.hpp>
 #include <sfml/system/error.hpp>
 #include <sfml/system/Lock.hpp>
-#include <sfml/main/activity.hpp>
+#if defined(SFML_SYSTEM_ANDROID)
+	#include <sfml/main/activity.hpp>
+#endif
 #include <algorithm>
 #include <cstring>
 
