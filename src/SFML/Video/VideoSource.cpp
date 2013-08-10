@@ -31,6 +31,13 @@
 namespace sf
 {
 ////////////////////////////////////////////////////////////
+VideoSource::VideoSource()
+{
+	// todo: ensure FFMPEG is loaded ?
+}
+
+
+////////////////////////////////////////////////////////////
 VideoSource::VideoSource(const VideoSource& copy)
 {
 	m_status = copy.getStatus();
