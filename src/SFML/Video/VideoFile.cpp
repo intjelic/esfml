@@ -121,6 +121,9 @@ bool VideoFile::openRead(const std::string& filename)
 
 	m_streamIndex = ret;
 
+	// Retrieve FPS
+	m_framePerSecond = m_formatContext->streams[m_streamIndex]->r_frame_rate.num;
+
 	// Retrieve the codec context
 	m_codecContext = m_formatContext->streams[m_streamIndex]->codec;
 

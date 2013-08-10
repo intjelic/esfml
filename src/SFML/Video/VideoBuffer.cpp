@@ -33,9 +33,10 @@ namespace sf
 {
 ////////////////////////////////////////////////////////////
 VideoBuffer::VideoBuffer() :
-m_frames  (),
-m_duration(),
-m_videos  ()
+m_frames         (),
+m_framePerSecond (0),
+m_duration       (),
+m_videos         ()
 {
 	av_register_all();
 }
@@ -43,9 +44,10 @@ m_videos  ()
 
 ////////////////////////////////////////////////////////////
 VideoBuffer::VideoBuffer(const VideoBuffer& copy) :
-m_frames (),
-m_duration(),
-m_videos  ()
+m_frames         (),
+m_framePerSecond (0),
+m_duration       (),
+m_videos         ()
 {
 }
 
@@ -64,6 +66,8 @@ bool VideoBuffer::loadFromFile(const std::string& filename, unsigned int frameCo
 		return false;
 
 	// TODO: retrieve the video parameters (frameCount, etc)
+
+	m_framePerSecond = file.getFramePerSecond();
 
 	// Prepare our array to receive this amount of video frame
 	m_frames.clear();
@@ -119,7 +123,7 @@ std::size_t VideoBuffer::getFrameCount() const
 ////////////////////////////////////////////////////////////
 unsigned int VideoBuffer::getFramePerSecond() const
 {
-	return 0;
+	return m_framePerSecond;
 }
 
 
