@@ -22,8 +22,8 @@
 //
 ////////////////////////////////////////////////////////////
 
-#ifndef SFML_VIDEO_HPP
-#define SFML_VIDEO_HPP
+#ifndef SFML__VIDEO_HPP
+#define SFML__VIDEO_HPP
 
 ////////////////////////////////////////////////////////////
 // Headers
@@ -35,4 +35,4 @@
 #include <SFML/Video/VideoBuffer.hpp>
 
 
-#endif // SFML_VIDEO_HPP
+#endif // SFML__VIDEO_HPP
