@@ -104,7 +104,7 @@ bool VideoFile::openRead(const std::string& filename)
 
 	// Find a video stream
 	m_streamIndex = 0;
-	ret = av_find_best_stream(m_formatContext, AVMEDIA_TYPE_VIDEO, -1, -1, &m_codec, 0);
+	ret = av_find_best_stream(m_formatContext, AVMEDIA_TYPE_VIDEO, -1, -1, NULL, 0);
 
 	if (ret < 0)
 	{
