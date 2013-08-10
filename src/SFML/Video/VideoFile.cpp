@@ -78,8 +78,7 @@ unsigned int VideoFile::getFramePerSecond() const
 bool VideoFile::openRead(const std::string& filename)
 {
 	// If the file is already opened, first close it
-	if (m_formatContext)
-		close();
+	close();
 
 	// Open a multimedia file
 	int ret = avformat_open_input(&m_formatContext, filename.c_str(), NULL, NULL);
@@ -275,11 +274,14 @@ void VideoFile::seek(Time timeOffset)
 ////////////////////////////////////////////////////////////////////////////////
 void VideoFile::close()
 {
-	avcodec_close(m_codecContext);
-	avformat_close_input(&m_formatContext);
+	if (m_formatContext)
+	{
+		avcodec_close(m_codecContext);
+		avformat_close_input(&m_formatContext);
 
-	m_streamIndex = -1;
-	m_size = Vector2i(0, 0);
+		m_streamIndex = -1;
+		m_size = Vector2i(0, 0);
+	}
 }
 
 
