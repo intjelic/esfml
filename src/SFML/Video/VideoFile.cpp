@@ -124,6 +124,9 @@ bool VideoFile::openRead(const std::string& filename)
 	// Retrieve FPS
 	m_framePerSecond = m_formatContext->streams[m_streamIndex]->r_frame_rate.num;
 
+	// Retrieve the frame count
+	m_frameCount = m_formatContext->streams[m_streamIndex]->duration;
+
 	// Retrieve the codec context
 	m_codecContext = m_formatContext->streams[m_streamIndex]->codec;
 
@@ -244,6 +247,7 @@ std::size_t VideoFile::read(std::vector<Image>& data, std::size_t frameCount)
 
 		// Convert color format to RGBA
 		sws_scale(m_swsContext, rawFrame->data, rawFrame->linesize, 0, m_size.y, rgbaFrame->data, rgbaFrame->linesize);
+
 		// Append our decoded and well formatted frame
 		data[currentFrame].create(m_size.x, m_size.y, (const sf::Uint8*)rgbaFrame->data[0]);
 

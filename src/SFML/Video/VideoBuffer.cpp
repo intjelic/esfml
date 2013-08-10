@@ -34,6 +34,7 @@ namespace sf
 ////////////////////////////////////////////////////////////
 VideoBuffer::VideoBuffer() :
 m_frames         (),
+m_frameCount     (0),
 m_framePerSecond (0),
 m_duration       (),
 m_videos         ()
@@ -45,6 +46,7 @@ m_videos         ()
 ////////////////////////////////////////////////////////////
 VideoBuffer::VideoBuffer(const VideoBuffer& copy) :
 m_frames         (),
+m_frameCount     (0),
 m_framePerSecond (0),
 m_duration       (),
 m_videos         ()
@@ -58,23 +60,23 @@ VideoBuffer::~VideoBuffer()
 }
 
 
-bool VideoBuffer::loadFromFile(const std::string& filename, unsigned int frameCount)
+////////////////////////////////////////////////////////////
+bool VideoBuffer::loadFromFile(const std::string& filename)
 {
     priv::VideoFile file;
 
     if (!file.openRead(filename))
 		return false;
 
-	// TODO: retrieve the video parameters (frameCount, etc)
-
+	m_frameCount = file.getFrameCount();
 	m_framePerSecond = file.getFramePerSecond();
 
 	// Prepare our array to receive this amount of video frame
 	m_frames.clear();
-	m_frames.reserve(frameCount);
+	m_frames.reserve(m_frameCount);
 
 	// Read the frames from the provided file
-	return file.read(m_frames, frameCount) == frameCount;
+	return file.read(m_frames, m_frameCount) == m_frameCount;
 }
 
 

@@ -84,7 +84,7 @@ public :
     /// \see loadFromMemory, loadFromStream, loadFromFrames, saveToFile
     ///
     ////////////////////////////////////////////////////////////////////////////
-    bool loadFromFile(const std::string& filename, unsigned int frameCount);
+    bool loadFromFile(const std::string& filename);
 
     ////////////////////////////////////////////////////////////////////////////
     /// \brief Load the video buffer from a file in memory
@@ -240,6 +240,7 @@ private :
     // Member data
     ////////////////////////////////////////////////////////////////////////////
     std::vector<Image> m_frames;         ///< Frame buffer
+    unsigned int       m_frameCount;     ///< Number of frame in this buffer
     unsigned int       m_framePerSecond; ///< Number of frame per second
     Time               m_duration;       ///< Video duration
     mutable VideoList  m_videos;         ///< List of videos that are using this buffer
