@@ -45,6 +45,13 @@ VideoSource::VideoSource(const VideoSource& copy)
 
 
 ////////////////////////////////////////////////////////////
+VideoSource::~VideoSource()
+{
+	// Nothing to do
+}
+
+
+////////////////////////////////////////////////////////////
 VideoSource::Status VideoSource::getStatus() const
 {
     return m_status;
