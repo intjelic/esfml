@@ -20,6 +20,8 @@ set(SRC
 source_group("" FILES ${SRC})
 
 find_package(FFMPEG REQUIRED)
+include_directories(${FFMPEG_INCLUDE_DIRS})
+
 add_definitions(-D__STDC_CONSTANT_MACROS)
 
 # define the sfml-window target
