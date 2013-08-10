@@ -39,7 +39,7 @@ namespace sf
 /// \brief Base class defining a video's properties
 ///
 ////////////////////////////////////////////////////////////
-class SFML_VIDEO_API VideoSource : public Drawable, Transformable
+class SFML_VIDEO_API VideoSource : public Drawable, public Transformable
 {
 public :
 
