@@ -79,9 +79,9 @@ protected :
     VideoSource();
 
 	////////////////////////////////////////////////////////////
-    /// \brief Get the current status of the sound (stopped, paused, playing)
+    /// \brief Get the current status of the video (stopped, paused, playing)
     ///
-    /// \return Current status of the sound
+    /// \return Current status of the video
     ///
 	////////////////////////////////////////////////////////////
     Status getStatus() const;
@@ -89,7 +89,8 @@ protected :
 	////////////////////////////////////////////////////////////
     // Member data
 	////////////////////////////////////////////////////////////
-    Status m_status; ///< OpenAL source identifier
+    Status m_status; ///< The current status of the video (stopped, paused, playing)
+
 };
 
 } // namespace sf
