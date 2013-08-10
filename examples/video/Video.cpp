@@ -1,16 +1,20 @@
 #include <sfml/system.hpp>
 #include <sfml/graphics.hpp>
 #include <sfml/video.hpp>
+#include <iostream>
+
 
 int main()
 {
-	sf::VideoBuffer videobuffer;
-	videobuffer.loadFromFile("resources/sample.ogv", 50);
+    sf::VideoBuffer videobuffer;
+    videobuffer.loadFromFile("resources/sample.ogv", 500);
+
+    sf::Video video;
+    video.setBuffer(videobuffer);
+    video.play();
 
     sf::RenderWindow window(sf::VideoMode(640, 480), "SFML - Video");
-
-	sf::Texture texture;
-	texture.loadFromImage(videobuffer.getFrames()[42]);
+    std::cout << "Remove this print statement and you'll get a segmentation fault (O.o)" << std::endl;
 
     while (window.isOpen())
     {
@@ -22,10 +26,11 @@ int main()
 
             if ((event.type == sf::Event::KeyPressed) && (event.key.code == sf::Keyboard::Escape))
                 window.close();
-       }
+        }
 
-		window.clear();
-		window.draw(sf::Sprite(texture));
+        window.clear();
+        video.update();
+        window.draw(video);
         window.display();
     }
 
