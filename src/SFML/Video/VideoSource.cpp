@@ -57,4 +57,11 @@ VideoSource::Status VideoSource::getStatus() const
     return m_status;
 }
 
+
+////////////////////////////////////////////////////////////
+void VideoSource::setStatus(VideoSource::Status status)
+{
+	m_status = status;
+}
+
 } // namespace sf
