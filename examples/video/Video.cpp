@@ -7,13 +7,12 @@
 int main()
 {
     sf::VideoBuffer videobuffer;
-    videobuffer.loadFromFile("resources/sample.ogv", 500);
+    videobuffer.loadFromFile("resources/sample.ogv");
 
-    sf::Video video;
-    video.setBuffer(videobuffer);
+    sf::Video video(videobuffer);
     video.play();
 
-    sf::RenderWindow window(sf::VideoMode(640, 480), "SFML - Video");
+    sf::RenderWindow window(sf::VideoMode(1280, 720), "SFML - Video");
     std::cout << "Remove this print statement and you'll get a segmentation fault (O.o)" << std::endl;
 
     while (window.isOpen())
