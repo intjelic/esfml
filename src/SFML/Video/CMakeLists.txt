@@ -14,6 +14,7 @@ set(SRC
     ${INCROOT}/VideoStream.hpp
     ${SRCROOT}/Movie.cpp
     ${INCROOT}/Movie.hpp
+    ${SRCROOT}/Video.cpp
     ${INCROOT}/Video.hpp
 )
 
