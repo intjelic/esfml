@@ -259,16 +259,16 @@ else()
 
     # BUILD rules
     set(DIR ${PROJECT_SOURCE_DIR}/src/sfml/${MODULE_NAME})
-    set(NDK_MODULE_PATH NDK_MODULE_PATH=${PROJECT_SOURCE_DIR}/extlibs/android)
-    set(NDK_PROJECT_PATH NDK_PROJECT_PATH=${PROJECT_SOURCE_DIR}/src/sfml/${MODULE_NAME})
+    set(NDK_MODULE_PATH ${PROJECT_SOURCE_DIR}/extlibs/android)
+    set(NDK_PROJECT_PATH ${PROJECT_SOURCE_DIR}/src/sfml/${MODULE_NAME})
     set(NDK_BUILD ${ANDROID_NDK_PATH}/ndk-build)
     set(NDK_APPLICATION_MK NDK_APPLICATION_MK=${APPLICATION_MK})
 
-    # it should invoke the ndk-build scripts from the ndk with the right parameters
-    # e.g: NDK_PROJECT_PATH=/home/sonkun/Desktop/esfml/src/sfml/main
-    #   $NDK/ndk-build -C /home/sonkun/Desktop/esfml/src/sfml/main
-    #   NDK_APPLICATION_MK=/home/sonkun/Desktop/esfml/src/sfml/main/Application.mk
-    add_custom_command(TARGET ${target} POST_BUILD COMMAND ${NDK_PROJECT_PATH} ${NDK_MODULE_PATH} ${NDK_BUILD} -C ${DIR} ${NDK_APPLICATION_MK})
+    # define environment for ndk-build
+    set(NDK_ENVIRONMENT NDK_MODULE_PATH=${NDK_MODULE_PATH} NDK_PROJECT_PATH=${NDK_PROJECT_PATH})
+
+    # invoke the ndk-build scripts from the ndk with the right parameters
+    add_custom_command(TARGET ${target} POST_BUILD COMMAND ${NDK_BUILD} -C ${DIR} ${NDK_APPLICATION_MK} ${NDK_ENVIRONMENT})
 
     ## CLEAN RULES (not working)
     #LIST(APPEND ${CMAKE_BINARY_DIR}/jni ${FILES_TO_CLEAN})
@@ -278,16 +278,16 @@ else()
 
     # INSTALL RULES
     if (ANDROID_ABI_ARM)
-        install(DIRECTORY ${CMAKE_BINARY_DIR}/src/sfml/${MODULE_NAME}/obj/local/armeabi DESTINATION ${ANDROID_NDK_PATH}/sources/sfml/lib/)
+        install(DIRECTORY ${CMAKE_BINARY_DIR}/src/sfml/${MODULE_NAME}/obj/local/armeabi DESTINATION ${ANDROID_NDK_PATH}/sources/sfml/lib/ PATTERN "objs" EXCLUDE)
     endif()
     if (ANDROID_ABI_ARMv7)
-        install(DIRECTORY ${CMAKE_BINARY_DIR}/src/sfml/${MODULE_NAME}/obj/local/armeabi-v7a DESTINATION ${ANDROID_NDK_PATH}/sources/sfml/lib)
+        install(DIRECTORY ${CMAKE_BINARY_DIR}/src/sfml/${MODULE_NAME}/obj/local/armeabi-v7a DESTINATION ${ANDROID_NDK_PATH}/sources/sfml/lib PATTERN "objs" EXCLUDE)
     endif()
     if (ANDROID_ABI_MIPS)
-        install(DIRECTORY ${CMAKE_BINARY_DIR}/src/sfml/${MODULE_NAME}/obj/local/mips DESTINATION ${ANDROID_NDK_PATH}/sources/sfml/lib)
+        install(DIRECTORY ${CMAKE_BINARY_DIR}/src/sfml/${MODULE_NAME}/obj/local/mips DESTINATION ${ANDROID_NDK_PATH}/sources/sfml/lib PATTERN "objs" EXCLUDE)
     endif()
     if (ANDROID_ABI_x86)
-        install(DIRECTORY ${CMAKE_BINARY_DIR}/src/sfml/${MODULE_NAME}/obj/local/x86 DESTINATION ${ANDROID_NDK_PATH}/sources/sfml/lib)
+        install(DIRECTORY ${CMAKE_BINARY_DIR}/src/sfml/${MODULE_NAME}/obj/local/x86 DESTINATION ${ANDROID_NDK_PATH}/sources/sfml/lib PATTERN "objs" EXCLUDE)
     endif()
 
 endif()
