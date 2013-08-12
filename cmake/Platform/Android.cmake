@@ -28,4 +28,4 @@ sfml_set_option(ANDROID_ABI_ARMv7 FALSE BOOL "Build for armv7 architecture ?")
 sfml_set_option(ANDROID_ABI_MIPS FALSE BOOL "Build for mipsel architecture ?")
 sfml_set_option(ANDROID_ABI_x86 FALSE BOOL "Build for x86 architecture ?")
 
-set(CMAKE_INSTALL_PREFIX ${NDK_PATH}/sources/sfml)
+set(CMAKE_INSTALL_PREFIX ${ANDROID_NDK_PATH}/sources/sfml)
