@@ -252,8 +252,8 @@ void processEvent(ActivityStates* states)
                     int index = (action & AMOTION_EVENT_ACTION_POINTER_INDEX_MASK) >> AMOTION_EVENT_ACTION_POINTER_INDEX_SHIFT;
                     int id = AMotionEvent_getPointerId(_event, index);
 
-                    float x = AMotionEvent_getX(_event, 0);
-                    float y = AMotionEvent_getY(_event, 0);
+                    float x = AMotionEvent_getX(_event, index);
+                    float y = AMotionEvent_getY(_event, index);
 
                     sf::Event event;
                     event.type = Event::MouseButtonPressed;
@@ -272,8 +272,8 @@ void processEvent(ActivityStates* states)
                     int index = (action & AMOTION_EVENT_ACTION_POINTER_INDEX_MASK) >> AMOTION_EVENT_ACTION_POINTER_INDEX_SHIFT;
                     int id = AMotionEvent_getPointerId(_event, index);
 
-                    float x = AMotionEvent_getX(_event, 0);
-                    float y = AMotionEvent_getY(_event, 0);
+                    float x = AMotionEvent_getX(_event, index);
+                    float y = AMotionEvent_getY(_event, index);
 
                     sf::Event event;
                     event.type = Event::MouseButtonReleased;

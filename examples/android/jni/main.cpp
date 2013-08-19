@@ -39,18 +39,22 @@ int main(int argc, char *argv[])
             }
             else if (event.type == sf::Event::MouseButtonPressed)
             {
-            	int index = static_cast<int>(event.mouseButton.button);
-            	sprites[index] = sf::Sprite(texture);
+                int index = static_cast<int>(event.mouseButton.button);
 
+                sprites[index] = sf::Sprite(texture);
                 sf::Vector2u imageSize = texture.getSize();
-                sprites[index].setOrigin(imageSize.x/2, imageSize.y/2);
+                sprites[index].setOrigin(imageSize.x / 2, imageSize.y / 2);
 
-            	sprites[index].setPosition(event.mouseButton.x, event.mouseButton.y);
+                // Move the sprite to the finger's location
+                sf::Vector2i pixelPos(event.mouseButton.x, event.mouseButton.y);
+                sf::Vector2f worldPos = window.mapPixelToCoords(pixelPos);
+
+                sprites[index].setPosition(worldPos);
             }
             else if (event.type == sf::Event::MouseButtonReleased)
             {
-            	int index = static_cast<int>(event.mouseButton.button);
-            	sprites.erase(index);
+                int index = static_cast<int>(event.mouseButton.button);
+                sprites.erase(index);
             }
             else if (event.type == sf::Event::MouseMoved)
             {
@@ -74,7 +78,7 @@ int main(int argc, char *argv[])
         window.clear(sf::Color::White);
 
         for (std::map<int, sf::Sprite>::iterator it=sprites.begin(); it!=sprites.end(); ++it)
-        	window.draw(it->second);
+            window.draw(it->second);
 
         window.display();
     }
