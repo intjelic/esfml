@@ -28,7 +28,7 @@
 ////////////////////////////////////////////////////////////
 // Headers
 ////////////////////////////////////////////////////////////
-#include <SFML/Video/export.hpp>
+#include <SFML/Video/Export.hpp>
 #include <SFML/Graphics/Image.hpp>
 #include <SFML/System/Thread.hpp>
 #include <SFML/System/Vector2.hpp>
