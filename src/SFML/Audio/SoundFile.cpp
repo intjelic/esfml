@@ -103,8 +103,14 @@ unsigned int SoundFile::getSampleRate() const
 
 
 ////////////////////////////////////////////////////////////
-bool SoundFile::openRead(const std::string& filename)
+bool SoundFile::openRead(const std::string& _filename)
 {
+    #ifdef SFML_SYSTEM_BLACKBERRY
+        std::string filename = std::string("app/native/") + _filename;
+    #else
+        std::string filename = _filename;
+    #endif
+
     #ifndef SFML_SYSTEM_ANDROID
 
     // If the file is already opened, first close it

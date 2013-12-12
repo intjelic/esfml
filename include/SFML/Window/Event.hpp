@@ -213,7 +213,7 @@ public :
         JoystickMoveEvent    joystickMove;    ///< Joystick move event parameters (Event::JoystickMoved)
         JoystickButtonEvent  joystickButton;  ///< Joystick button event parameters (Event::JoystickButtonPressed, Event::JoystickButtonReleased)
         JoystickConnectEvent joystickConnect; ///< Joystick (dis)connect event parameters (Event::JoystickConnected, Event::JoystickDisconnected)
-        TouchEvent           touch;           ///< Touch events parameters (Event::TouchBegan, Event::TouchMoved, Event::TouchEnded)
+        TouchEvent           touch;           ///< Touch event parameters (Event::TouchBegan, Event::TouchMoved, Event::TouchEnded)
         SensorEvent          sensor;          ///< Sensor event parameters (Event::SensorChanged)
     };
 };

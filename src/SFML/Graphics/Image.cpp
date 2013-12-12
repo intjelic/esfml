@@ -121,17 +121,21 @@ void Image::create(unsigned int width, unsigned int height, const Uint8* pixels)
 ////////////////////////////////////////////////////////////
 bool Image::loadFromFile(const std::string& filename)
 {
-    #ifndef SFML_SYSTEM_ANDROID
-
-        return priv::ImageLoader::getInstance().loadImageFromFile(filename, m_pixels, m_size);
-
-    #else
+    #if defined(SFML_SYSTEM_ANDROID)
 
         if (m_stream)
             delete (priv::ResourceStream*)m_stream;
 
         m_stream = new priv::ResourceStream(filename);
         return loadFromStream(*(priv::ResourceStream*)m_stream);
+
+    #elif defined(SFML_SYSTEM_BLACKBERRY)
+
+        return priv::ImageLoader::getInstance().loadImageFromFile("app/native/" + filename, m_pixels, m_size);
+
+    #else
+
+        return priv::ImageLoader::getInstance().loadImageFromFile(filename, m_pixels, m_size);
 
     #endif
 }

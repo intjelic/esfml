@@ -32,6 +32,7 @@
 #include <SFML/System/Utf.hpp>
 #include <locale>
 #include <string>
+#include <iterator>
 
 
 namespace sf

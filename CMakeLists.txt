@@ -91,6 +91,21 @@ if(SFML_OS_ANDROID)
     set(CMAKE_CXX_CREATE_SHARED_LIBRARY_WITHOUT_STLPORT "<CMAKE_CXX_COMPILER> <CMAKE_SHARED_LIBRARY_CXX_FLAGS> <LANGUAGE_COMPILE_FLAGS> <LINK_FLAGS> <CMAKE_SHARED_LIBRARY_CREATE_CXX_FLAGS> <SONAME_FLAG><TARGET_SONAME> -o <TARGET> <OBJECTS> <LINK_LIBRARIES>")
 endif()
 
+# Blackberry options
+if(SFML_OS_BLACKBERRY)
+    # force usage of GNU C++ STL library
+    set(BLACKBERRY_STL "_gpp")
+
+    # we install libs in a subdirectory named after the target type (device or simulator)
+    set(LIB_PREFIX "${ARCHITECTURE_NAME}/")
+
+    # we install headers in ${QNX_TARGET}/usr/include
+    set(INCLUDE_PREFIX "usr/")
+
+    # install everything in the ndk
+    set(CMAKE_INSTALL_PREFIX ${BLACKBERRY_QNX_TARGET})
+endif()
+
 # define SFML_STATIC if the build type is not set to 'shared'
 if(NOT BUILD_SHARED_LIBS)
     add_definitions(-DSFML_STATIC)
@@ -200,7 +215,7 @@ endif()
 # setup the install rules
 if(NOT SFML_BUILD_FRAMEWORKS)
     install(DIRECTORY include
-            DESTINATION .
+            DESTINATION ${INCLUDE_PREFIX}.
             COMPONENT devel
             FILES_MATCHING PATTERN "*.hpp" PATTERN "*.inl")
 else()
@@ -309,5 +324,11 @@ elseif(SFML_OS_ANDROID)
 
     # install Android.mk so the NDK knows how to set up SFML
     install(FILES src/SFML/Android.mk DESTINATION .)
+
+elseif(SFML_OS_BLACKBERRY)
+
+    # install extlibs
+    install(FILES extlibs/libs-blackberry/${BLACKBERRY_TARGET}/libsndfile.so DESTINATION ${LIB_PREFIX}lib${LIB_SUFFIX})
+    install(FILES extlibs/headers/libsndfile/blackberry/sndfile.h DESTINATION usr/include)
 
 endif()

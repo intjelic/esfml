@@ -177,6 +177,18 @@ elseif(SFML_OS_ANDROID)
         ${SRCROOT}/Android/SensorImpl.cpp
     )
     source_group("android" FILES ${PLATFORM_SRC})
+elseif(SFML_OS_BLACKBERRY)
+    set(PLATFORM_SRC
+        ${SRCROOT}/Blackberry/WindowImplBlackberry.hpp
+        ${SRCROOT}/Blackberry/WindowImplBlackberry.cpp
+        ${SRCROOT}/Blackberry/VideoModeImpl.cpp
+        ${SRCROOT}/Blackberry/InputImpl.hpp
+        ${SRCROOT}/Blackberry/InputImpl.cpp
+        ${SRCROOT}/Blackberry/JoystickImpl.hpp
+        ${SRCROOT}/Blackberry/JoystickImpl.cpp
+        ${SRCROOT}/Blackberry/SensorImpl.hpp
+        ${SRCROOT}/Blackberry/SensorImpl.cpp)
+    source_group("blackberry" FILES ${PLATFORM_SRC})
 endif()
 
 # find external libraries
@@ -223,13 +235,15 @@ elseif(SFML_OS_IOS)
     list(APPEND WINDOW_EXT_LIBS "-framework Foundation -framework UIKit -framework CoreGraphics -framework QuartzCore -framework CoreMotion")
 elseif(SFML_OS_ANDROID)
     list(APPEND WINDOW_EXT_LIBS "-landroid")
+elseif(SFML_OS_BLACKBERRY)
+    list(APPEND WINDOW_EXT_LIBS "-lscreen -lbps")
 endif()
 if(SFML_OPENGL_ES)
     if(SFML_OS_LINUX)
         list(APPEND WINDOW_EXT_LIBS ${EGL_LIBRARY} ${GLES_LIBRARY})
     elseif(SFML_OS_IOS)
         list(APPEND WINDOW_EXT_LIBS "-framework OpenGLES")
-    elseif(SFML_OS_ANDROID)
+    elseif(SFML_OS_ANDROID OR SFML_OS_BLACKBERRY)
         list(APPEND WINDOW_EXT_LIBS "-lEGL -lGLESv1_CM")
     endif()
 else()

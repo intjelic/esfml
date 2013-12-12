@@ -1,7 +1,7 @@
 ////////////////////////////////////////////////////////////
 //
 // SFML - Simple and Fast Multimedia Library
-// Copyright (C) 2007-2014 Laurent Gomila (laurent.gom@gmail.com)
+// Copyright (C) 2013 Jonathan De Wachter (dewachter.jonathan@gmail.com)
 //
 // This software is provided 'as-is', without any express or implied warranty.
 // In no event will the authors be held liable for any damages arising from the use of this software.
@@ -22,58 +22,70 @@
 //
 ////////////////////////////////////////////////////////////
 
-#ifndef SFML_WINDOWHANDLE_HPP
-#define SFML_WINDOWHANDLE_HPP
-
 ////////////////////////////////////////////////////////////
 // Headers
 ////////////////////////////////////////////////////////////
-#include <SFML/Config.hpp>
-
-// Windows' HWND is a typedef on struct HWND__*
-#if defined(SFML_SYSTEM_WINDOWS)
-    struct HWND__;
-#endif
+#include <SFML/Window/JoystickImpl.hpp>
+#include <SFML/System/Err.hpp>
 
 namespace sf
 {
+namespace priv
+{
 ////////////////////////////////////////////////////////////
-/// Define a low-level window handle type, specific to
-/// each platform
+void JoystickImpl::initialize()
+{
+
+}
+
+
 ////////////////////////////////////////////////////////////
-#if defined(SFML_SYSTEM_WINDOWS)
+void JoystickImpl::cleanup()
+{
 
-    // Window handle is HWND (HWND__*) on Windows
-    typedef HWND__* WindowHandle;
+}
 
-#elif defined(SFML_SYSTEM_LINUX) || defined(SFML_SYSTEM_FREEBSD)
 
-    // Window handle is Window (unsigned long) on Unix - X11
-    typedef unsigned long WindowHandle;
+////////////////////////////////////////////////////////////
+bool JoystickImpl::isConnected(unsigned int index)
+{
+	return false;
+}
 
-#elif defined(SFML_SYSTEM_MACOS)
 
-    // Window handle is NSWindow (void*) on Mac OS X - Cocoa
-    typedef void* WindowHandle;
+////////////////////////////////////////////////////////////
+bool JoystickImpl::open(unsigned int index)
+{
+    return false;
+}
 
-#elif defined(SFML_SYSTEM_IOS)
 
-    // Window handle is UIWindow (void*) on iOS - UIKit
-    typedef void* WindowHandle;
+////////////////////////////////////////////////////////////
+void JoystickImpl::close()
+{
+}
 
-#elif defined(SFML_SYSTEM_ANDROID)
 
-    // Window handle is ANativeWindow (void*) on Android
-    typedef void* WindowHandle;
+////////////////////////////////////////////////////////////
+JoystickCaps JoystickImpl::getCapabilities() const
+{
+    // To implement
+    return JoystickCaps();
+}
 
-#elif defined(SFML_SYSTEM_BLACKBERRY)
 
-    // No windows handle on Blackberry
-    typedef void* WindowHandle;
+////////////////////////////////////////////////////////////
+Joystick::Identification JoystickImpl::getIdentification() const
+{
+    return m_identification;
+}
 
-#endif
+
+////////////////////////////////////////////////////////////
+JoystickState JoystickImpl::JoystickImpl::update()
+{
+}
+
+} // namespace priv
 
 } // namespace sf
-
-
-#endif // SFML_WINDOWHANDLE_HPP

@@ -1,7 +1,7 @@
 ////////////////////////////////////////////////////////////
 //
 // SFML - Simple and Fast Multimedia Library
-// Copyright (C) 2007-2014 Laurent Gomila (laurent.gom@gmail.com)
+// Copyright (C) 2013 Jonathan De Wachter (dewachter.jonathan@gmail.com)
 //
 // This software is provided 'as-is', without any express or implied warranty.
 // In no event will the authors be held liable for any damages arising from the use of this software.
@@ -22,27 +22,34 @@
 //
 ////////////////////////////////////////////////////////////
 
-#ifndef SFML_INPUTIMPL_HPP
-#define SFML_INPUTIMPL_HPP
-
 ////////////////////////////////////////////////////////////
 // Headers
 ////////////////////////////////////////////////////////////
-#include <SFML/Config.hpp>
+#include <SFML/Window/VideoModeImpl.hpp>
 
-#if defined(SFML_SYSTEM_WINDOWS)
-    #include <SFML/Window/Win32/InputImpl.hpp>
-#elif defined(SFML_SYSTEM_LINUX) || defined(SFML_SYSTEM_FREEBSD)
-    #include <SFML/Window/Unix/InputImpl.hpp>
-#elif defined(SFML_SYSTEM_MACOS)
-    #include <SFML/Window/OSX/InputImpl.hpp>
-#elif defined(SFML_SYSTEM_IOS)
-    #include <SFML/Window/iOS/InputImpl.hpp>
-#elif defined(SFML_SYSTEM_ANDROID)
-    #include <SFML/Window/Android/InputImpl.hpp>
-#elif defined(SFML_SYSTEM_BLACKBERRY)
-    #include <SFML/Window/Blackberry/InputImpl.hpp>
-#endif
+namespace sf
+{
+namespace priv
+{
+////////////////////////////////////////////////////////////
+std::vector<VideoMode> VideoModeImpl::getFullscreenModes()
+{
+    VideoMode desktop = getDesktopMode();
+
+    // Return both protrait and landscape resolutions
+    std::vector<VideoMode> modes;
+    modes.push_back(desktop);
+    modes.push_back(VideoMode(desktop.height, desktop.width, desktop.bitsPerPixel));
+    return modes;
+}
 
 
-#endif // SFML_INPUTIMPL_HPP
+////////////////////////////////////////////////////////////
+VideoMode VideoModeImpl::getDesktopMode()
+{
+    return VideoMode(0, 0);
+}
+
+} // namespace priv
+
+} // namespace sf

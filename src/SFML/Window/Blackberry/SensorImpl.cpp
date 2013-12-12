@@ -1,7 +1,7 @@
 ////////////////////////////////////////////////////////////
 //
 // SFML - Simple and Fast Multimedia Library
-// Copyright (C) 2007-2014 Laurent Gomila (laurent.gom@gmail.com)
+// Copyright (C) 2013 Jonathan De Wachter (dewachter.jonathan@gmail.com)
 //
 // This software is provided 'as-is', without any express or implied warranty.
 // In no event will the authors be held liable for any damages arising from the use of this software.
@@ -22,27 +22,67 @@
 //
 ////////////////////////////////////////////////////////////
 
-#ifndef SFML_INPUTIMPL_HPP
-#define SFML_INPUTIMPL_HPP
-
 ////////////////////////////////////////////////////////////
 // Headers
 ////////////////////////////////////////////////////////////
-#include <SFML/Config.hpp>
-
-#if defined(SFML_SYSTEM_WINDOWS)
-    #include <SFML/Window/Win32/InputImpl.hpp>
-#elif defined(SFML_SYSTEM_LINUX) || defined(SFML_SYSTEM_FREEBSD)
-    #include <SFML/Window/Unix/InputImpl.hpp>
-#elif defined(SFML_SYSTEM_MACOS)
-    #include <SFML/Window/OSX/InputImpl.hpp>
-#elif defined(SFML_SYSTEM_IOS)
-    #include <SFML/Window/iOS/InputImpl.hpp>
-#elif defined(SFML_SYSTEM_ANDROID)
-    #include <SFML/Window/Android/InputImpl.hpp>
-#elif defined(SFML_SYSTEM_BLACKBERRY)
-    #include <SFML/Window/Blackberry/InputImpl.hpp>
-#endif
+#include <SFML/Window/SensorImpl.hpp>
 
 
-#endif // SFML_INPUTIMPL_HPP
+namespace sf
+{
+namespace priv
+{
+////////////////////////////////////////////////////////////
+void SensorImpl::initialize()
+{
+    // To be implemented
+}
+
+
+////////////////////////////////////////////////////////////
+void SensorImpl::cleanup()
+{
+    // To be implemented
+}
+
+
+////////////////////////////////////////////////////////////
+bool SensorImpl::isAvailable(Sensor::Type sensor)
+{
+    // To be implemented
+    return false;
+}
+
+
+////////////////////////////////////////////////////////////
+bool SensorImpl::open(Sensor::Type sensor)
+{
+    // To be implemented
+    return false;
+}
+
+
+////////////////////////////////////////////////////////////
+void SensorImpl::close()
+{
+    // To be implemented
+}
+
+
+////////////////////////////////////////////////////////////
+Vector3f SensorImpl::update()
+{
+    // To be implemented
+    return Vector3f();
+}
+
+
+////////////////////////////////////////////////////////////
+void SensorImpl::setEnabled(bool enabled)
+{
+    // To be implemented
+}
+
+} // namespace priv
+
+} // namespace sf

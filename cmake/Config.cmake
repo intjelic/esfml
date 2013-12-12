@@ -22,6 +22,10 @@ elseif(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
         set(SFML_OS_ANDROID 1)
         # use the OpenGL ES implementation on Android
         set(OPENGL_ES 1)
+    elseif(BLACKBERRY)
+        set(SFML_OS_BLACKBERRY 1)
+        # use the OpenGL ES implementation on Blackberry
+        set(OPENGL_ES 1)
     else()
         set(SFML_OS_LINUX 1)
         # don't use the OpenGL ES implementation on Linux
@@ -114,4 +118,6 @@ elseif(SFML_OS_LINUX OR SFML_OS_FREEBSD OR SFML_OS_MACOSX)
     set(INSTALL_MISC_DIR share/SFML)
 elseif(SFML_OS_ANDROID)
     set(INSTALL_MISC_DIR ${ANDROID_NDK}/sources/sfml)
+elseif(SFML_OS_BLACKBERRY)
+    set(INSTALL_MISC_DIR .)
 endif()
