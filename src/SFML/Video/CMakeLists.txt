@@ -4,6 +4,8 @@ set(SRCROOT ${PROJECT_SOURCE_DIR}/src/SFML/Video)
 
 # all source files
 set(SRC
+    ${SRCROOT}/VideoPlayer.cpp
+    ${SRCROOT}/VideoPlayer.hpp
     ${SRCROOT}/VideoFile.cpp
     ${SRCROOT}/VideoFile.hpp
     ${INCROOT}/VideoSource.hpp
