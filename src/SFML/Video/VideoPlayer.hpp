@@ -34,10 +34,6 @@
 #include <SFML/System/Clock.hpp>
 #include <SFML/System/Time.hpp>
 
-#define STOPPED 0
-#define PLAYING 1
-#define PAUSED 2
-
 
 namespace sf
 {
@@ -47,13 +43,24 @@ class VideoPlayer
 {
 public :
 
+    ////////////////////////////////////////////////////////////
+    /// \brief Enumeration of the video player states
+    ///
+    ////////////////////////////////////////////////////////////
+    enum Status
+    {
+        Stopped, ///< Video player is not playing
+        Paused,  ///< Video player is paused
+        Playing  ///< Video player is playing
+    };
+
     VideoPlayer();
 
     void play();
     void pause();
     void stop();
 
-    unsigned int getStatus() const;
+    Status getStatus() const;
 
     void setPlayingOffset(Time timeOffset);
     Time getPlayingOffset() const;
@@ -68,9 +75,27 @@ public :
 
 private :
 
+    ////////////////////////////////////////////////////////////
+    /// \brief Update the video player every 10 milliseconds
+    ///
+    /// This function will compute the new frame very 10 milliseconds,
+    /// a short delay to avoid consuming too much CPU.
+    ///
+    ////////////////////////////////////////////////////////////
     void update();
+
+    ////////////////////////////////////////////////////////////
+    /// \brief Compute the new frame according to the elapsed time
+    ///
+    /// This function performs the computation of the frame itself and
+    /// updates the internal data.
+    ///
+    ////////////////////////////////////////////////////////////
     void computeNewFrame();
 
+    ////////////////////////////////////////////////////////////
+    // Member data
+    ////////////////////////////////////////////////////////////
     Thread             m_thread;       ///< Thread computing frame indexes
     bool               m_isPlaying;    ///< Play state (true = playing, false = stopped || paused)
     bool               m_isPaused;     ///< Pause state (true = paused, false = playing || stopped)
