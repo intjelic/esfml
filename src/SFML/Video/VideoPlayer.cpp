@@ -96,13 +96,15 @@ void VideoPlayer::stop()
 }
 
 ////////////////////////////////////////////////////////////
-VideoPlayer::Status VideoPlayer::getStatus() const
+VideoSource::Status VideoPlayer::getStatus() const
 {
 	// Compute the status
 	if (m_isPaused)
-		return Paused;
+		return VideoSource::Paused;
 	else
-		return m_isPlaying ? Playing : Stopped;
+		return m_isPlaying ? VideoSource::Playing : VideoSource::Stopped;
+
+    return VideoSource::Stopped;
 }
 
 ////////////////////////////////////////////////////////////

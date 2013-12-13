@@ -29,6 +29,7 @@
 // Headers
 ////////////////////////////////////////////////////////////
 #include <SFML/Video/VideoBuffer.hpp>
+#include <SFML/Video/VideoSource.hpp>
 #include <SFML/Graphics/Texture.hpp>
 #include <SFML/System/Thread.hpp>
 #include <SFML/System/Clock.hpp>
@@ -43,24 +44,13 @@ class VideoPlayer
 {
 public :
 
-    ////////////////////////////////////////////////////////////
-    /// \brief Enumeration of the video player states
-    ///
-    ////////////////////////////////////////////////////////////
-    enum Status
-    {
-        Stopped, ///< Video player is not playing
-        Paused,  ///< Video player is paused
-        Playing  ///< Video player is playing
-    };
-
     VideoPlayer();
 
     void play();
     void pause();
     void stop();
 
-    Status getStatus() const;
+    VideoSource::Status getStatus() const;
 
     void setPlayingOffset(Time timeOffset);
     Time getPlayingOffset() const;

@@ -26,12 +26,15 @@
 // Headers
 ////////////////////////////////////////////////////////////
 #include <SFML/Video/VideoSource.hpp>
+#include <SFML/Video/VideoPlayer.hpp>
+#include <SFML/Graphics/Sprite.hpp>
 
 
 namespace sf
 {
 ////////////////////////////////////////////////////////////
 VideoSource::VideoSource()
+: m_player(new priv::VideoPlayer)
 {
 	// todo: ensure FFMPEG is loaded ?
 }
@@ -40,28 +43,35 @@ VideoSource::VideoSource()
 ////////////////////////////////////////////////////////////
 VideoSource::VideoSource(const VideoSource& copy)
 {
-	m_status = copy.getStatus();
+    // todo: should we do something here ?
 }
 
 
 ////////////////////////////////////////////////////////////
 VideoSource::~VideoSource()
 {
-	// Nothing to do
+    delete m_player;
 }
 
 
 ////////////////////////////////////////////////////////////
 VideoSource::Status VideoSource::getStatus() const
 {
-    return m_status;
+    return m_player->getStatus();
 }
 
 
 ////////////////////////////////////////////////////////////
-void VideoSource::setStatus(VideoSource::Status status)
+void VideoSource::draw(RenderTarget& target, RenderStates states) const
 {
-	m_status = status;
+    // Grab the current frame
+    Sprite frame(m_player->getCurrentFrame());
+
+    // Apply the video render states
+    states.transform *= getTransform();
+
+    // Draw the current frame
+    target.draw(frame, states);
 }
 
 } // namespace sf

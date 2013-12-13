@@ -30,10 +30,7 @@
 ////////////////////////////////////////////////////////////
 #include <SFML/Video/Export.hpp>
 #include <SFML/Video/VideoSource.hpp>
-#include <SFML/Graphics/Texture.hpp>
-#include <SFML/Graphics/Sprite.hpp>
 #include <SFML/System/Time.hpp>
-#include <SFML/System/Clock.hpp>
 
 
 namespace sf
@@ -210,28 +207,13 @@ public :
 	////////////////////////////////////////////////////////////
     void resetBuffer();
 
-	////////////////////////////////////////////////////////////
-    /// \brief Update the current frame
-    ///
-	////////////////////////////////////////////////////////////
-    void update();
-
 private :
-
-	////////////////////////////////////////////////////////////
-    /// \brief Draw the video to a render target.
-    ///
-	////////////////////////////////////////////////////////////
-    virtual void draw(RenderTarget& target, RenderStates states) const;
 
 	////////////////////////////////////////////////////////////
     // Member data
 	////////////////////////////////////////////////////////////
-    const VideoBuffer* m_buffer;      ///< Video buffer bound to the source
-    Texture            m_texture;     ///< Texture containing the current frame image
-    Clock              m_clock;       ///< Clock measuring elapsed time since the play()
-    Time               m_timeBuffer;  ///< Time acting as buffer when the video is stoppe
-    bool               m_loop;        ///< Tell whether the video should loop after reaching the end
+    const VideoBuffer* m_buffer; ///< Video buffer bound to the source
+
 };
 
 } // namespace sf

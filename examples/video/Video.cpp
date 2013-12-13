@@ -29,7 +29,6 @@ int main()
         }
 
         window.clear();
-        video.update();
         window.draw(video);
         window.display();
     }

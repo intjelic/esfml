@@ -27,8 +27,7 @@
 ////////////////////////////////////////////////////////////
 #include <SFML/Video/Video.hpp>
 #include <SFML/Video/VideoBuffer.hpp>
-#include <SFML/Graphics/RenderTarget.hpp>
-#include <SFML/Graphics/RenderStates.hpp>
+#include <SFML/Video/VideoPlayer.hpp>
 
 
 namespace sf
@@ -73,36 +72,21 @@ Video::~Video()
 ////////////////////////////////////////////////////////////
 void Video::play()
 {
-	// Update the video status and restart the clock
-	if (VideoSource::getStatus() != Playing)
-	{
-		setStatus(Playing);
-		m_clock.restart();
-	}
+    m_player->play();
 }
 
 
 ////////////////////////////////////////////////////////////
 void Video::pause()
 {
-	// Update the time buffer and the video status
-	if (VideoSource::getStatus() == Playing)
-	{
-		setStatus(Paused);
-		m_timeBuffer += m_clock.getElapsedTime();
-	}
+    m_player->pause();
 }
 
 
 ////////////////////////////////////////////////////////////
 void Video::stop()
 {
-	// Reset the time buffer to zero and update the video status
-	if (VideoSource::getStatus() != Stopped)
-	{
-		setStatus(Stopped);
-		m_timeBuffer = Time::Zero;
-	}
+    m_player->stop();
 }
 
 
@@ -119,21 +103,21 @@ void Video::setBuffer(const VideoBuffer& buffer)
     // Assign and use the new buffer
     m_buffer = &buffer;
     m_buffer->attachVideo(this);
+    m_player->setBuffer(*m_buffer);
 }
 
 
 ////////////////////////////////////////////////////////////
 void Video::setLoop(bool loop)
 {
-	m_loop = loop;
+    m_player->setLoop(loop);
 }
 
 
 ////////////////////////////////////////////////////////////
 void Video::setPlayingOffset(Time timeOffset)
 {
-	m_timeBuffer = timeOffset;
-	m_clock.restart();
+	m_player->setPlayingOffset(timeOffset);
 }
 
 
@@ -147,19 +131,14 @@ const VideoBuffer* Video::getBuffer() const
 ////////////////////////////////////////////////////////////
 bool Video::getLoop() const
 {
-	return m_loop;
+	return m_player->getLoop();
 }
 
 
 ////////////////////////////////////////////////////////////
 Time Video::getPlayingOffset() const
 {
-	// If playing, the playing offset is the result of the time buffer plus the
-	// elapsed time since the last time the time buffer was updated.
-	if (VideoSource::getStatus() == Playing)
-		return m_timeBuffer + m_clock.getElapsedTime();
-	else
-		return m_timeBuffer;
+	return m_player->getPlayingOffset();
 }
 
 
@@ -200,40 +179,8 @@ void Video::resetBuffer()
     stop();
 
     // Detach the buffer
+    m_player->resetBuffer();
     m_buffer = NULL;
-}
-
-
-////////////////////////////////////////////////////////////
-void Video::update()
-{
-	// Retrieve FPS
-	unsigned int fps = m_buffer->getFramePerSecond();
-
-	// Retrieve the playing offset
-	Time playingOffset;
-
-	if (VideoSource::getStatus() == Playing)
-		playingOffset = m_timeBuffer + m_clock.getElapsedTime();
-	else
-		playingOffset = m_timeBuffer;
-
-	// Compute the frame index
-	unsigned int index = playingOffset.asSeconds() * fps;
-
-	// Update the current image
-	m_texture.loadFromImage(m_buffer->getFrames()[index]);
-}
-
-
-////////////////////////////////////////////////////////////
-void Video::draw(RenderTarget& target, RenderStates states) const
-{
-	// Apply the video render states
-	states.transform *= getTransform();
-
-	// Draw the current frame
-	target.draw(Sprite(m_texture), states);
 }
 
 } // namespace sf

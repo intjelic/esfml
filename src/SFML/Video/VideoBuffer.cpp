@@ -118,7 +118,7 @@ const Image* VideoBuffer::getFrames() const
 ////////////////////////////////////////////////////////////
 std::size_t VideoBuffer::getFrameCount() const
 {
-	return 0;
+	return m_frames.size();
 }
 
 
@@ -139,7 +139,7 @@ Vector2i VideoBuffer::getSize() const
 ////////////////////////////////////////////////////////////
 Time VideoBuffer::getDuration() const
 {
-	return Time::Zero;
+    return seconds(static_cast<float>(getFrameCount()) / static_cast<float>(getFramePerSecond()));
 }
 
 

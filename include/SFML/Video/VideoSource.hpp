@@ -31,10 +31,17 @@
 #include <SFML/Video/Export.hpp>
 #include <SFML/Graphics/Drawable.hpp>
 #include <SFML/Graphics/Transformable.hpp>
+#include <SFML/Graphics/RenderTarget.hpp>
+#include <SFML/Graphics/RenderStates.hpp>
 
 
 namespace sf
 {
+namespace priv
+{
+    class VideoPlayer;
+}
+
 ////////////////////////////////////////////////////////////
 /// \brief Base class defining a video's properties
 ///
@@ -87,19 +94,15 @@ protected :
     Status getStatus() const;
 
 	////////////////////////////////////////////////////////////
-    /// \brief Set the current status of the video (stopped, paused, playing)
-    ///
-    /// \param status New status of the video
+    /// \brief Draw the video to a render target.
     ///
 	////////////////////////////////////////////////////////////
-    void setStatus(Status status);
-
-private :
+    virtual void draw(RenderTarget& target, RenderStates states) const;
 
 	////////////////////////////////////////////////////////////
     // Member data
 	////////////////////////////////////////////////////////////
-    Status m_status; ///< The current status of the video (stopped, paused, playing)
+    priv::VideoPlayer* m_player; ///< The video player
 
 };
 
