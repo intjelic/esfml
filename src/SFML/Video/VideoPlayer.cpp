@@ -35,11 +35,11 @@ namespace priv
 {
 ////////////////////////////////////////////////////////////
 VideoPlayer::VideoPlayer() :
-m_thread    (&VideoPlayer::update, this),
-m_isPlaying (false),
-m_isPaused  (false),
-m_buffer    (NULL),
-m_loop      (false)
+m_thread     (&VideoPlayer::update, this),
+m_isPlaying  (false),
+m_isPaused   (false),
+m_inUseBuffer(NULL),
+m_loop       (false)
 {
 }
 
@@ -50,19 +50,19 @@ void VideoPlayer::play()
     if (m_isPlaying)
         return;
 
-	// Play only if some frames are available
-    if (m_buffer)
+    // Play only if some frames are available
+    if (m_inUseBuffer || !m_pendingBuffers.empty())
     {
-		// Restart the clock
-		m_clock.restart();
+        // Restart the clock
+        m_clock.restart();
 
-		// Start updating the video in a separate thread
-		m_isPlaying = true;
-		m_thread.launch();
+        // Start updating the video in a separate thread
+        m_isPlaying = true;
+        m_thread.launch();
 
-		// Update the status
-		m_isPaused = false;
-	}
+        // Update the status
+        m_isPaused = false;
+    }
 }
 
 ////////////////////////////////////////////////////////////
@@ -72,37 +72,37 @@ void VideoPlayer::pause()
     if (m_isPaused)
         return;
 
-	if (m_isPlaying)
-	{
-		// Stop the background tasks
-		m_isPlaying = false;
-		m_thread.wait();
+    if (m_isPlaying)
+    {
+        // Stop the background tasks
+        m_isPlaying = false;
+        m_thread.wait();
 
-		// Update the time buffer and the status
-		m_timeBuffer += m_clock.getElapsedTime();
-		m_isPaused = true;
-	}
+        // Update the time buffer and the status
+        m_timeBuffer += m_clock.getElapsedTime();
+        m_isPaused = true;
+    }
 }
 
 ////////////////////////////////////////////////////////////
 void VideoPlayer::stop()
 {
-	// Stop the background tasks
-	pause();
+    // Stop the background tasks
+    pause();
 
-	// Reset the time buffer to zero and update the status
-	m_timeBuffer = Time::Zero;
-	m_isPaused = false;
+    // Reset the time buffer to zero and update the status
+    m_timeBuffer = Time::Zero;
+    m_isPaused = false;
 }
 
 ////////////////////////////////////////////////////////////
 VideoSource::Status VideoPlayer::getStatus() const
 {
-	// Compute the status
-	if (m_isPaused)
-		return VideoSource::Paused;
-	else
-		return m_isPlaying ? VideoSource::Playing : VideoSource::Stopped;
+    // Compute the status
+    if (m_isPaused)
+        return VideoSource::Paused;
+    else
+        return m_isPlaying ? VideoSource::Playing : VideoSource::Stopped;
 
     return VideoSource::Stopped;
 }
@@ -110,45 +110,77 @@ VideoSource::Status VideoPlayer::getStatus() const
 ////////////////////////////////////////////////////////////
 void VideoPlayer::setPlayingOffset(Time timeOffset)
 {
-	m_timeBuffer = timeOffset;
-	m_clock.restart();
+    m_timeBuffer = timeOffset;
+    m_clock.restart();
 }
 
 ////////////////////////////////////////////////////////////
 Time VideoPlayer::getPlayingOffset() const
 {
-	// If playing, the playing offset is the result of the time buffer plus the
-	// elapsed time since the last time the buffer was updated.
-	if (m_isPlaying)
-		return m_timeBuffer + m_clock.getElapsedTime();
-	else
-		return m_timeBuffer;
+    // If playing, the playing offset is the result of the time buffer plus the
+    // elapsed time since the last time the buffer was updated.
+    if (m_isPlaying)
+        return m_timeBuffer + m_clock.getElapsedTime();
+    else
+        return m_timeBuffer;
 }
 
 ////////////////////////////////////////////////////////////
 void VideoPlayer::setLoop(bool loop)
 {
-	m_loop = loop;
+    m_loop = loop;
 }
 
 ////////////////////////////////////////////////////////////
 bool VideoPlayer::getLoop() const
 {
-	return m_loop;
+    return m_loop;
 }
 
 ////////////////////////////////////////////////////////////
 void VideoPlayer::setBuffer(const VideoBuffer& buffer)
 {
-	resetBuffer();
-	m_buffer = &buffer;
+    resetBuffer();
+    m_inUseBuffer = &buffer;
 }
 
 ////////////////////////////////////////////////////////////
 void VideoPlayer::resetBuffer()
 {
-	stop();
-	m_buffer = NULL;
+    stop();
+    m_inUseBuffer = NULL;
+}
+
+////////////////////////////////////////////////////////////
+void VideoPlayer::queueBuffer(const VideoBuffer& buffer)
+{
+    m_pendingBuffers.push(&buffer);
+}
+
+////////////////////////////////////////////////////////////
+const VideoBuffer* VideoPlayer::unqueueBuffer()
+{
+    const VideoBuffer* buffer = NULL;
+
+    if (!m_usedBuffers.empty())
+    {
+        buffer = m_usedBuffers.front();
+        m_usedBuffers.pop();
+    }
+
+    return buffer;
+}
+
+////////////////////////////////////////////////////////////
+unsigned int VideoPlayer::getPendingBufferCount()
+{
+    return m_pendingBuffers.size();
+}
+
+////////////////////////////////////////////////////////////
+unsigned int VideoPlayer::getUsedBufferCount()
+{
+    return m_usedBuffers.size();
 }
 
 ////////////////////////////////////////////////////////////
@@ -156,56 +188,67 @@ void VideoPlayer::update()
 {
     while (m_isPlaying)
     {
-		// Compute the new frame index and update the internal texture
-		computeNewFrame();
+        // Compute the new frame index and update the internal texture
+        computeNewFrame();
 
         // Leave some time for the other threads if the video is playing
-		sleep(milliseconds(10));
-	}
+        sleep(milliseconds(10));
+    }
 }
 
 ////////////////////////////////////////////////////////////
 void VideoPlayer::computeNewFrame()
 {
-	// Retrieve FPS
-	unsigned int fps = m_buffer->getFramePerSecond();
+    // Retrieve FPS
+    unsigned int fps = m_inUseBuffer->getFramePerSecond();
 
-	// Compute the playing offset
-	Time playingOffset;
-	playingOffset = m_timeBuffer + m_clock.getElapsedTime();
+    // Compute the playing offset
+    Time playingOffset;
+    playingOffset = m_timeBuffer + m_clock.getElapsedTime();
 
-	// Retrieve duration
-	Time duration = m_buffer->getDuration();
+    // Retrieve duration
+    Time duration = m_inUseBuffer->getDuration();
 
-	if (playingOffset >= duration)
-	{
-		if (m_loop)
-		{
-			m_timeBuffer = playingOffset - duration;
-			m_clock.restart();
+    if (playingOffset >= duration)
+    {
+        if (!m_pendingBuffers.empty())
+        {
+            m_usedBuffers.push(m_inUseBuffer);
+            m_inUseBuffer = m_pendingBuffers.front();
+            m_pendingBuffers.pop();
 
-			computeNewFrame();
-		}
-		else
-		{
-			m_isPlaying = false;
-			m_timeBuffer = Time::Zero;
-		}
+            m_timeBuffer = playingOffset - duration;
+            m_clock.restart();
 
-		return;
-	}
+            computeNewFrame();
+        }
+        else if (m_loop)
+        {
+            m_timeBuffer = playingOffset - duration;
+            m_clock.restart();
 
-	// Compute the frame index
-	unsigned int index = playingOffset.asSeconds() * fps;
+            computeNewFrame();
+        }
+        else
+        {
+            m_isPlaying = false;
+            m_timeBuffer = Time::Zero;
+        }
 
-	// Update the current image
-	m_currentFrame.loadFromImage(m_buffer->getFrames()[index]);
+        return;
+    }
+
+    // Compute the frame index
+    unsigned int index = playingOffset.asSeconds() * fps;
+
+    // Update the current image
+    m_currentFrame.loadFromImage(m_inUseBuffer->getFrames()[index]);
 }
 
 ////////////////////////////////////////////////////////////
 const Texture& VideoPlayer::getCurrentFrame() const
 {
-	return m_currentFrame;
+    return m_currentFrame;
 }
 
 } // namepsace priv

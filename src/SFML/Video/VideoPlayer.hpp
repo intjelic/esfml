@@ -34,6 +34,7 @@
 #include <SFML/System/Thread.hpp>
 #include <SFML/System/Clock.hpp>
 #include <SFML/System/Time.hpp>
+#include <queue>
 
 
 namespace sf
@@ -60,6 +61,12 @@ public :
 
 	void setBuffer(const VideoBuffer&);
 	void resetBuffer();
+
+	void queueBuffer(const VideoBuffer& buffer);
+	const VideoBuffer* unqueueBuffer();
+
+	unsigned int getPendingBufferCount();
+	unsigned int getUsedBufferCount();
 
 	const Texture& getCurrentFrame() const;
 
@@ -90,6 +97,9 @@ private :
     bool               m_isPlaying;    ///< Play state (true = playing, false = stopped || paused)
     bool               m_isPaused;     ///< Pause state (true = paused, false = playing || stopped)
     const VideoBuffer* m_buffer;       ///< The buffer containing the frames to play
+    std::queue<const VideoBuffer*> m_pendingBuffers; ///< Buffers we still need to play
+    const VideoBuffer*             m_inUseBuffer;    ///< The buffer being played
+    std::queue<const VideoBuffer*> m_usedBuffers;    ///< Buffers we have played
     Clock              m_clock;        ///< Clock measuring elapsed time since the play()
     Time               m_timeBuffer;   ///< Time acting as buffer when the video is stopped
     bool               m_loop;         ///< Loop flag (true to loop, false to play once)
