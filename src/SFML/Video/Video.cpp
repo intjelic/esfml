@@ -117,7 +117,7 @@ void Video::setLoop(bool loop)
 ////////////////////////////////////////////////////////////
 void Video::setPlayingOffset(Time timeOffset)
 {
-	m_player->setPlayingOffset(timeOffset);
+    m_player->setPlayingOffset(timeOffset);
 }
 
 
@@ -131,14 +131,14 @@ const VideoBuffer* Video::getBuffer() const
 ////////////////////////////////////////////////////////////
 bool Video::getLoop() const
 {
-	return m_player->getLoop();
+    return m_player->getLoop();
 }
 
 
 ////////////////////////////////////////////////////////////
 Time Video::getPlayingOffset() const
 {
-	return m_player->getPlayingOffset();
+    return m_player->getPlayingOffset();
 }
 
 

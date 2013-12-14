@@ -59,17 +59,17 @@ public :
     void setLoop(bool loop);
     bool getLoop() const;
 
-	void setBuffer(const VideoBuffer&);
-	void resetBuffer();
+    void setBuffer(const VideoBuffer&);
+    void resetBuffer();
 
-	void queueBuffer(const VideoBuffer& buffer);
-	const VideoBuffer* unqueueBuffer();
-	void resetBuffers();
+    void queueBuffer(const VideoBuffer& buffer);
+    const VideoBuffer* unqueueBuffer();
+    void resetBuffers();
 
-	unsigned int getPendingBufferCount();
-	unsigned int getUsedBufferCount();
+    unsigned int getPendingBufferCount();
+    unsigned int getUsedBufferCount();
 
-	const Texture& getCurrentFrame() const;
+    const Texture& getCurrentFrame() const;
 
 private :
 

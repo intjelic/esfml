@@ -39,7 +39,7 @@ m_framePerSecond (0),
 m_duration       (),
 m_videos         ()
 {
-	av_register_all();
+    av_register_all();
 }
 
 
@@ -66,31 +66,31 @@ bool VideoBuffer::loadFromFile(const std::string& filename)
     priv::VideoFile file;
 
     if (!file.openRead(filename))
-		return false;
+        return false;
 
-	m_frameCount = file.getFrameCount();
-	m_framePerSecond = file.getFramePerSecond();
+    m_frameCount = file.getFrameCount();
+    m_framePerSecond = file.getFramePerSecond();
 
-	// Prepare our array to receive this amount of video frame
-	m_frames.clear();
-	m_frames.reserve(m_frameCount);
+    // Prepare our array to receive this amount of video frame
+    m_frames.clear();
+    m_frames.reserve(m_frameCount);
 
-	// Read the frames from the provided file
-	return file.read(m_frames, m_frameCount) == m_frameCount;
+    // Read the frames from the provided file
+    return file.read(m_frames, m_frameCount) == m_frameCount;
 }
 
 
 ////////////////////////////////////////////////////////////
 bool VideoBuffer::loadFromMemory(const void* data, std::size_t sizeInBytes)
 {
-	return false;
+    return false;
 }
 
 
 ////////////////////////////////////////////////////////////
 bool VideoBuffer::loadFromStream(InputStream& stream)
 {
-	return false;
+    return false;
 }
 
 
@@ -112,35 +112,35 @@ bool VideoBuffer::loadFromFrames(const Image* frames, std::size_t frameCount, co
 ////////////////////////////////////////////////////////////
 bool VideoBuffer::saveToFile(const std::string& filename) const
 {
-	return false;
+    return false;
 }
 
 
 ////////////////////////////////////////////////////////////
 const Image* VideoBuffer::getFrames() const
 {
-	return m_frames.empty() ? NULL : &m_frames[0];
+    return m_frames.empty() ? NULL : &m_frames[0];
 }
 
 
 ////////////////////////////////////////////////////////////
 std::size_t VideoBuffer::getFrameCount() const
 {
-	return m_frames.size();
+    return m_frames.size();
 }
 
 
 ////////////////////////////////////////////////////////////
 unsigned int VideoBuffer::getFramePerSecond() const
 {
-	return m_framePerSecond;
+    return m_framePerSecond;
 }
 
 
 ////////////////////////////////////////////////////////////
 Vector2i VideoBuffer::getSize() const
 {
-	return Vector2i(0, 0);
+    return Vector2i(0, 0);
 }
 
 

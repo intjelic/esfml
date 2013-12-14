@@ -117,7 +117,7 @@ public :
 
     ////////////////////////////////////////////////////////////
     /// \brief Load the video buffer from an array of images
-	///
+    ///
     /// \param frames         Pointer to the array of images in memory
     /// \param frameCount     Number of frames in the array
     /// \param size           Size of the video

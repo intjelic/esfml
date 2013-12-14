@@ -33,7 +33,7 @@
 
 namespace
 {
-	// Capture device and its counter
+    // Capture device and its counter
     cv::VideoCapture* captureDevice = NULL;
     unsigned int count = 0;
 }
@@ -47,26 +47,26 @@ m_frame      (),
 m_frameRate  (0),
 m_isCapturing(false)
 {
-	if (!captureDevice)
-	{
-		// Device from which we capture images
-		captureDevice = new cv::VideoCapture(0);
-	}
+    if (!captureDevice)
+    {
+        // Device from which we capture images
+        captureDevice = new cv::VideoCapture(0);
+    }
 
-	count++;
+    count++;
 }
 
 
 ////////////////////////////////////////////////////////////
 VideoRecorder::~VideoRecorder()
 {
-	count--;
+    count--;
 
-	if (count == 0)
-	{
-		captureDevice->release();
-		delete captureDevice;
-	}
+    if (count == 0)
+    {
+        captureDevice->release();
+        delete captureDevice;
+    }
 }
 
 
@@ -116,31 +116,31 @@ unsigned int VideoRecorder::getFrameRate() const
 ////////////////////////////////////////////////////////////
 Vector2u VideoRecorder::getVideoSize() const
 {
-	double width = captureDevice->get(CV_CAP_PROP_FRAME_WIDTH);
-	double height = captureDevice->get(CV_CAP_PROP_FRAME_HEIGHT);
+    double width = captureDevice->get(CV_CAP_PROP_FRAME_WIDTH);
+    double height = captureDevice->get(CV_CAP_PROP_FRAME_HEIGHT);
 
-	return Vector2u(width, height);
+    return Vector2u(width, height);
 }
 
 
 ////////////////////////////////////////////////////////////
 bool VideoRecorder::isAvailable()
 {
-	// Attempt to open a temporary device to know if it's available.
-	if (!captureDevice)
-	{
-		bool isAvailable = false;
+    // Attempt to open a temporary device to know if it's available.
+    if (!captureDevice)
+    {
+        bool isAvailable = false;
 
-		captureDevice = new cv::VideoCapture(0);
-		isAvailable = captureDevice->isOpened();
-		captureDevice->release();
-		delete captureDevice;
+        captureDevice = new cv::VideoCapture(0);
+        isAvailable = captureDevice->isOpened();
+        captureDevice->release();
+        delete captureDevice;
 
-		return isAvailable;
-	}
+        return isAvailable;
+    }
 
-	// Or simply check the availability with the current one.
-	return captureDevice->isOpened();
+    // Or simply check the availability with the current one.
+    return captureDevice->isOpened();
 }
 
 
@@ -162,11 +162,11 @@ void VideoRecorder::onStop()
 ////////////////////////////////////////////////////////////
 void VideoRecorder::record()
 {
-	// TODO: the following assumes capturing an image takes no time, which is
-	// wrong.
+    // TODO: the following assumes capturing an image takes no time, which is
+    // wrong.
 
-	// Compute how long this thread must sleep to match the frame rate.
-	Time time = milliseconds(1000/m_frameRate);
+    // Compute how long this thread must sleep to match the frame rate.
+    Time time = milliseconds(1000/m_frameRate);
 
     while (m_isCapturing)
     {
@@ -185,24 +185,24 @@ void VideoRecorder::record()
 ////////////////////////////////////////////////////////////
 void VideoRecorder::captureNextFrame()
 {
-	// Grab the next frame
-	cv::Mat frame;
-	captureDevice->read(frame);
+    // Grab the next frame
+    cv::Mat frame;
+    captureDevice->read(frame);
 
-	// Convert to RGBA
-	Uint8* data = new Uint8[frame.total()*4];
-	cv::Mat continuous_data(frame.size(), CV_8UC4, data);
-	cv::cvtColor(frame, continuous_data, CV_BGR2RGBA, 4);
+    // Convert to RGBA
+    Uint8* data = new Uint8[frame.total()*4];
+    cv::Mat continuous_data(frame.size(), CV_8UC4, data);
+    cv::cvtColor(frame, continuous_data, CV_BGR2RGBA, 4);
 
-	// Insert it into our buffer
-	m_frame.create(frame.cols, frame.rows, data);
+    // Insert it into our buffer
+    m_frame.create(frame.cols, frame.rows, data);
 
-	// Forward them to the derived class
-	if (!onProcessNextFrame(m_frame))
-	{
-		// The user wants to stop the capture
-		m_isCapturing = false;
-	}
+    // Forward them to the derived class
+    if (!onProcessNextFrame(m_frame))
+    {
+        // The user wants to stop the capture
+        m_isCapturing = false;
+    }
 }
 
 } // namespace sf

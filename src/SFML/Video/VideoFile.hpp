@@ -35,9 +35,9 @@
 #include <string>
 
 extern "C" {
-	#include <libavformat/avformat.h>
-	#include <libavcodec/avcodec.h>
-	#include <libswscale/swscale.h>
+    #include <libavformat/avformat.h>
+    #include <libavcodec/avcodec.h>
+    #include <libswscale/swscale.h>
 }
 
 namespace sf
@@ -158,7 +158,7 @@ public :
     void seek(Time timeOffset);
 
 private :
-	void close();
+    void close();
 
     ////////////////////////////////////////////////////////////////////////////
     // Member data

@@ -36,7 +36,7 @@ namespace sf
 VideoSource::VideoSource()
 : m_player(new priv::VideoPlayer)
 {
-	// todo: ensure FFMPEG is loaded ?
+    // todo: ensure FFMPEG is loaded ?
 }
 
 

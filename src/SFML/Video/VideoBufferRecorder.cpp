@@ -43,7 +43,7 @@ bool VideoBufferRecorder::onStart()
 ////////////////////////////////////////////////////////////
 bool VideoBufferRecorder::onProcessNextFrame(const Image& frame)
 {
-	m_frames.push_back(frame);
+    m_frames.push_back(frame);
 
     return true;
 }
