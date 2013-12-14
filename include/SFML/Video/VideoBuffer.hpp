@@ -128,7 +128,7 @@ public :
     /// \see loadFromFile, loadFromMemory, saveToFile
     ///
     ////////////////////////////////////////////////////////////
-    bool loadFromSamples(const Image* frames, std::size_t frameCount, const Vector2i& size, unsigned int framePerSecond);
+    bool loadFromFrames(const Image* frames, std::size_t frameCount, const Vector2u& size, unsigned int framePerSecond);
 
     ////////////////////////////////////////////////////////////
     /// \brief Save the video buffer to a video file

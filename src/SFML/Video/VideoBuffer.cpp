@@ -95,9 +95,17 @@ bool VideoBuffer::loadFromStream(InputStream& stream)
 
 
 ////////////////////////////////////////////////////////////
-bool VideoBuffer::loadFromSamples(const Image* frames, std::size_t frameCount, const Vector2i& size, unsigned int framePerSecond)
+bool VideoBuffer::loadFromFrames(const Image* frames, std::size_t frameCount, const Vector2u& size, unsigned int framePerSecond)
 {
-	return false;
+    // Copy the new video frames
+    m_frames.assign(frames, frames + frameCount);
+
+    // Copy the video properties
+    m_frameCount = frameCount;
+    m_framePerSecond = framePerSecond;
+    m_duration = seconds(frameCount / framePerSecond);
+
+    return true;
 }
 
 
