@@ -18,6 +18,10 @@ set(SRC
     ${INCROOT}/Movie.hpp
     ${SRCROOT}/Video.cpp
     ${INCROOT}/Video.hpp
+    ${SRCROOT}/VideoRecorder.cpp
+    ${INCROOT}/VideoRecorder.hpp
+    ${SRCROOT}/VideoBufferRecorder.cpp
+    ${INCROOT}/VideoBufferRecorder.hpp
 )
 
 source_group("" FILES ${SRC})

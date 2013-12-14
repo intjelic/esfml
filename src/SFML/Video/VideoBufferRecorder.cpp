@@ -22,27 +22,45 @@
 //
 ////////////////////////////////////////////////////////////
 
-#ifndef SFML__VIDEO_HPP
-#define SFML__VIDEO_HPP
-
 ////////////////////////////////////////////////////////////
 // Headers
 ////////////////////////////////////////////////////////////
-
-#include <SFML/System.hpp>
-#include <SFML/Video/Movie.hpp>
-#include <SFML/Video/Video.hpp>
-#include <SFML/Video/VideoBuffer.hpp>
 #include <SFML/Video/VideoBufferRecorder.hpp>
-#include <SFML/Video/VideoRecorder.hpp>
-#include <SFML/Video/VideoStream.hpp>
 
-#endif // SFML__VIDEO_HPP
+
+namespace sf
+{
+////////////////////////////////////////////////////////////
+bool VideoBufferRecorder::onStart()
+{
+    m_frames.clear();
+    m_buffer = VideoBuffer();
+
+    return true;
+}
+
 
 ////////////////////////////////////////////////////////////
-/// \defgroup video Video module
-///
-/// Videos, streaming (movies or custom sources), recording
-/// from camera.
-///
+bool VideoBufferRecorder::onProcessNextFrame(const Image& frame)
+{
+	m_frames.push_back(frame);
+
+    return true;
+}
+
+
 ////////////////////////////////////////////////////////////
+void VideoBufferRecorder::onStop()
+{
+    if (!m_frames.empty())
+        m_buffer.loadFromFrames(&m_frames[0], m_frames.size(), getVideoSize(), getFrameRate());
+}
+
+
+////////////////////////////////////////////////////////////
+const VideoBuffer& VideoBufferRecorder::getBuffer() const
+{
+    return m_buffer;
+}
+
+} // namespace sf
