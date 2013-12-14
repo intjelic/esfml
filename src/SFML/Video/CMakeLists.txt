@@ -23,7 +23,10 @@ set(SRC
 source_group("" FILES ${SRC})
 
 find_package(FFMPEG REQUIRED)
+find_package(OpenCV REQUIRED)
+
 include_directories(${FFMPEG_INCLUDE_DIRS})
+include_directories(${OpenCV_INCLUDE_DIRS})
 
 add_definitions(-D__STDC_CONSTANT_MACROS)
 
@@ -31,4 +34,4 @@ add_definitions(-D__STDC_CONSTANT_MACROS)
 sfml_add_library(sfml-video
                  SOURCES ${SRC}
                  DEPENDS sfml-system
-                 EXTERNAL_LIBS ${FFMPEG_LIBRARIES} swscale avformat)
+                 EXTERNAL_LIBS ${FFMPEG_LIBRARIES} ${OpenCV_LIBS} swscale avformat)
