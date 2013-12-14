@@ -26,6 +26,9 @@
 // Headers
 ////////////////////////////////////////////////////////////
 #include <SFML/Video/VideoStream.hpp>
+#include <SFML/Video/VideoPlayer.hpp>
+#include <SFML/System/Sleep.hpp>
+
 
 namespace sf
 {

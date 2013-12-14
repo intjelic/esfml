@@ -30,8 +30,9 @@
 ////////////////////////////////////////////////////////////
 
 #include <SFML/System.hpp>
+#include <SFML/Video/Movie.hpp>
 #include <SFML/Video/Video.hpp>
 #include <SFML/Video/VideoBuffer.hpp>
-
+#include <SFML/Video/VideoStream.hpp>
 
 #endif // SFML__VIDEO_HPP

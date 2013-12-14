@@ -60,7 +60,7 @@ public :
 
 protected :
 
-    virtual bool onGetData(Chunk& data);
+    virtual bool onGetData(std::vector<Image>& data);
     virtual void onSeek(Time timeOffset);
 
 private :
