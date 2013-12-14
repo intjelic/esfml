@@ -29,6 +29,8 @@
 // Headers
 ////////////////////////////////////////////////////////////
 #include <SFML/Video/Export.hpp>
+#include <SFML/Video/VideoSource.hpp>
+#include <SFML/Video/VideoBuffer.hpp>
 #include <SFML/Graphics/Image.hpp>
 #include <SFML/System/Thread.hpp>
 #include <SFML/System/Vector2.hpp>
@@ -37,28 +39,18 @@
 
 namespace sf
 {
-class SFML_VIDEO_API VideoStream
+class SFML_VIDEO_API VideoStream : public VideoSource
 {
 public :
-
-    enum Status
-    {
-        Stopped, ///< Video is not playing
-        Paused,  ///< Video is paused
-        Playing  ///< Video is playing
-    };
-
-    struct Chunk
-    {
-        const Image* frames;     ///< Pointer to the video frames
-        std::size_t  frameCount; ///< Number of frames pointed by Samples
-    };
 
     virtual ~VideoStream();
 
     void play();
     void pause();
     void stop();
+
+    Vector2i getSize() const;
+    unsigned int getFramePerSecond() const;
 
     Status getStatus() const;
     void setPlayingOffset(Time timeOffset);
@@ -72,19 +64,29 @@ protected :
     VideoStream();
 
     void initialize(const Vector2i& size, unsigned int framePerSecond);
-    virtual bool onGetData(Chunk& data) = 0;
+    virtual bool onGetData(std::vector<Image>& data) = 0;
     virtual void onSeek(Time timeOffset) = 0;
 
 private :
 
+    bool fillAndPushBuffer(unsigned int bufferNum);
+    bool fillQueue();
+
     void streamData();
 
-    Thread        m_thread;         ///< Thread running the background tasks
-    bool          m_isStreaming;    ///< Streaming state (true = playing, false = stopped)
-    Image         m_buffers[10];    ///< Sound buffers used to store temporary audio data
-    Vector2i      m_size;           ///< Number of channels (1 = mono, 2 = stereo, ...)
-    unsigned int  m_framePerSecond; ///< Frequency (frames / second)
-    bool          m_loop;           ///< Loop flag (true to loop, false to play once)
+    enum
+    {
+        BufferCount = 3 ///< Number of video buffers used by the streaming loop
+    };
+
+    Thread        m_thread;                  ///< Thread running the background tasks
+    bool          m_isStreaming;             ///< Streaming state (true = playing, false = stopped)
+    VideoBuffer   m_buffers[BufferCount];    ///< Video buffers used to store temporary video data
+    Vector2i      m_size;                    ///< Size of the video
+    unsigned int  m_framePerSecond;          ///< Number of frame played per second
+    bool          m_loop;                    ///< Loop flag (true to loop, false to play once)
+    Uint64        m_framesProcessed;         ///< Number of frames processed since beginning of the stream
+    bool          m_endBuffers[BufferCount]; ///< Each buffer is marked as "end buffer" or not, for proper duration calculation
 
 };
 

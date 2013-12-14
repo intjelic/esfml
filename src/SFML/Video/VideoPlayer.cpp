@@ -53,6 +53,13 @@ void VideoPlayer::play()
     // Play only if some frames are available
     if (m_inUseBuffer || !m_pendingBuffers.empty())
     {
+        // Prepare the first buffer of the list unless there's already one being played
+        if (!m_inUseBuffer)
+        {
+            m_inUseBuffer = m_pendingBuffers.front();
+            m_pendingBuffers.pop();
+        }
+
         // Restart the clock
         m_clock.restart();
 
@@ -169,6 +176,20 @@ const VideoBuffer* VideoPlayer::unqueueBuffer()
     }
 
     return buffer;
+}
+
+////////////////////////////////////////////////////////////
+void VideoPlayer::resetBuffers()
+{
+    stop();
+
+    while (!m_pendingBuffers.empty())
+        m_pendingBuffers.pop();
+
+    m_inUseBuffer = NULL;
+
+    while (!m_usedBuffers.empty())
+        m_usedBuffers.pop();
 }
 
 ////////////////////////////////////////////////////////////

@@ -64,6 +64,7 @@ public :
 
 	void queueBuffer(const VideoBuffer& buffer);
 	const VideoBuffer* unqueueBuffer();
+	void resetBuffers();
 
 	unsigned int getPendingBufferCount();
 	unsigned int getUsedBufferCount();
