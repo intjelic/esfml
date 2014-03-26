@@ -89,7 +89,7 @@ Texture::~Texture()
     // Destroy the OpenGL texture
     if (m_texture)
     {
-        ensureGlContext();
+        ensureContext();
 
         GLuint texture = static_cast<GLuint>(m_texture);
         glCheck(glDeleteTextures(1, &texture));
@@ -127,7 +127,7 @@ bool Texture::create(unsigned int width, unsigned int height)
     m_actualSize    = actualSize;
     m_pixelsFlipped = false;
 
-    ensureGlContext();
+    ensureContext();
 
     // Create the OpenGL texture if it doesn't exist yet
     if (!m_texture)
@@ -258,7 +258,7 @@ Image Texture::copyToImage() const
     if (!m_texture)
         return Image();
 
-    ensureGlContext();
+    ensureContext();
 
     // Make sure that the current texture binding will be preserved
     priv::TextureSaver save;
@@ -349,7 +349,7 @@ void Texture::update(const Uint8* pixels, unsigned int width, unsigned int heigh
 
     if (pixels && m_texture)
     {
-        ensureGlContext();
+        ensureContext();
 
         // Make sure that the current texture binding will be preserved
         priv::TextureSaver save;
@@ -414,7 +414,7 @@ void Texture::setSmooth(bool smooth)
 
         if (m_texture)
         {
-            ensureGlContext();
+            ensureContext();
 
             // Make sure that the current texture binding will be preserved
             priv::TextureSaver save;
@@ -443,7 +443,7 @@ void Texture::setRepeated(bool repeated)
 
         if (m_texture)
         {
-            ensureGlContext();
+            ensureContext();
 
             // Make sure that the current texture binding will be preserved
             priv::TextureSaver save;
@@ -466,7 +466,7 @@ bool Texture::isRepeated() const
 ////////////////////////////////////////////////////////////
 void Texture::bind(const Texture* texture, CoordinateType coordinateType)
 {
-    ensureGlContext();
+    ensureContext();
 
     if (texture && texture->m_texture)
     {
@@ -522,7 +522,7 @@ void Texture::bind(const Texture* texture, CoordinateType coordinateType)
 ////////////////////////////////////////////////////////////
 unsigned int Texture::getMaximumSize()
 {
-    ensureGlContext();
+    ensureContext();
 
     GLint size;
     glCheck(glGetIntegerv(GL_MAX_TEXTURE_SIZE, &size));
@@ -551,7 +551,7 @@ Texture& Texture::operator =(const Texture& right)
 ////////////////////////////////////////////////////////////
 unsigned int Texture::getValidSize(unsigned int size)
 {
-    ensureGlContext();
+    ensureContext();
 
     // Make sure that extensions are initialized
     priv::ensureExtensionsInit();

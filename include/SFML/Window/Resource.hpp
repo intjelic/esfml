@@ -54,10 +54,10 @@ protected :
     ~Resource();
 
     ////////////////////////////////////////////////////////////
-    /// \brief Make sure that a valid OpenGL context exists in the current thread
+    /// \brief Make sure that a valid graphics context exists in the current thread
     ///
     ////////////////////////////////////////////////////////////
-    static void ensureGlContext();
+    static void ensureContext();
 };
 
 } // namespace sf

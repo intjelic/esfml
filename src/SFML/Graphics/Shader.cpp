@@ -107,7 +107,7 @@ m_params        ()
 ////////////////////////////////////////////////////////////
 Shader::~Shader()
 {
-    ensureGlContext();
+    ensureContext();
 
     // Destroy effect program
     if (m_shaderProgram)
@@ -225,7 +225,7 @@ void Shader::setParameter(const std::string& name, float x)
 {
     if (m_shaderProgram)
     {
-        ensureGlContext();
+        ensureContext();
 
         // Enable program
         GLhandleARB program = glCheck(glGetHandleARB(GL_PROGRAM_OBJECT_ARB));
@@ -249,7 +249,7 @@ void Shader::setParameter(const std::string& name, float x, float y)
 {
     if (m_shaderProgram)
     {
-        ensureGlContext();
+        ensureContext();
 
         // Enable program
         GLhandleARB program = glCheck(glGetHandleARB(GL_PROGRAM_OBJECT_ARB));
@@ -273,7 +273,7 @@ void Shader::setParameter(const std::string& name, float x, float y, float z)
 {
     if (m_shaderProgram)
     {
-        ensureGlContext();
+        ensureContext();
 
         // Enable program
         GLhandleARB program = glCheck(glGetHandleARB(GL_PROGRAM_OBJECT_ARB));
@@ -297,7 +297,7 @@ void Shader::setParameter(const std::string& name, float x, float y, float z, fl
 {
     if (m_shaderProgram)
     {
-        ensureGlContext();
+        ensureContext();
 
         // Enable program
         GLhandleARB program = glCheck(glGetHandleARB(GL_PROGRAM_OBJECT_ARB));
@@ -342,7 +342,7 @@ void Shader::setParameter(const std::string& name, const sf::Transform& transfor
 {
     if (m_shaderProgram)
     {
-        ensureGlContext();
+        ensureContext();
 
         // Enable program
         GLhandleARB program = glCheck(glGetHandleARB(GL_PROGRAM_OBJECT_ARB));
@@ -366,7 +366,7 @@ void Shader::setParameter(const std::string& name, const Texture& texture)
 {
     if (m_shaderProgram)
     {
-        ensureGlContext();
+        ensureContext();
 
         // Find the location of the variable in the shader
         int location = getParamLocation(name);
@@ -401,7 +401,7 @@ void Shader::setParameter(const std::string& name, CurrentTextureType)
 {
     if (m_shaderProgram)
     {
-        ensureGlContext();
+        ensureContext();
 
         // Find the location of the variable in the shader
         m_currentTexture = getParamLocation(name);
@@ -412,7 +412,7 @@ void Shader::setParameter(const std::string& name, CurrentTextureType)
 ////////////////////////////////////////////////////////////
 void Shader::bind(const Shader* shader)
 {
-    ensureGlContext();
+    ensureContext();
 
     if (shader && shader->m_shaderProgram)
     {
@@ -437,7 +437,7 @@ void Shader::bind(const Shader* shader)
 ////////////////////////////////////////////////////////////
 bool Shader::isAvailable()
 {
-    ensureGlContext();
+    ensureContext();
 
     // Make sure that extensions are initialized
     priv::ensureExtensionsInit();
@@ -452,7 +452,7 @@ bool Shader::isAvailable()
 ////////////////////////////////////////////////////////////
 bool Shader::compile(const char* vertexShaderCode, const char* fragmentShaderCode)
 {
-    ensureGlContext();
+    ensureContext();
 
     // First make sure that we can use shaders
     if (!isAvailable())

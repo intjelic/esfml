@@ -47,7 +47,7 @@ m_depthBuffer(0)
 ////////////////////////////////////////////////////////////
 RenderTextureImplFBO::~RenderTextureImplFBO()
 {
-    ensureGlContext();
+    ensureContext();
 
     // Destroy the depth buffer
     if (m_depthBuffer)
@@ -71,7 +71,7 @@ RenderTextureImplFBO::~RenderTextureImplFBO()
 ////////////////////////////////////////////////////////////
 bool RenderTextureImplFBO::isAvailable()
 {
-    ensureGlContext();
+    ensureContext();
 
     // Make sure that extensions are initialized
     priv::ensureExtensionsInit();

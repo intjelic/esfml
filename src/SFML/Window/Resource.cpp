@@ -77,7 +77,7 @@ Resource::~Resource()
 
 
 ////////////////////////////////////////////////////////////
-void Resource::ensureGlContext()
+void Resource::ensureContext()
 {
     priv::GlContext::ensureContext();
 }
