@@ -22,8 +22,8 @@
 //
 ////////////////////////////////////////////////////////////
 
-#ifndef SFML_GLRESOURCE_HPP
-#define SFML_GLRESOURCE_HPP
+#ifndef SFML_RESOURCE_HPP
+#define SFML_RESOURCE_HPP
 
 ////////////////////////////////////////////////////////////
 // Headers
@@ -37,7 +37,7 @@ namespace sf
 /// \brief Base class for classes that require an OpenGL context
 ///
 ////////////////////////////////////////////////////////////
-class SFML_WINDOW_API GlResource
+class SFML_WINDOW_API Resource
 {
 protected :
 
@@ -45,13 +45,13 @@ protected :
     /// \brief Default constructor
     ///
     ////////////////////////////////////////////////////////////
-    GlResource();
+    Resource();
 
     ////////////////////////////////////////////////////////////
     /// \brief Destructor
     ///
     ////////////////////////////////////////////////////////////
-    ~GlResource();
+    ~Resource();
 
     ////////////////////////////////////////////////////////////
     /// \brief Make sure that a valid OpenGL context exists in the current thread
@@ -63,14 +63,14 @@ protected :
 } // namespace sf
 
 
-#endif // SFML_GLRESOURCE_HPP
+#endif // SFML_RESOURCE_HPP
 
 ////////////////////////////////////////////////////////////
-/// \class sf::GlResource
+/// \class sf::Resource
 /// \ingroup window
 ///
 /// This class is for internal use only, it must be the base
-/// of every class that requires a valid OpenGL context in
+/// of every class that requires a valid graphics context in
 /// order to work.
 ///
 ////////////////////////////////////////////////////////////

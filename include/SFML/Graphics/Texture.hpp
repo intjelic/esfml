@@ -30,7 +30,7 @@
 ////////////////////////////////////////////////////////////
 #include <SFML/Graphics/Export.hpp>
 #include <SFML/Graphics/Image.hpp>
-#include <SFML/Window/GlResource.hpp>
+#include <SFML/Window/Resource.hpp>
 
 
 namespace sf
@@ -44,7 +44,7 @@ class InputStream;
 /// \brief Image living on the graphics card that can be used for drawing
 ///
 ////////////////////////////////////////////////////////////
-class SFML_GRAPHICS_API Texture : GlResource
+class SFML_GRAPHICS_API Texture : Resource
 {
 public :
 

@@ -31,7 +31,7 @@
 #include <SFML/Graphics/Export.hpp>
 #include <SFML/Graphics/Transform.hpp>
 #include <SFML/Graphics/Color.hpp>
-#include <SFML/Window/GlResource.hpp>
+#include <SFML/Window/Resource.hpp>
 #include <SFML/System/NonCopyable.hpp>
 #include <SFML/System/Vector2.hpp>
 #include <SFML/System/Vector3.hpp>
@@ -48,7 +48,7 @@ class Texture;
 /// \brief Shader class (vertex and fragment)
 ///
 ////////////////////////////////////////////////////////////
-class SFML_GRAPHICS_API Shader : GlResource, NonCopyable
+class SFML_GRAPHICS_API Shader : Resource, NonCopyable
 {
 public :
 

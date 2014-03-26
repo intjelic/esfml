@@ -30,7 +30,7 @@
 ////////////////////////////////////////////////////////////
 #include <SFML/Graphics/RenderTextureImpl.hpp>
 #include <SFML/Window/Context.hpp>
-#include <SFML/Window/GlResource.hpp>
+#include <SFML/Window/Resource.hpp>
 
 
 namespace sf
@@ -42,7 +42,7 @@ namespace priv
 ///        FrameBuffer Object OpenGL extension
 ///
 ////////////////////////////////////////////////////////////
-class RenderTextureImplFBO : public RenderTextureImpl, GlResource
+class RenderTextureImplFBO : public RenderTextureImpl, Resource
 {
 public :
 

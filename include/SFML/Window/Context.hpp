@@ -29,7 +29,7 @@
 // Headers
 ////////////////////////////////////////////////////////////
 #include <SFML/Window/Export.hpp>
-#include <SFML/Window/GlResource.hpp>
+#include <SFML/Window/Resource.hpp>
 #include <SFML/Window/ContextSettings.hpp>
 #include <SFML/System/NonCopyable.hpp>
 
@@ -45,7 +45,7 @@ namespace priv
 /// \brief Class holding a valid drawing context
 ///
 ////////////////////////////////////////////////////////////
-class SFML_WINDOW_API Context : GlResource, NonCopyable
+class SFML_WINDOW_API Context : Resource, NonCopyable
 {
 public :
 

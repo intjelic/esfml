@@ -9,8 +9,8 @@ set(SRC
     ${INCROOT}/Export.hpp
     ${SRCROOT}/GlContext.cpp
     ${SRCROOT}/GlContext.hpp
-    ${SRCROOT}/GlResource.cpp
-    ${INCROOT}/GlResource.hpp
+    ${SRCROOT}/Resource.cpp
+    ${INCROOT}/Resource.hpp
     ${INCROOT}/ContextSettings.hpp
     ${INCROOT}/Event.hpp
     ${SRCROOT}/InputImpl.hpp

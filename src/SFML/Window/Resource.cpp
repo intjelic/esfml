@@ -25,7 +25,7 @@
 ////////////////////////////////////////////////////////////
 // Headers
 ////////////////////////////////////////////////////////////
-#include <SFML/Window/GlResource.hpp>
+#include <SFML/Window/Resource.hpp>
 #include <SFML/Window/GlContext.hpp>
 #include <SFML/System/Mutex.hpp>
 #include <SFML/System/Lock.hpp>
@@ -42,7 +42,7 @@ namespace
 namespace sf
 {
 ////////////////////////////////////////////////////////////
-GlResource::GlResource()
+Resource::Resource()
 {
     {
         // Protect from concurrent access
@@ -62,7 +62,7 @@ GlResource::GlResource()
 
 
 ////////////////////////////////////////////////////////////
-GlResource::~GlResource()
+Resource::~Resource()
 {
     // Protect from concurrent access
     Lock lock(mutex);
@@ -77,7 +77,7 @@ GlResource::~GlResource()
 
 
 ////////////////////////////////////////////////////////////
-void GlResource::ensureGlContext()
+void Resource::ensureGlContext()
 {
     priv::GlContext::ensureContext();
 }

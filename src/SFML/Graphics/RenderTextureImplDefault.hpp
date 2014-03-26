@@ -29,7 +29,7 @@
 // Headers
 ////////////////////////////////////////////////////////////
 #include <SFML/Graphics/RenderTextureImpl.hpp>
-#include <SFML/Window/GlResource.hpp>
+#include <SFML/Window/Resource.hpp>
 #include <SFML/Window/Context.hpp>
 
 
@@ -42,7 +42,7 @@ namespace priv
 ///        using a in-memory context
 ///
 ////////////////////////////////////////////////////////////
-class RenderTextureImplDefault : public RenderTextureImpl, GlResource
+class RenderTextureImplDefault : public RenderTextureImpl, Resource
 {
 public :
 
