@@ -47,7 +47,7 @@ namespace priv
 Display* OpenDisplay();
 
 ////////////////////////////////////////////////////////////
-/// \brief Release a reference to the shared
+/// \brief Release a reference to the shared display
 ///
 /// \param display Display to release
 ///
