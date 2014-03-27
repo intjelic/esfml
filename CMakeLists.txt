@@ -27,6 +27,9 @@ set(VERSION_PATCH 0)
 # add the SFML header path
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
 
+# add an option for choosing the graphics back-end to use
+sfml_set_option(SFML_GRAPHICS_BACKEND "OpenGL" STRING "Choose the graphics back-end to use (OpenGL or DirectX)")
+
 # add an option for choosing the build type (shared or static)
 if(NOT (SFML_OS_IOS OR SFML_OS_ANDROID))
     sfml_set_option(BUILD_SHARED_LIBS TRUE BOOL "TRUE to build SFML as shared libraries, FALSE to build it as static libraries")
@@ -105,6 +108,20 @@ endif()
 if(SFML_OPENGL_ES)
     add_definitions(-DSFML_OPENGL_ES)
     add_definitions(-DGL_GLEXT_PROTOTYPES)
+endif()
+
+# force usage of OpenGL if not windows
+if(NOT SFML_OS_WINDOWS)
+	set(SFML_GRAPHICS_BACKEND "OpenGL")
+endif()
+
+# define SFML_OPENGL or SFML_DIRECTX according the chosen graphics back-end
+if(SFML_GRAPHICS_BACKEND MATCHES "OpenGL")
+    add_definitions(-DSFML_OPENGL)
+    set(SFML_OPENGL 1)
+elseif(SFML_GRAPHICS_BACKEND MATCHES "DirectX")
+    add_definitions(-DSFML_DIRECTX)
+    set(SFML_DIRECTX 1)
 endif()
 
 # define an option for choosing between static and dynamic C runtime (Windows only)
