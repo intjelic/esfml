@@ -123,7 +123,7 @@ public :
     /// \return Pointer to the created context (don't forget to delete it)
     ///
     ////////////////////////////////////////////////////////////
-    static GlContext* create();
+    static ContextImpl* create();
 
     ////////////////////////////////////////////////////////////
     /// \brief Create a new context attached to a window
@@ -138,7 +138,7 @@ public :
     /// \return Pointer to the created context
     ///
     ////////////////////////////////////////////////////////////
-    static GlContext* create(const ContextSettings& settings, const WindowImpl* owner, unsigned int bitsPerPixel);
+    static ContextImpl* create(const ContextSettings& settings, const WindowImpl* owner, unsigned int bitsPerPixel);
 
     ////////////////////////////////////////////////////////////
     /// \brief Create a new context that embeds its own rendering target
@@ -153,12 +153,12 @@ public :
     /// \return Pointer to the created context
     ///
     ////////////////////////////////////////////////////////////
-    static GlContext* create(const ContextSettings& settings, unsigned int width, unsigned int height);
-
+    static ContextImpl* create(const ContextSettings& settings, unsigned int width, unsigned int height);
+    
 private:
 
-    friend class GlContext;
-
+    friend class ContextImpl;
+    
     ////////////////////////////////////////////////////////////
     /// \brief Get the (hidden and inactive) shared context
     ///
@@ -169,19 +169,19 @@ private:
     /// \brief Get the current context in this thread
     ///
     ////////////////////////////////////////////////////////////
-    static ThreadLocalPtr<GlContext>& getCurrentContext();
+	static ThreadLocalPtr<ContextImpl>& getCurrentContext();
 
     ////////////////////////////////////////////////////////////
     /// \brief Set the current context for this thread
     ///
     ////////////////////////////////////////////////////////////
-    static void setCurrentContext(GlContext* context);
+	static void setCurrentContext(ContextImpl* context);
 
     ////////////////////////////////////////////////////////////
     /// \brief Get the internal context for the current thread
     ///
     ////////////////////////////////////////////////////////////
-    static GlContext* getInternalContext();
+	static ContextImpl* getInternalContext();
 };
 
 } // namespace priv

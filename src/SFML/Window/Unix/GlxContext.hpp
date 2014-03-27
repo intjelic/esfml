@@ -28,7 +28,7 @@
 ////////////////////////////////////////////////////////////
 // Headers
 ////////////////////////////////////////////////////////////
-#include <SFML/Window/GlContext.hpp>
+#include <SFML/Window/ContextImpl.hpp>
 #include <X11/Xlib.h>
 #include <GL/glx.h>
 
@@ -38,10 +38,10 @@ namespace sf
 namespace priv
 {
 ////////////////////////////////////////////////////////////
-/// \brief Linux (GLX) implementation of OpenGL contexts
+/// \brief Linux (GLX) implementation of graphics contexts
 ///
 ////////////////////////////////////////////////////////////
-class GlxContext : public GlContext
+class GlxContext : public ContextImpl
 {
 public :
 

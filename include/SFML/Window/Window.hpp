@@ -44,7 +44,7 @@ namespace sf
 {
 namespace priv
 {
-    class GlContext;
+    class ContextImpl;
     class WindowImpl;
 }
 
@@ -481,11 +481,11 @@ private:
     ////////////////////////////////////////////////////////////
     // Member data
     ////////////////////////////////////////////////////////////
-    priv::WindowImpl* m_impl;           ///< Platform-specific implementation of the window
-    priv::GlContext*  m_context;        ///< Platform-specific implementation of the OpenGL context
-    Clock             m_clock;          ///< Clock for measuring the elapsed time between frames
-    Time              m_frameTimeLimit; ///< Current framerate limit
-    Vector2u          m_size;           ///< Current size of the window
+    priv::WindowImpl*  m_impl;           ///< Platform-specific implementation of the window
+    priv::ContextImpl* m_context;        ///< Platform-specific implementation of the OpenGL context
+    Clock              m_clock;          ///< Clock for measuring the elapsed time between frames
+    Time               m_frameTimeLimit; ///< Current framerate limit
+    Vector2u           m_size;           ///< Current size of the window
 };
 
 } // namespace sf

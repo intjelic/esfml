@@ -31,7 +31,7 @@
 #include <SFML/Window/VideoMode.hpp>
 #include <SFML/Window/ContextSettings.hpp>
 #include <SFML/Window/EGLCheck.hpp>
-#include <SFML/Window/GlContext.hpp>
+#include <SFML/Window/ContextImpl.hpp>
 #include <SFML/OpenGL.hpp>
 
 
@@ -39,7 +39,11 @@ namespace sf
 {
 namespace priv
 {
-class EglContext : public GlContext
+////////////////////////////////////////////////////////////
+/// \brief EGL implementation of graphics contexts
+///
+////////////////////////////////////////////////////////////
+class EglContext : public ContextImpl
 {
 public :
 

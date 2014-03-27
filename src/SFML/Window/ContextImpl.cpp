@@ -25,7 +25,7 @@
 ////////////////////////////////////////////////////////////
 // Headers
 ////////////////////////////////////////////////////////////
-#include <SFML/Window/GlContext.hpp>
+#include <SFML/Window/ContextImpl.hpp>
 #include <SFML/Window/ContextManager.hpp>
 #include <SFML/OpenGL.hpp>
 #include <set>
@@ -43,7 +43,7 @@ namespace sf
 namespace priv
 {
 ////////////////////////////////////////////////////////////
-GlContext::~GlContext()
+ContextImpl::~ContextImpl()
 {
     // Deactivate the context before killing it, unless we're inside Cleanup()
     if (ContextManager::getSharedContext())
@@ -52,7 +52,7 @@ GlContext::~GlContext()
 
 
 ////////////////////////////////////////////////////////////
-void GlContext::initialize()
+void ContextImpl::initialize()
 {
 #if defined(SFML_OPENGL)
 
@@ -89,14 +89,14 @@ void GlContext::initialize()
 
 
 ////////////////////////////////////////////////////////////
-const ContextSettings& GlContext::getSettings() const
+const ContextSettings& ContextImpl::getSettings() const
 {
     return m_settings;
 }
 
 
 ////////////////////////////////////////////////////////////
-bool GlContext::setActive(bool active)
+bool ContextImpl::setActive(bool active)
 {
     if (active)
     {
@@ -138,14 +138,14 @@ bool GlContext::setActive(bool active)
 
 
 ////////////////////////////////////////////////////////////
-GlContext::GlContext()
+ContextImpl::ContextImpl()
 {
     // Nothing to do
 }
 
 
 ////////////////////////////////////////////////////////////
-int GlContext::evaluateFormat(unsigned int bitsPerPixel, const ContextSettings& settings, int colorBits, int depthBits, int stencilBits, int antialiasing)
+int ContextImpl::evaluateFormat(unsigned int bitsPerPixel, const ContextSettings& settings, int colorBits, int depthBits, int stencilBits, int antialiasing)
 {
     return std::abs(static_cast<int>(bitsPerPixel               - colorBits))   +
            std::abs(static_cast<int>(settings.depthBits         - depthBits))   +

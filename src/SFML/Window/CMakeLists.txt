@@ -7,8 +7,8 @@ set(SRC
     ${SRCROOT}/Context.cpp
     ${INCROOT}/Context.hpp
     ${INCROOT}/Export.hpp
-    ${SRCROOT}/GlContext.cpp
-    ${SRCROOT}/GlContext.hpp
+    ${SRCROOT}/ContextImpl.cpp
+    ${SRCROOT}/ContextImpl.hpp
     ${SRCROOT}/ContextManager.cpp
     ${SRCROOT}/ContextManager.hpp
     ${SRCROOT}/Resource.cpp

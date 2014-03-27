@@ -27,7 +27,7 @@
 ////////////////////////////////////////////////////////////
 #include <SFML/Window/Context.hpp>
 #include <SFML/Window/ContextManager.hpp>
-#include <SFML/Window/GlContext.hpp>
+#include <SFML/Window/ContextImpl.hpp>
 
 
 namespace sf

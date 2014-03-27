@@ -27,7 +27,7 @@
 ////////////////////////////////////////////////////////////
 #include <SFML/Window/Resource.hpp>
 #include <SFML/Window/ContextManager.hpp>
-#include <SFML/Window/GlContext.hpp>
+#include <SFML/Window/ContextImpl.hpp>
 #include <SFML/System/Mutex.hpp>
 #include <SFML/System/Lock.hpp>
 

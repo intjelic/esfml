@@ -36,14 +36,14 @@
 namespace
 {
     // This per-thread variable holds the current context for each thread
-    sf::ThreadLocalPtr<sf::priv::GlContext> currentContext(NULL);
+    sf::ThreadLocalPtr<sf::priv::ContextImpl> currentContext(NULL);
 
     // The hidden, inactive context that will be shared with all other contexts
     ContextType* sharedContext = NULL;
 
     // Internal contexts
-    sf::ThreadLocalPtr<sf::priv::GlContext> internalContext(NULL);
-    std::set<sf::priv::GlContext*> internalContexts;
+    sf::ThreadLocalPtr<sf::priv::ContextImpl> internalContext(NULL);
+    std::set<sf::priv::ContextImpl*> internalContexts;
     sf::Mutex internalContextsMutex;
 
     // Check if the internal context of the current thread is valid
@@ -59,7 +59,7 @@ namespace
     }
 
     // Retrieve the internal context for the current thread
-    sf::priv::GlContext* getInternalContext()
+    sf::priv::ContextImpl* getInternalContext()
     {
         if (!hasInternalContext())
         {
@@ -100,7 +100,7 @@ void ContextManager::globalCleanup()
 
     // Destroy the internal contexts
     sf::Lock lock(internalContextsMutex);
-    for (std::set<GlContext*>::iterator it = internalContexts.begin(); it != internalContexts.end(); ++it)
+    for (std::set<ContextImpl*>::iterator it = internalContexts.begin(); it != internalContexts.end(); ++it)
         delete *it;
     internalContexts.clear();
 }
@@ -116,9 +116,9 @@ void ContextManager::ensureContext()
 
 
 ////////////////////////////////////////////////////////////
-GlContext* ContextManager::create()
+ContextImpl* ContextManager::create()
 {
-    GlContext* context = new ContextType(sharedContext);
+    ContextImpl* context = new ContextType(sharedContext);
     context->initialize();
 
     return context;
@@ -126,13 +126,13 @@ GlContext* ContextManager::create()
 
 
 ////////////////////////////////////////////////////////////
-GlContext* ContextManager::create(const ContextSettings& settings, const WindowImpl* owner, unsigned int bitsPerPixel)
+ContextImpl* ContextManager::create(const ContextSettings& settings, const WindowImpl* owner, unsigned int bitsPerPixel)
 {
     // Make sure that there's an active context (context creation may need extensions, and thus a valid context)
     ensureContext();
 
     // Create the context
-    GlContext* context = new ContextType(sharedContext, settings, owner, bitsPerPixel);
+    ContextImpl* context = new ContextType(sharedContext, settings, owner, bitsPerPixel);
     context->initialize();
 
     return context;
@@ -140,13 +140,13 @@ GlContext* ContextManager::create(const ContextSettings& settings, const WindowI
 
 
 ////////////////////////////////////////////////////////////
-GlContext* ContextManager::create(const ContextSettings& settings, unsigned int width, unsigned int height)
+ContextImpl* ContextManager::create(const ContextSettings& settings, unsigned int width, unsigned int height)
 {
     // Make sure that there's an active context (context creation may need extensions, and thus a valid context)
     ensureContext();
 
     // Create the context
-    GlContext* context = new ContextType(sharedContext, settings, width, height);
+    ContextImpl* context = new ContextType(sharedContext, settings, width, height);
     context->initialize();
 
     return context;
@@ -161,21 +161,21 @@ ContextType* ContextManager::getSharedContext()
 
 
 ////////////////////////////////////////////////////////////
-ThreadLocalPtr<sf::priv::GlContext>& ContextManager::getCurrentContext()
+ThreadLocalPtr<ContextImpl>& ContextManager::getCurrentContext()
 {
     return currentContext;
 }
 
 
 ////////////////////////////////////////////////////////////
-void ContextManager::setCurrentContext(GlContext* context)
+void ContextManager::setCurrentContext(ContextImpl* context)
 {
     currentContext = context;
 }
 
 
 ////////////////////////////////////////////////////////////
-priv::GlContext* ContextManager::getInternalContext()
+ContextImpl* ContextManager::getInternalContext()
 {
     return ::getInternalContext();
 }

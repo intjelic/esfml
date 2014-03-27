@@ -28,7 +28,7 @@
 ////////////////////////////////////////////////////////////
 // Headers
 ////////////////////////////////////////////////////////////
-#include <SFML/Window/GlContext.hpp>
+#include <SFML/Window/ContextImpl.hpp>
 #include <SFML/Window/iOS/ObjCType.hpp>
 #include <SFML/System/Vector2.hpp>
 #include <SFML/System/Clock.hpp>
@@ -45,10 +45,10 @@ namespace priv
 class WindowImplUIKit;
 
 ////////////////////////////////////////////////////////////
-/// \brief iOS (EAGL) implementation of OpenGL contexts
+/// \brief iOS (EAGL) implementation of graphics contexts
 ///
 ////////////////////////////////////////////////////////////
-class EaglContext : public GlContext
+class EaglContext : public ContextImpl
 {
 public:
 

@@ -22,8 +22,8 @@
 //
 ////////////////////////////////////////////////////////////
 
-#ifndef SFML_GLCONTEXT_HPP
-#define SFML_GLCONTEXT_HPP
+#ifndef SFML_CONTEXTIMPL_HPP
+#define SFML_CONTEXTIMPL_HPP
 
 ////////////////////////////////////////////////////////////
 // Headers
@@ -42,7 +42,7 @@ class WindowImpl;
 /// \brief Abstract class representing an OpenGL context
 ///
 ////////////////////////////////////////////////////////////
-class GlContext : NonCopyable
+class ContextImpl : NonCopyable
 {
 public :
 
@@ -50,7 +50,7 @@ public :
     /// \brief Destructor
     ///
     ////////////////////////////////////////////////////////////
-    virtual ~GlContext();
+    virtual ~ContextImpl();
 
     ////////////////////////////////////////////////////////////
     /// \brief Perform various initializations after the context construction
@@ -113,7 +113,7 @@ protected :
     /// This constructor is meant for derived classes only.
     ///
     ////////////////////////////////////////////////////////////
-    GlContext();
+    ContextImpl();
 
     ////////////////////////////////////////////////////////////
     /// \brief Activate the context as the current target
@@ -155,4 +155,4 @@ protected :
 } // namespace sf
 
 
-#endif // SFML_GLCONTEXT_HPP
+#endif // SFML_CONTEXTIMPL_HPP

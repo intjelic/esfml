@@ -28,7 +28,7 @@
 ////////////////////////////////////////////////////////////
 // Headers
 ////////////////////////////////////////////////////////////
-#include <SFML/Window/GlContext.hpp>
+#include <SFML/Window/ContextImpl.hpp>
 #include <SFML/OpenGL.hpp>
 #include <windows.h>
 
@@ -38,10 +38,10 @@ namespace sf
 namespace priv
 {
 ////////////////////////////////////////////////////////////
-/// \brief Windows (WGL) implementation of OpenGL contexts
+/// \brief Windows (WGL) implementation of graphics contexts
 ///
 ////////////////////////////////////////////////////////////
-class WglContext : public GlContext
+class WglContext : public ContextImpl
 {
 public :
 
