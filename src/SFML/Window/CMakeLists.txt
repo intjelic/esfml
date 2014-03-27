@@ -7,6 +7,7 @@ set(SRC
     ${SRCROOT}/Context.cpp
     ${INCROOT}/Context.hpp
     ${INCROOT}/Export.hpp
+    ${INCROOT}/ContextHandle.hpp
     ${SRCROOT}/ContextImpl.cpp
     ${SRCROOT}/ContextImpl.hpp
     ${SRCROOT}/ContextManager.cpp
