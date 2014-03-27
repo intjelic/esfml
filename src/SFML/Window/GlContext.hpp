@@ -28,7 +28,6 @@
 ////////////////////////////////////////////////////////////
 // Headers
 ////////////////////////////////////////////////////////////
-#include <SFML/Config.hpp>
 #include <SFML/Window/ContextSettings.hpp>
 #include <SFML/System/NonCopyable.hpp>
 
@@ -48,83 +47,16 @@ class GlContext : NonCopyable
 public :
 
     ////////////////////////////////////////////////////////////
-    /// \brief Perform the global initialization
-    ///
-    /// This function is called once, before the very first OpenGL
-    /// resource is created. It makes sure that everything is ready
-    /// for contexts to work properly.
-    /// Note: this function doesn't need to be thread-safe, as it
-    /// can be called only once.
-    ///
-    ////////////////////////////////////////////////////////////
-    static void globalInit();
-
-    ////////////////////////////////////////////////////////////
-    /// \brief Perform the global cleanup
-    ///
-    /// This function is called after the very last OpenGL resource
-    /// is destroyed. It makes sure that everything that was
-    /// created by initialize() is properly released.
-    /// Note: this function doesn't need to be thread-safe, as it
-    /// can be called only once.
-    ///
-    ////////////////////////////////////////////////////////////
-    static void globalCleanup();
-
-    ////////////////////////////////////////////////////////////
-    /// \brief Ensures that an OpenGL context is active in the current thread
-    ///
-    ////////////////////////////////////////////////////////////
-    static void ensureContext();
-
-    ////////////////////////////////////////////////////////////
-    /// \brief Create a new context, not associated to a window
-    ///
-    /// This function automatically chooses the specialized class
-    /// to use according to the OS.
-    ///
-    /// \return Pointer to the created context (don't forget to delete it)
-    ///
-    ////////////////////////////////////////////////////////////
-    static GlContext* create();
-
-    ////////////////////////////////////////////////////////////
-    /// \brief Create a new context attached to a window
-    ///
-    /// This function automatically chooses the specialized class
-    /// to use according to the OS.
-    ///
-    /// \param settings     Creation parameters
-    /// \param owner        Pointer to the owner window
-    /// \param bitsPerPixel Pixel depth (in bits per pixel)
-    ///
-    /// \return Pointer to the created context
-    ///
-    ////////////////////////////////////////////////////////////
-    static GlContext* create(const ContextSettings& settings, const WindowImpl* owner, unsigned int bitsPerPixel);
-
-    ////////////////////////////////////////////////////////////
-    /// \brief Create a new context that embeds its own rendering target
-    ///
-    /// This function automatically chooses the specialized class
-    /// to use according to the OS.
-    ///
-    /// \param settings Creation parameters
-    /// \param width    Back buffer width
-    /// \param height   Back buffer height
-    ///
-    /// \return Pointer to the created context
-    ///
-    ////////////////////////////////////////////////////////////
-    static GlContext* create(const ContextSettings& settings, unsigned int width, unsigned int height);
-
-public :
-
-    ////////////////////////////////////////////////////////////
     /// \brief Destructor
     ///
     ////////////////////////////////////////////////////////////
     virtual ~GlContext();
+
+    ////////////////////////////////////////////////////////////
+    /// \brief Perform various initializations after the context construction
+    ///
+    ////////////////////////////////////////////////////////////
+    void initialize();
 
     ////////////////////////////////////////////////////////////
     /// \brief Get the settings of the context
@@ -216,14 +148,6 @@ protected :
     // Member data
     ////////////////////////////////////////////////////////////
     ContextSettings m_settings; ///< Creation settings of the context
-
-private:
-
-    ////////////////////////////////////////////////////////////
-    /// \brief Perform various initializations after the context construction
-    ///
-    ////////////////////////////////////////////////////////////
-    void initialize();
 };
 
 } // namespace priv

@@ -9,6 +9,8 @@ set(SRC
     ${INCROOT}/Export.hpp
     ${SRCROOT}/GlContext.cpp
     ${SRCROOT}/GlContext.hpp
+    ${SRCROOT}/ContextManager.cpp
+    ${SRCROOT}/ContextManager.hpp
     ${SRCROOT}/Resource.cpp
     ${INCROOT}/Resource.hpp
     ${INCROOT}/ContextSettings.hpp

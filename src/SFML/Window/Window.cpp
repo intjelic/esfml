@@ -26,6 +26,7 @@
 // Headers
 ////////////////////////////////////////////////////////////
 #include <SFML/Window/Window.hpp>
+#include <SFML/Window/ContextManager.hpp>
 #include <SFML/Window/GlContext.hpp>
 #include <SFML/Window/WindowImpl.hpp>
 #include <SFML/System/Sleep.hpp>
@@ -117,7 +118,7 @@ void Window::create(VideoMode mode, const String& title, Uint32 style, const Con
     m_impl = priv::WindowImpl::create(mode, title, style, settings);
 
     // Recreate the context
-    m_context = priv::GlContext::create(settings, m_impl, mode.bitsPerPixel);
+    m_context = priv::ContextManager::create(settings, m_impl, mode.bitsPerPixel);
 
     // Perform common initializations
     initialize();
@@ -134,7 +135,7 @@ void Window::create(WindowHandle handle, const ContextSettings& settings)
     m_impl = priv::WindowImpl::create(handle);
 
     // Recreate the context
-    m_context = priv::GlContext::create(settings, m_impl, VideoMode::getDesktopMode().bitsPerPixel);
+    m_context = priv::ContextManager::create(settings, m_impl, VideoMode::getDesktopMode().bitsPerPixel);
 
     // Perform common initializations
     initialize();

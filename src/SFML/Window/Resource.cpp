@@ -26,6 +26,7 @@
 // Headers
 ////////////////////////////////////////////////////////////
 #include <SFML/Window/Resource.hpp>
+#include <SFML/Window/ContextManager.hpp>
 #include <SFML/Window/GlContext.hpp>
 #include <SFML/System/Mutex.hpp>
 #include <SFML/System/Lock.hpp>
@@ -50,14 +51,14 @@ Resource::Resource()
 
         // If this is the very first resource, trigger the global context initialization
         if (count == 0)
-            priv::GlContext::globalInit();
+            priv::ContextManager::globalInit();
 
         // Increment the resources counter
         count++;
     }
 
     // Now make sure that there is an active OpenGL context in the current thread
-    priv::GlContext::ensureContext();
+    priv::ContextManager::ensureContext();
 }
 
 
@@ -72,14 +73,14 @@ Resource::~Resource()
 
     // If there's no more resource alive, we can trigger the global context cleanup
     if (count == 0)
-        priv::GlContext::globalCleanup();
+        priv::ContextManager::globalCleanup();
 }
 
 
 ////////////////////////////////////////////////////////////
 void Resource::ensureContext()
 {
-    priv::GlContext::ensureContext();
+    priv::ContextManager::ensureContext();
 }
 
 } // namespace sf

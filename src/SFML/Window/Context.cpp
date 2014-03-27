@@ -26,6 +26,7 @@
 // Headers
 ////////////////////////////////////////////////////////////
 #include <SFML/Window/Context.hpp>
+#include <SFML/Window/ContextManager.hpp>
 #include <SFML/Window/GlContext.hpp>
 
 
@@ -34,7 +35,7 @@ namespace sf
 ////////////////////////////////////////////////////////////
 Context::Context()
 {
-    m_context = priv::GlContext::create();
+    m_context = priv::ContextManager::create();
     setActive(true);
 }
 
@@ -56,7 +57,7 @@ bool Context::setActive(bool active)
 ////////////////////////////////////////////////////////////
 Context::Context(const ContextSettings& settings, unsigned int width, unsigned int height)
 {
-    m_context = priv::GlContext::create(settings, width, height);
+    m_context = priv::ContextManager::create(settings, width, height);
     setActive(true);
 }
 
