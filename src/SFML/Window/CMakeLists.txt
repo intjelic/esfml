@@ -55,6 +55,10 @@ if(SFML_OS_WINDOWS)
     set(PLATFORM_SRC
         ${SRCROOT}/Win32/WglContext.cpp
         ${SRCROOT}/Win32/WglContext.hpp
+        ${SRCROOT}/Win32/DxContext.cpp
+        ${SRCROOT}/Win32/DxContext.hpp
+        ${SRCROOT}/Win32/Interface.cpp
+        ${SRCROOT}/Win32/Interface.hpp
         ${SRCROOT}/Win32/InputImpl.cpp
         ${SRCROOT}/Win32/InputImpl.hpp
         ${SRCROOT}/Win32/JoystickImpl.cpp

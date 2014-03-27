@@ -38,8 +38,17 @@
 
     #if defined(SFML_SYSTEM_WINDOWS)
 
-        #include <SFML/Window/Win32/WglContext.hpp>
-        typedef sf::priv::WglContext ContextType;
+        #if defined(SFML_OPENGL)
+
+            #include <SFML/Window/Win32/WglContext.hpp>
+            typedef sf::priv::WglContext ContextType;
+
+        #elif defined(SFML_DIRECTX)
+
+            #include <SFML/Window/Win32/DxContext.hpp>
+            typedef sf::priv::DxContext ContextType;
+
+        #endif
 
     #elif defined(SFML_SYSTEM_LINUX) || defined(SFML_SYSTEM_FREEBSD)
 
