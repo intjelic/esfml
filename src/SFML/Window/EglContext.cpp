@@ -188,6 +188,13 @@ void EglContext::setVerticalSyncEnabled(bool enabled)
 
 
 ////////////////////////////////////////////////////////////
+ContextHandle EglContext::getContextHandle() const
+{
+    return m_context;
+}
+
+
+////////////////////////////////////////////////////////////
 void EglContext::createContext(EglContext* shared)
 {
     const EGLint contextVersion[] = {

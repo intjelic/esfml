@@ -29,6 +29,7 @@
 // Headers
 ////////////////////////////////////////////////////////////
 #include <SFML/Window/ContextSettings.hpp>
+#include <SFML/Window/ContextHandle.hpp>
 #include <SFML/System/NonCopyable.hpp>
 
 
@@ -104,6 +105,14 @@ public :
     ///
     ////////////////////////////////////////////////////////////
     virtual void setVerticalSyncEnabled(bool enabled) = 0;
+
+    ////////////////////////////////////////////////////////////
+    /// \brief Get the underlying graphics context handle
+    ///
+    /// \return Context handle of this context
+    ///
+    ////////////////////////////////////////////////////////////
+    virtual ContextHandle getContextHandle() const = 0;
 
 protected :
 

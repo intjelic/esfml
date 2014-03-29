@@ -158,6 +158,13 @@ void GlxContext::setVerticalSyncEnabled(bool enabled)
 
 
 ////////////////////////////////////////////////////////////
+ContextHandle GlxContext::getContextHandle() const
+{
+    return m_context;
+}
+
+
+////////////////////////////////////////////////////////////
 XVisualInfo GlxContext::selectBestVisual(::Display* display, unsigned int bitsPerPixel, const ContextSettings& settings)
 {
     // Retrieve all the visuals

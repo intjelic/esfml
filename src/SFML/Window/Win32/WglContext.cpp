@@ -145,6 +145,13 @@ void WglContext::setVerticalSyncEnabled(bool enabled)
 
 
 ////////////////////////////////////////////////////////////
+ContextHandle WglContext::getContextHandle() const
+{
+    return m_context;
+}
+
+
+////////////////////////////////////////////////////////////
 void WglContext::createContext(WglContext* shared, unsigned int bitsPerPixel, const ContextSettings& settings)
 {
     // Save the creation settings

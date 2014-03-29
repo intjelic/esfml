@@ -112,6 +112,14 @@ public :
     virtual void setVerticalSyncEnabled(bool enabled);
 
     ////////////////////////////////////////////////////////////
+    /// \brief Get the underlying graphics context handle
+    ///
+    /// \return Context handle of this context
+    ///
+    ////////////////////////////////////////////////////////////
+    virtual ContextHandle getContextHandle() const;
+
+    ////////////////////////////////////////////////////////////
     /// \brief Create the context
     ///
     /// \param shared       Context to share the new one with (can be NULL)

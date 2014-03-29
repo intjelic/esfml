@@ -42,15 +42,9 @@ m_interface    (NULL),
 m_context      (NULL),
 m_ownsWindow   (true)
 {
-<<<<<<< Updated upstream
-	// Grab the unique DirectX interface instance
-	m_interface = OpenInterface();
-	
-=======
     // Grab the unique DirectX interface instance
     m_interface = OpenInterface();
 
->>>>>>> Stashed changes
     // Create a dummy window (disabled and hidden)
     m_window = CreateWindowA("STATIC", "", WS_POPUP | WS_DISABLED, 0, 0, 1, 1, NULL, NULL, GetModuleHandle(NULL), NULL);
     ShowWindow(m_window, SW_HIDE);
@@ -70,15 +64,9 @@ m_interface    (NULL),
 m_context      (NULL),
 m_ownsWindow   (false)
 {
-<<<<<<< Updated upstream
-	// Grab the unique DirectX interface instance
-	m_interface = OpenInterface();
-	
-=======
     // Grab the unique DirectX interface instance
     m_interface = OpenInterface();
 
->>>>>>> Stashed changes
     // Get the owner window and its device context
     m_window = owner->getSystemHandle();
     m_deviceContext = GetDC(m_window);
@@ -97,15 +85,9 @@ m_interface    (NULL),
 m_context      (NULL),
 m_ownsWindow   (true)
 {
-<<<<<<< Updated upstream
-	// Grab the unique DirectX interface instance
-	m_interface = OpenInterface();
-	
-=======
     // Grab the unique DirectX interface instance
     m_interface = OpenInterface();
 
->>>>>>> Stashed changes
     // Create the hidden window
     m_window = CreateWindowA("STATIC", "", WS_POPUP | WS_DISABLED, 0, 0, width, height, NULL, NULL, GetModuleHandle(NULL), NULL);
     ShowWindow(m_window, SW_HIDE);
@@ -120,19 +102,11 @@ m_ownsWindow   (true)
 ////////////////////////////////////////////////////////////
 DxContext::~DxContext()
 {
-<<<<<<< Updated upstream
-	// Release the DirectX context
-	m_context->Release();
-	
-	// Drop the DirectX interface instance
-	CloseInterface(m_interface);
-=======
     // Release the DirectX context
     m_context->Release();
 
     // Drop the DirectX interface instance
     CloseInterface(m_interface);
->>>>>>> Stashed changes
 }
 
 
@@ -164,23 +138,15 @@ void DxContext::setVerticalSyncEnabled(bool enabled)
 
 
 ////////////////////////////////////////////////////////////
+ContextHandle DxContext::getContextHandle() const
+{
+    return m_context;
+}
+
+
+////////////////////////////////////////////////////////////
 void DxContext::createContext(DxContext* shared, unsigned int bitsPerPixel, const ContextSettings& settings)
 {
-<<<<<<< Updated upstream
-	D3DPRESENT_PARAMETERS params;
-	
-	ZeroMemory(&params, sizeof(params));
-	params.Windowed = TRUE;
-	params.SwapEffect = D3DSWAPEFFECT_DISCARD;
-	params.hDeviceWindow = m_window;
-	
-	m_interface->CreateDevice(D3DADAPTER_DEFAULT,
-		D3DDEVTYPE_HAL,
-		m_window,
-		D3DCREATE_SOFTWARE_VERTEXPROCESSING,
-		&params,
-		&m_context);
-=======
     D3DPRESENT_PARAMETERS params;
 
     ZeroMemory(&params, sizeof(params));
@@ -194,7 +160,6 @@ void DxContext::createContext(DxContext* shared, unsigned int bitsPerPixel, cons
         D3DCREATE_SOFTWARE_VERTEXPROCESSING,
         &params,
         &m_context);
->>>>>>> Stashed changes
 }
 
 } // namespace priv

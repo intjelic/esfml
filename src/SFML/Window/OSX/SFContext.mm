@@ -126,6 +126,13 @@ void SFContext::setVerticalSyncEnabled(bool enabled)
 
 
 ////////////////////////////////////////////////////////////
+ContextHandle SFContext::getContextHandle() const
+{
+    return m_context;
+}
+
+
+////////////////////////////////////////////////////////////
 void SFContext::createContext(SFContext* shared,
                               unsigned int bitsPerPixel,
                               const ContextSettings& settings)

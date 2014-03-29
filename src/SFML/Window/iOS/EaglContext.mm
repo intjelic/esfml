@@ -193,6 +193,13 @@ void EaglContext::setVerticalSyncEnabled(bool enabled)
     m_vsyncEnabled = enabled;
 }
 
+
+////////////////////////////////////////////////////////////
+ContextHandle EaglContext::getContextHandle() const
+{
+    return m_context;
+}
+
     
 ////////////////////////////////////////////////////////////
 void EaglContext::createContext(EaglContext* shared,

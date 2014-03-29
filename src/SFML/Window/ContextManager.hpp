@@ -163,11 +163,11 @@ public :
     ///
     ////////////////////////////////////////////////////////////
     static ContextImpl* create(const ContextSettings& settings, unsigned int width, unsigned int height);
-    
+
 private:
 
     friend class ContextImpl;
-    
+
     ////////////////////////////////////////////////////////////
     /// \brief Get the (hidden and inactive) shared context
     ///

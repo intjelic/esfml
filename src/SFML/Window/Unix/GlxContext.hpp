@@ -109,6 +109,14 @@ public :
     virtual void setVerticalSyncEnabled(bool enabled);
 
     ////////////////////////////////////////////////////////////
+    /// \brief Get the underlying graphics context handle
+    ///
+    /// \return Context handle of this context
+    ///
+    ////////////////////////////////////////////////////////////
+    virtual ContextHandle getContextHandle() const;
+
+    ////////////////////////////////////////////////////////////
     /// \brief Select the best GLX visual for a given set of settings
     ///
     /// \param display      X display
