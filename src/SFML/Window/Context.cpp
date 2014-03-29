@@ -55,6 +55,13 @@ bool Context::setActive(bool active)
 
 
 ////////////////////////////////////////////////////////////
+ContextHandle Context::getContextHandle() const
+{
+    return m_context->getContextHandle();
+}
+
+
+////////////////////////////////////////////////////////////
 Context::Context(const ContextSettings& settings, unsigned int width, unsigned int height)
 {
     m_context = priv::ContextManager::create(settings, width, height);

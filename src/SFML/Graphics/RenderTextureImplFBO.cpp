@@ -25,9 +25,9 @@
 ////////////////////////////////////////////////////////////
 // Headers
 ////////////////////////////////////////////////////////////
+#include <SFML/Graphics/GLCheck.hpp>
 #include <SFML/Graphics/RenderTextureImplFBO.hpp>
 #include <SFML/Graphics/Texture.hpp>
-#include <SFML/Graphics/GLCheck.hpp>
 #include <SFML/System/Err.hpp>
 
 
@@ -133,6 +133,13 @@ bool RenderTextureImplFBO::create(unsigned int width, unsigned int height, unsig
 bool RenderTextureImplFBO::activate(bool active)
 {
     return m_context->setActive(active);
+}
+
+
+////////////////////////////////////////////////////////////
+ContextHandle RenderTextureImplFBO::getContextHandle() const
+{
+    return m_context->getContextHandle();
 }
 
 

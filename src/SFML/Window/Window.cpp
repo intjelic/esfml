@@ -331,6 +331,13 @@ bool Window::setActive(bool active) const
 
 
 ////////////////////////////////////////////////////////////
+ContextHandle Window::getContextHandle() const
+{
+    return m_context->getContextHandle();
+}
+
+
+////////////////////////////////////////////////////////////
 void Window::display()
 {
     // Display the backbuffer on screen

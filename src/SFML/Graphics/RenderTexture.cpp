@@ -121,6 +121,13 @@ bool RenderTexture::setActive(bool active)
 
 
 ////////////////////////////////////////////////////////////
+ContextHandle RenderTexture::getContextHandle() const
+{
+    return m_impl->getContextHandle();
+}
+
+
+////////////////////////////////////////////////////////////
 void RenderTexture::display()
 {
     // Update the target texture

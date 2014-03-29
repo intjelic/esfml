@@ -84,6 +84,14 @@ private :
     virtual bool activate(bool active);
 
     ////////////////////////////////////////////////////////////
+    /// \brief Get the context handle attached to the render texture
+    ///
+    /// \return Context handle attached to this render texture
+    ///
+    ////////////////////////////////////////////////////////////
+    virtual ContextHandle getContextHandle() const;
+
+    ////////////////////////////////////////////////////////////
     /// \brief Update the pixels of the target texture
     ///
     /// \param textureId OpenGL identifier of the target texture

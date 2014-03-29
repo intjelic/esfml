@@ -32,6 +32,7 @@
 #include <SFML/Window/ContextSettings.hpp>
 #include <SFML/Window/VideoMode.hpp>
 #include <SFML/Window/WindowHandle.hpp>
+#include <SFML/Window/ContextHandle.hpp>
 #include <SFML/Window/WindowStyle.hpp>
 #include <SFML/Window/Resource.hpp>
 #include <SFML/System/Clock.hpp>
@@ -408,6 +409,21 @@ public :
     ///
     ////////////////////////////////////////////////////////////
     bool setActive(bool active = true) const;
+
+    ////////////////////////////////////////////////////////////
+    /// \brief Get the context handle attached to the window
+    ///
+    /// The type of the returned handle is sf::ContextHandle,
+    /// which is a typedef to the handle type defined by the graphics
+    /// back-end used.
+    /// You shouldn't need to use this function, unless you have
+    /// very specific stuff to implement that SFML doesn't support,
+    /// or implement a temporary workaround until a bug is fixed.
+    ///
+    /// \return Context handle attached to this window
+    ///
+    ////////////////////////////////////////////////////////////
+    ContextHandle getContextHandle() const;
 
     ////////////////////////////////////////////////////////////
     /// \brief Display on screen what has been rendered to the window so far

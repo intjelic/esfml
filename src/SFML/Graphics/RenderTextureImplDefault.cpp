@@ -25,8 +25,8 @@
 ////////////////////////////////////////////////////////////
 // Headers
 ////////////////////////////////////////////////////////////
-#include <SFML/Graphics/RenderTextureImplDefault.hpp>
 #include <SFML/Graphics/GLCheck.hpp>
+#include <SFML/Graphics/RenderTextureImplDefault.hpp>
 #include <SFML/Graphics/TextureSaver.hpp>
 #include <SFML/Window/Context.hpp>
 #include <SFML/System/Err.hpp>
@@ -72,6 +72,13 @@ bool RenderTextureImplDefault::create(unsigned int width, unsigned int height, u
 bool RenderTextureImplDefault::activate(bool active)
 {
     return m_context->setActive(active);
+}
+
+
+////////////////////////////////////////////////////////////
+ContextHandle RenderTextureImplDefault::getContextHandle() const
+{
+    return m_context->getContextHandle();
 }
 
 

@@ -30,6 +30,7 @@
 ////////////////////////////////////////////////////////////
 #include <SFML/Window/Export.hpp>
 #include <SFML/Window/Resource.hpp>
+#include <SFML/Window/ContextHandle.hpp>
 #include <SFML/Window/ContextSettings.hpp>
 #include <SFML/System/NonCopyable.hpp>
 
@@ -74,6 +75,21 @@ public :
     ///
     ////////////////////////////////////////////////////////////
     bool setActive(bool active);
+
+    ////////////////////////////////////////////////////////////
+    /// \brief Get the context handle
+    ///
+    /// The type of the returned handle is sf::ContextHandle,
+    /// which is a typedef to the handle type defined by the graphics
+    /// back-end used.
+    /// You shouldn't need to use this function, unless you have
+    /// very specific stuff to implement that SFML doesn't support,
+    /// or implement a temporary workaround until a bug is fixed.
+    ///
+    /// \return Context handle
+    ///
+    ////////////////////////////////////////////////////////////
+    ContextHandle getContextHandle() const;
 
 public :
 
