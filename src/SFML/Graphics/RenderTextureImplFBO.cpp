@@ -81,7 +81,7 @@ bool RenderTextureImplFBO::isAvailable()
 
 
 ////////////////////////////////////////////////////////////
-bool RenderTextureImplFBO::create(unsigned int width, unsigned int height, unsigned int textureId, bool depthBuffer)
+bool RenderTextureImplFBO::create(unsigned int width, unsigned int height, TextureImpl* texture, bool depthBuffer)
 {
     // Create the context
     m_context = new Context;
@@ -114,7 +114,7 @@ bool RenderTextureImplFBO::create(unsigned int width, unsigned int height, unsig
     }
 
     // Link the texture to the frame buffer
-    glCheck(GLEXT_glFramebufferTexture2D(GLEXT_GL_FRAMEBUFFER, GLEXT_GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, textureId, 0));
+    glCheck(GLEXT_glFramebufferTexture2D(GLEXT_GL_FRAMEBUFFER, GLEXT_GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture->m_texture, 0));
 
     // A final check, just to be sure...
     GLenum status = glCheck(GLEXT_glCheckFramebufferStatus(GLEXT_GL_FRAMEBUFFER));
@@ -144,7 +144,7 @@ ContextHandle RenderTextureImplFBO::getContextHandle() const
 
 
 ////////////////////////////////////////////////////////////
-void RenderTextureImplFBO::updateTexture(unsigned int)
+void RenderTextureImplFBO::updateTexture(TextureImpl*)
 {
     glCheck(glFlush());
 }

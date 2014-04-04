@@ -27,7 +27,7 @@
 ////////////////////////////////////////////////////////////
 #include <SFML/Graphics/GLCheck.hpp>
 #include <SFML/Graphics/RenderTextureImplDefault.hpp>
-#include <SFML/Graphics/TextureSaver.hpp>
+#include <SFML/Graphics/OpenGL/TextureSaver.hpp>
 #include <SFML/Window/Context.hpp>
 #include <SFML/System/Err.hpp>
 
@@ -55,7 +55,7 @@ RenderTextureImplDefault::~RenderTextureImplDefault()
 
 
 ////////////////////////////////////////////////////////////
-bool RenderTextureImplDefault::create(unsigned int width, unsigned int height, unsigned int, bool depthBuffer)
+bool RenderTextureImplDefault::create(unsigned int width, unsigned int height, TextureImpl*, bool depthBuffer)
 {
     // Store the dimensions
     m_width = width;
@@ -83,13 +83,13 @@ ContextHandle RenderTextureImplDefault::getContextHandle() const
 
 
 ////////////////////////////////////////////////////////////
-void RenderTextureImplDefault::updateTexture(unsigned int textureId)
+void RenderTextureImplDefault::updateTexture(TextureImpl* texture)
 {
     // Make sure that the current texture binding will be preserved
     priv::TextureSaver save;
 
     // Copy the rendered pixels to the texture
-    glCheck(glBindTexture(GL_TEXTURE_2D, textureId));
+    glCheck(glBindTexture(GL_TEXTURE_2D, texture->m_texture));
     glCheck(glCopyTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 0, 0, m_width, m_height));
 }
 

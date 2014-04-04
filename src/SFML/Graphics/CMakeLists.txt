@@ -11,10 +11,6 @@ set(SRC
     ${SRCROOT}/Font.cpp
     ${INCROOT}/Font.hpp
     ${INCROOT}/Glyph.hpp
-    ${SRCROOT}/GLCheck.cpp
-    ${SRCROOT}/GLCheck.hpp
-    ${SRCROOT}/GLExtensions.hpp
-    ${SRCROOT}/GLExtensions.cpp
     ${SRCROOT}/Image.cpp
     ${INCROOT}/Image.hpp
     ${SRCROOT}/ImageLoader.cpp
@@ -34,8 +30,7 @@ set(SRC
     ${INCROOT}/Shader.hpp
     ${SRCROOT}/Texture.cpp
     ${INCROOT}/Texture.hpp
-    ${SRCROOT}/TextureSaver.cpp
-    ${SRCROOT}/TextureSaver.hpp
+    ${SRCROOT}/TextureImpl.hpp
     ${SRCROOT}/Transform.cpp
     ${INCROOT}/Transform.hpp
     ${SRCROOT}/Transformable.cpp
@@ -46,6 +41,32 @@ set(SRC
     ${INCROOT}/Vertex.hpp
 )
 source_group("" FILES ${SRC})
+
+# opengl sources
+set(OPENGL_SRC
+    ${SRCROOT}/GLCheck.cpp
+    ${SRCROOT}/GLCheck.hpp
+    ${SRCROOT}/GLExtensions.hpp
+    ${SRCROOT}/GLExtensions.cpp
+    ${SRCROOT}/OpenGL/TextureImpl.cpp
+    ${SRCROOT}/OpenGL/TextureSaver.cpp
+    ${SRCROOT}/OpenGL/TextureSaver.hpp
+)
+source_group("opengl" FILES ${OPENGL_SRC})
+
+# directx sources
+set(DIRECTX_SRC
+    ${SRCROOT}/DirectX/TextureImpl.cpp
+    ${SRCROOT}/DirectX/TextureSaver.cpp
+    ${SRCROOT}/DirectX/TextureSaver.hpp
+)
+source_group("directx" FILES ${DIRECTX_SRC})
+
+if(SFML_OPENGL)
+    set(SRC ${SRC} ${OPENGL_SRC})
+elseif(SFML_DIRECTX)
+    set(SRC ${SRC} ${DIRECTX_SRC})
+endif()
 
 # drawables sources
 set(DRAWABLES_SRC

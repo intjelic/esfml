@@ -73,13 +73,13 @@ private :
     ///
     /// \param width       Width of the texture to render to
     /// \param height      Height of the texture to render to
-    /// \param textureId   OpenGL identifier of the target texture
+    /// \param texture     Texture implementation of the target texture
     /// \param depthBuffer Is a depth buffer requested?
     ///
     /// \return True if creation has been successful
     ///
     ////////////////////////////////////////////////////////////
-    virtual bool create(unsigned int width, unsigned int height, unsigned int textureId, bool depthBuffer);
+    virtual bool create(unsigned int width, unsigned int height, TextureImpl* texture, bool depthBuffer);
 
     ////////////////////////////////////////////////////////////
     /// \brief Activate or deactivate the render texture for rendering
@@ -102,10 +102,10 @@ private :
     ////////////////////////////////////////////////////////////
     /// \brief Update the pixels of the target texture
     ///
-    /// \param textureId OpenGL identifier of the target texture
+    /// \param texture Texture implementation of the target texture
     ///
     ////////////////////////////////////////////////////////////
-    virtual void updateTexture(unsigned textureId);
+    virtual void updateTexture(TextureImpl* texture);
 
     ////////////////////////////////////////////////////////////
     // Member data

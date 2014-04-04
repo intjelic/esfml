@@ -28,6 +28,7 @@
 ////////////////////////////////////////////////////////////
 // Headers
 ////////////////////////////////////////////////////////////
+#include <SFML/Graphics/TextureImpl.hpp>
 #include <SFML/Window/ContextHandle.hpp>
 #include <SFML/System/NonCopyable.hpp>
 
@@ -55,13 +56,13 @@ public :
     ///
     /// \param width       Width of the texture to render to
     /// \param height      Height of the texture to render to
-    /// \param textureId   OpenGL identifier of the target texture
+    /// \param texture     Texture implementation of the target texture
     /// \param depthBuffer Is a depth buffer requested?
     ///
     /// \return True if creation has been successful
     ///
     ////////////////////////////////////////////////////////////
-    virtual bool create(unsigned int width, unsigned int height, unsigned int textureId, bool depthBuffer) = 0;
+    virtual bool create(unsigned int width, unsigned int height, TextureImpl* texture, bool depthBuffer) = 0;
 
     ////////////////////////////////////////////////////////////
     /// \brief Activate or deactivate the render texture for rendering
@@ -84,10 +85,10 @@ public :
     ////////////////////////////////////////////////////////////
     /// \brief Update the pixels of the target texture
     ///
-    /// \param textureId OpenGL identifier of the target texture
+    /// \param texture Texture implementation of the target texture
     ///
     ////////////////////////////////////////////////////////////
-    virtual void updateTexture(unsigned int textureId) = 0;
+    virtual void updateTexture(TextureImpl* texture) = 0;
 };
 
 } // namespace priv

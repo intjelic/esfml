@@ -40,6 +40,11 @@ class RenderTarget;
 class RenderTexture;
 class InputStream;
 
+namespace priv
+{
+    class TextureImpl;
+}
+
 ////////////////////////////////////////////////////////////
 /// \brief Image living on the graphics card that can be used for drawing
 ///
@@ -471,6 +476,15 @@ private :
     friend class RenderTarget;
 
     ////////////////////////////////////////////////////////////
+    /// \brief Delete the internal texture implementation
+    ///
+    /// This function cleans the texture object which is needed before
+    /// recreation or destruction.
+    ///
+    ////////////////////////////////////////////////////////////
+    void close();
+
+    ////////////////////////////////////////////////////////////
     /// \brief Get a valid image size according to hardware support
     ///
     /// This function checks whether the graphics driver supports
@@ -488,13 +502,12 @@ private :
     ////////////////////////////////////////////////////////////
     // Member data
     ////////////////////////////////////////////////////////////
-    Vector2u     m_size;          ///< Public texture size
-    Vector2u     m_actualSize;    ///< Actual texture size (can be greater than public size because of padding)
-    unsigned int m_texture;       ///< Internal texture identifier
-    bool         m_isSmooth;      ///< Status of the smooth filter
-    bool         m_isRepeated;    ///< Is the texture in repeat mode?
-    mutable bool m_pixelsFlipped; ///< To work around the inconsistency in Y orientation
-    Uint64       m_cacheId;       ///< Unique number that identifies the texture to the render target's cache
+    priv::TextureImpl* m_impl;       ///< Backend-specific implementation of the texture
+    Vector2u           m_size;       ///< Public texture size
+    Vector2u           m_actualSize; ///< Actual texture size (can be greater than public size because of padding)
+    bool               m_isSmooth;   ///< Status of the smooth filter
+    bool               m_isRepeated; ///< Is the texture in repeat mode?
+    Uint64             m_cacheId;    ///< Unique number that identifies the texture to the render target's cache
 };
 
 } // namespace sf

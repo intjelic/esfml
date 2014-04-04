@@ -75,7 +75,7 @@ bool RenderTexture::create(unsigned int width, unsigned int height, bool depthBu
     }
 
     // Initialize the render texture
-    if (!m_impl->create(width, height, m_texture.m_texture, depthBuffer))
+    if (!m_impl->create(width, height, m_texture.m_impl, depthBuffer))
         return false;
 
     // We can now initialize the render target part
@@ -133,8 +133,8 @@ void RenderTexture::display()
     // Update the target texture
     if (setActive(true))
     {
-        m_impl->updateTexture(m_texture.m_texture);
-        m_texture.m_pixelsFlipped = true;
+        m_impl->updateTexture(m_texture.m_impl);
+        m_texture.m_impl->m_pixelsFlipped = true;
     }
 }
 
