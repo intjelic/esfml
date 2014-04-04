@@ -22,6 +22,8 @@ set(SRC
     ${INCROOT}/RenderStates.hpp
     ${SRCROOT}/RenderTexture.cpp
     ${INCROOT}/RenderTexture.hpp
+    ${SRCROOT}/RenderTextureImpl.cpp
+    ${SRCROOT}/RenderTextureImpl.hpp
     ${SRCROOT}/RenderTarget.cpp
     ${INCROOT}/RenderTarget.hpp
     ${SRCROOT}/RenderWindow.cpp
@@ -51,6 +53,10 @@ set(OPENGL_SRC
     ${SRCROOT}/OpenGL/TextureImpl.cpp
     ${SRCROOT}/OpenGL/TextureSaver.cpp
     ${SRCROOT}/OpenGL/TextureSaver.hpp
+    ${SRCROOT}/OpenGL/RenderTextureImplFBO.cpp
+    ${SRCROOT}/OpenGL/RenderTextureImplFBO.hpp
+    ${SRCROOT}/OpenGL/RenderTextureImplDefault.cpp
+    ${SRCROOT}/OpenGL/RenderTextureImplDefault.hpp
 )
 source_group("opengl" FILES ${OPENGL_SRC})
 
@@ -59,6 +65,8 @@ set(DIRECTX_SRC
     ${SRCROOT}/DirectX/TextureImpl.cpp
     ${SRCROOT}/DirectX/TextureSaver.cpp
     ${SRCROOT}/DirectX/TextureSaver.hpp
+    ${SRCROOT}/DirectX/RenderTextureImplDefault.cpp
+    ${SRCROOT}/DirectX/RenderTextureImplDefault.hpp
 )
 source_group("directx" FILES ${DIRECTX_SRC})
 
@@ -87,17 +95,6 @@ set(DRAWABLES_SRC
     ${INCROOT}/VertexArray.hpp
 )
 source_group("drawables" FILES ${DRAWABLES_SRC})
-
-# render-texture sources
-set(RENDER_TEXTURE_SRC
-    ${SRCROOT}/RenderTextureImpl.cpp
-    ${SRCROOT}/RenderTextureImpl.hpp
-    ${SRCROOT}/RenderTextureImplFBO.cpp
-    ${SRCROOT}/RenderTextureImplFBO.hpp
-    ${SRCROOT}/RenderTextureImplDefault.cpp
-    ${SRCROOT}/RenderTextureImplDefault.hpp
-)
-source_group("render texture" FILES ${RENDER_TEXTURE_SRC})
 
 # stb_image sources
 set(STB_SRC

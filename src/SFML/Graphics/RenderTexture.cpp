@@ -26,8 +26,12 @@
 // Headers
 ////////////////////////////////////////////////////////////
 #include <SFML/Graphics/RenderTexture.hpp>
-#include <SFML/Graphics/RenderTextureImplFBO.hpp>
-#include <SFML/Graphics/RenderTextureImplDefault.hpp>
+#if defined(SFML_OPENGL)
+    #include <SFML/Graphics/OpenGL/RenderTextureImplFBO.hpp>
+    #include <SFML/Graphics/OpenGL/RenderTextureImplDefault.hpp>
+#elif defined(SFML_DIRECTX)
+    #include <SFML/Graphics/DirectX/RenderTextureImplDefault.hpp>
+#endif
 #include <SFML/System/Err.hpp>
 
 
@@ -61,7 +65,9 @@ bool RenderTexture::create(unsigned int width, unsigned int height, bool depthBu
     // We disable smoothing by default for render textures
     setSmooth(false);
 
-    // Create the implementation
+#if defined(SFML_OPENGL)
+
+    // Create the OpenGL implementation
     delete m_impl;
     if (priv::RenderTextureImplFBO::isAvailable())
     {
@@ -73,6 +79,14 @@ bool RenderTexture::create(unsigned int width, unsigned int height, bool depthBu
         // Use default implementation
         m_impl = new priv::RenderTextureImplDefault;
     }
+
+#elif defined(SFML_DIRECTX)
+
+    // Create the DirectX implementation
+    delete m_impl;
+    m_impl = new priv::RenderTextureImplDefault;
+
+#endif
 
     // Initialize the render texture
     if (!m_impl->create(width, height, m_texture.m_impl, depthBuffer))
