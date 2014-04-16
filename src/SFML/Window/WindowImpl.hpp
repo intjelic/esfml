@@ -70,7 +70,7 @@ public :
     static WindowImpl* create(VideoMode mode, const String& title, Uint32 style, const ContextSettings& settings);
 
     ////////////////////////////////////////////////////////////
-    /// \brief Create a new window depending on to the current OS
+    /// \brief Create a new window depending on the current OS
     ///
     /// \param handle Platform-specific handle of the control
     ///
