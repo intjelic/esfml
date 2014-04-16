@@ -172,7 +172,7 @@ void RenderTarget::draw(const Vertex* vertices, unsigned int vertexCount,
     {
         // First set the persistent OpenGL states if it's the very first call
         if (!m_cache.glStatesSet)
-            resetGLStates();
+            resetStates();
 
         // Check if the vertex count is low enough so that we can pre-transform them
         bool useVertexCache = (vertexCount <= StatesCache::VertexCacheSize);
@@ -253,6 +253,33 @@ void RenderTarget::draw(const Vertex* vertices, unsigned int vertexCount,
 ////////////////////////////////////////////////////////////
 void RenderTarget::pushGLStates()
 {
+    err() << "pushGLStates() is deprecated, use pushStates() instead." << std::endl;
+
+    pushStates();
+}
+
+
+////////////////////////////////////////////////////////////
+void RenderTarget::popGLStates()
+{
+    err() << "popGLStates() is deprecated, use popStates() instead." << std::endl;
+
+    popStates();
+}
+
+
+////////////////////////////////////////////////////////////
+void RenderTarget::resetGLStates()
+{
+    err() << "resetGLStates() is deprecated, use resetStates() instead." << std::endl;
+
+    resetStates();
+}
+
+
+////////////////////////////////////////////////////////////
+void RenderTarget::pushStates()
+{
     if (activate(true))
     {
         #ifdef SFML_DEBUG
@@ -278,12 +305,12 @@ void RenderTarget::pushGLStates()
         glCheck(glPushMatrix());
     }
 
-    resetGLStates();
+    resetStates();
 }
 
 
 ////////////////////////////////////////////////////////////
-void RenderTarget::popGLStates()
+void RenderTarget::popStates()
 {
     if (activate(true))
     {
@@ -302,7 +329,7 @@ void RenderTarget::popGLStates()
 
 
 ////////////////////////////////////////////////////////////
-void RenderTarget::resetGLStates()
+void RenderTarget::resetStates()
 {
     if (activate(true))
     {

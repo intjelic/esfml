@@ -254,18 +254,50 @@ public :
     ///
     ////////////////////////////////////////////////////////////
     virtual Vector2u getSize() const = 0;
+    ////////////////////////////////////////////////////////////
+    /// \brief Save the current render states and matrices
+    ///
+    /// This function is deprecated. Use pushStates() instead.
+    ///
+    /// \see pushStates
+    ///
+    ////////////////////////////////////////////////////////////
+    void pushGLStates();
 
     ////////////////////////////////////////////////////////////
-    /// \brief Save the current OpenGL render states and matrices
+    /// \brief Restore the previously saved render states and matrices
+    ///
+    /// This function is deprecated. Use popStates() instead.
+    ///
+    /// \see popStates
+    ///
+    ////////////////////////////////////////////////////////////
+    void popGLStates();
+
+    ////////////////////////////////////////////////////////////
+    /// \brief Reset the internal graphics states so that the target is ready for drawing
+    ///
+    /// This function is deprecated. Use resetStates() instead.
+    ///
+    /// \see resetStates
+    ///
+    ////////////////////////////////////////////////////////////
+    void resetGLStates();
+
+
+    ////////////////////////////////////////////////////////////
+    /// \brief Save the current render states and matrices
     ///
     /// This function can be used when you mix SFML drawing
-    /// and direct OpenGL rendering. Combined with PopGLStates,
+    /// and direct OpenGL/DirectX rendering. Combined with popStates(),
     /// it ensures that:
-    /// \li SFML's internal states are not messed up by your OpenGL code
-    /// \li your OpenGL states are not modified by a call to a SFML function
+    /// \li SFML's internal states are not messed up by your OpenGL/DirectX code
+    /// \li your OpenGL/DirectX states are not modified by a call to a SFML function
     ///
     /// More specifically, it must be used around code that
-    /// calls Draw functions. Example:
+    /// calls draw() functions.
+    ///
+    /// Example using OpenGL:
     /// \code
     /// // OpenGL code here...
     /// window.pushGLStates();
@@ -275,41 +307,46 @@ public :
     /// // OpenGL code here...
     /// \endcode
     ///
+    /// Example using DirectX:
+    /// \code
+    /// // TODO: write an example using DirectX
+    /// \endcode
+    ///
     /// Note that this function is quite expensive: it saves all the
-    /// possible OpenGL states and matrices, even the ones you
+    /// possible OpenGL/DirectX states and matrices, even the ones you
     /// don't care about. Therefore it should be used wisely.
     /// It is provided for convenience, but the best results will
-    /// be achieved if you handle OpenGL states yourself (because
+    /// be achieved if you handle OpenGL/DirectX states yourself (because
     /// you know which states have really changed, and need to be
-    /// saved and restored). Take a look at the ResetGLStates
+    /// saved and restored). Take a look at the resetStates()
     /// function if you do so.
     ///
-    /// \see popGLStates
+    /// \see popStates
     ///
     ////////////////////////////////////////////////////////////
-    void pushGLStates();
+    void pushStates();
 
     ////////////////////////////////////////////////////////////
-    /// \brief Restore the previously saved OpenGL render states and matrices
+    /// \brief Restore the previously saved render states and matrices
     ///
-    /// See the description of pushGLStates to get a detailed
+    /// See the description of pushStates() to get a detailed
     /// description of these functions.
     ///
-    /// \see pushGLStates
+    /// \see pushStates
     ///
     ////////////////////////////////////////////////////////////
-    void popGLStates();
+    void popStates();
 
     ////////////////////////////////////////////////////////////
-    /// \brief Reset the internal OpenGL states so that the target is ready for drawing
+    /// \brief Reset the internal graphics states so that the target is ready for drawing
     ///
     /// This function can be used when you mix SFML drawing
-    /// and direct OpenGL rendering, if you choose not to use
-    /// pushGLStates/popGLStates. It makes sure that all OpenGL
+    /// and direct OpenGL/DirectX rendering, if you choose not to use
+    /// pushStates/popStates. It makes sure that all OpenGL
     /// states needed by SFML are set, so that subsequent draw()
     /// calls will work as expected.
     ///
-    /// Example:
+    /// Example using OpenGL:
     /// \code
     /// // OpenGL code here...
     /// glPushAttrib(...);
@@ -320,8 +357,13 @@ public :
     /// // OpenGL code here...
     /// \endcode
     ///
+    /// Example using DirectX:
+    /// \code
+    /// // TODO: write an example mixing SFML drawing and DirectX rendering
+    /// \endcode
+    ///
     ////////////////////////////////////////////////////////////
-    void resetGLStates();
+    void resetStates();
 
 protected :
 
