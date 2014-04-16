@@ -30,6 +30,8 @@ set(SRC
     ${INCROOT}/RenderWindow.hpp
     ${SRCROOT}/Shader.cpp
     ${INCROOT}/Shader.hpp
+    ${SRCROOT}/ShaderImpl.cpp
+    ${SRCROOT}/ShaderImpl.hpp
     ${SRCROOT}/Texture.cpp
     ${INCROOT}/Texture.hpp
     ${SRCROOT}/TextureImpl.hpp
@@ -50,6 +52,8 @@ set(OPENGL_SRC
     ${SRCROOT}/GLCheck.hpp
     ${SRCROOT}/GLExtensions.hpp
     ${SRCROOT}/GLExtensions.cpp
+    ${SRCROOT}/OpenGL/ShaderImplGL.cpp
+    ${SRCROOT}/OpenGL/ShaderImplGL.hpp
     ${SRCROOT}/OpenGL/TextureImpl.cpp
     ${SRCROOT}/OpenGL/TextureSaver.cpp
     ${SRCROOT}/OpenGL/TextureSaver.hpp
@@ -62,6 +66,8 @@ source_group("opengl" FILES ${OPENGL_SRC})
 
 # directx sources
 set(DIRECTX_SRC
+    ${SRCROOT}/DirectX/ShaderImplDX.cpp
+    ${SRCROOT}/DirectX/ShaderImplDX.hpp
     ${SRCROOT}/DirectX/TextureImpl.cpp
     ${SRCROOT}/DirectX/TextureSaver.cpp
     ${SRCROOT}/DirectX/TextureSaver.hpp

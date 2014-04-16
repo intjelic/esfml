@@ -41,6 +41,11 @@
 
 namespace sf
 {
+namespace priv
+{
+    class ShaderImpl;
+}
+
 class InputStream;
 class Texture;
 
@@ -100,11 +105,10 @@ public :
     ///
     /// This function loads a single shader, either vertex or
     /// fragment, identified by the second argument.
-    /// The source must be a text file containing a valid
-    /// shader in GLSL language. GLSL is a C-like language
-    /// dedicated to OpenGL shaders; you'll probably need to
-    /// read a good documentation for it before writing your
-    /// own shaders.
+    ///
+    /// The source must be a text file containing a valid shader in
+    /// either GLSL language if you are using the OpenGL back-end or
+    /// in HLSL if you are using the the DirectX back-end.
     ///
     /// \param filename Path of the vertex or fragment shader file to load
     /// \param type     Type of shader (vertex or fragment)
@@ -122,10 +126,10 @@ public :
     /// This function loads both the vertex and the fragment
     /// shaders. If one of them fails to load, the shader is left
     /// empty (the valid shader is unloaded).
-    /// The sources must be text files containing valid shaders
-    /// in GLSL language. GLSL is a C-like language dedicated to
-    /// OpenGL shaders; you'll probably need to read a good documentation
-    /// for it before writing your own shaders.
+    ///
+    /// The source must be a text file containing a valid shader in
+    /// either GLSL language if you are using the OpenGL back-end or
+    /// in HLSL if you are using the the DirectX back-end.
     ///
     /// \param vertexShaderFilename   Path of the vertex shader file to load
     /// \param fragmentShaderFilename Path of the fragment shader file to load
@@ -142,10 +146,10 @@ public :
     ///
     /// This function loads a single shader, either vertex or
     /// fragment, identified by the second argument.
-    /// The source code must be a valid shader in GLSL language.
-    /// GLSL is a C-like language dedicated to OpenGL shaders;
-    /// you'll probably need to read a good documentation for
-    /// it before writing your own shaders.
+    ///
+    /// The source must be a text file containing a valid shader in
+    /// either GLSL language if you are using the OpenGL back-end or
+    /// in HLSL if you are using the the DirectX back-end.
     ///
     /// \param shader String containing the source code of the shader
     /// \param type   Type of shader (vertex or fragment)
@@ -163,10 +167,10 @@ public :
     /// This function loads both the vertex and the fragment
     /// shaders. If one of them fails to load, the shader is left
     /// empty (the valid shader is unloaded).
-    /// The sources must be valid shaders in GLSL language. GLSL is
-    /// a C-like language dedicated to OpenGL shaders; you'll
-    /// probably need to read a good documentation for it before
-    /// writing your own shaders.
+    ///
+    /// The source must be a text file containing a valid shader in
+    /// either GLSL language if you are using the OpenGL back-end or
+    /// in HLSL if you are using the the DirectX back-end.
     ///
     /// \param vertexShader   String containing the source code of the vertex shader
     /// \param fragmentShader String containing the source code of the fragment shader
@@ -183,10 +187,10 @@ public :
     ///
     /// This function loads a single shader, either vertex or
     /// fragment, identified by the second argument.
-    /// The source code must be a valid shader in GLSL language.
-    /// GLSL is a C-like language dedicated to OpenGL shaders;
-    /// you'll probably need to read a good documentation for it
-    /// before writing your own shaders.
+    ///
+    /// The source must be a text file containing a valid shader in
+    /// either GLSL language if you are using the OpenGL back-end or
+    /// in HLSL if you are using the the DirectX back-end.
     ///
     /// \param stream Source stream to read from
     /// \param type   Type of shader (vertex or fragment)
@@ -204,10 +208,10 @@ public :
     /// This function loads both the vertex and the fragment
     /// shaders. If one of them fails to load, the shader is left
     /// empty (the valid shader is unloaded).
-    /// The source codes must be valid shaders in GLSL language.
-    /// GLSL is a C-like language dedicated to OpenGL shaders;
-    /// you'll probably need to read a good documentation for
-    /// it before writing your own shaders.
+    ///
+    /// The source must be a text file containing a valid shader in
+    /// either GLSL language if you are using the OpenGL back-end or
+    /// in HLSL if you are using the the DirectX back-end.
     ///
     /// \param vertexShaderStream   Source stream to read the vertex shader from
     /// \param fragmentShaderStream Source stream to read the fragment shader from
@@ -494,7 +498,7 @@ public :
 private :
 
     ////////////////////////////////////////////////////////////
-    /// \brief Compile the shader(s) and create the program
+    /// \brief Create and compile the shader(s)
     ///
     /// If one of the arguments is NULL, the corresponding shader
     /// is not created.
