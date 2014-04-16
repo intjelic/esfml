@@ -29,6 +29,7 @@
 // Headers
 ////////////////////////////////////////////////////////////
 #include <SFML/Window/Export.hpp>
+#include <SFML/Window/ContextHandle.hpp>
 
 
 namespace sf
@@ -58,6 +59,21 @@ protected :
     ///
     ////////////////////////////////////////////////////////////
     static void ensureContext();
+
+    ////////////////////////////////////////////////////////////
+    /// \brief Get the hidden and inactive context handle
+    ///
+    /// The type of the returned handle is sf::ContextHandle,
+    /// which is a typedef to the handle type defined by the graphics
+    /// back-end used.
+    /// You shouldn't need to use this function, unless you have
+    /// very specific stuff to implement that SFML doesn't support,
+    /// or implement a temporary workaround until a bug is fixed.
+    ///
+    /// \return Context handle
+    ///
+    ////////////////////////////////////////////////////////////
+    ContextHandle getContextHandle() const;
 };
 
 } // namespace sf

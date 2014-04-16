@@ -30,7 +30,6 @@
 #include <SFML/Graphics/Shader.hpp>
 #include <SFML/Graphics/Texture.hpp>
 #include <SFML/Graphics/VertexArray.hpp>
-#include <SFML/Graphics/GLCheck.hpp>
 #include <SFML/System/Err.hpp>
 #include <iostream>
 

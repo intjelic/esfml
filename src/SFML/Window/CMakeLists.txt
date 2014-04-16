@@ -54,12 +54,6 @@ source_group("" FILES ${SRC})
 # add platform specific sources
 if(SFML_OS_WINDOWS)
     set(PLATFORM_SRC
-        ${SRCROOT}/Win32/WglContext.cpp
-        ${SRCROOT}/Win32/WglContext.hpp
-        ${SRCROOT}/Win32/DxContext.cpp
-        ${SRCROOT}/Win32/DxContext.hpp
-        ${SRCROOT}/Win32/Interface.cpp
-        ${SRCROOT}/Win32/Interface.hpp
         ${SRCROOT}/Win32/InputImpl.cpp
         ${SRCROOT}/Win32/InputImpl.hpp
         ${SRCROOT}/Win32/JoystickImpl.cpp
@@ -70,6 +64,17 @@ if(SFML_OS_WINDOWS)
         ${SRCROOT}/Win32/WindowImplWin32.cpp
         ${SRCROOT}/Win32/WindowImplWin32.hpp
     )
+
+    if(SFML_OPENGL)
+        list(APPEND PLATFORM_SRC ${SRCROOT}/Win32/WglContext.cpp)
+        list(APPEND PLATFORM_SRC ${SRCROOT}/Win32/WglContext.hpp)
+    elseif(SFML_DIRECTX)
+        list(APPEND PLATFORM_SRC ${SRCROOT}/Win32/DxContext.cpp)
+        list(APPEND PLATFORM_SRC ${SRCROOT}/Win32/DxContext.hpp)
+        list(APPEND PLATFORM_SRC ${SRCROOT}/Win32/Interface.cpp)
+        list(APPEND PLATFORM_SRC ${SRCROOT}/Win32/Interface.hpp)
+    endif()
+
     source_group("windows" FILES ${PLATFORM_SRC})
 
     # make sure that we use the Unicode version of the Win API functions

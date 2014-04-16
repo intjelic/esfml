@@ -25,6 +25,7 @@
 ////////////////////////////////////////////////////////////
 // Headers
 ////////////////////////////////////////////////////////////
+#include <SFML/Graphics/GLCheck.hpp>
 #include <SFML/Graphics/TextureImpl.hpp>
 #include <SFML/Graphics/OpenGL/TextureSaver.hpp>
 #include <SFML/Window/Window.hpp>

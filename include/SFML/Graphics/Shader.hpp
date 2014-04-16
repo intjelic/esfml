@@ -508,25 +508,6 @@ private :
     bool compile(const char* vertexShaderCode, const char* fragmentShaderCode);
 
     ////////////////////////////////////////////////////////////
-    /// \brief Bind all the textures used by the shader
-    ///
-    /// This function each texture to a different unit, and
-    /// updates the corresponding variables in the shader accordingly.
-    ///
-    ////////////////////////////////////////////////////////////
-    void bindTextures() const;
-
-    ////////////////////////////////////////////////////////////
-    /// \brief Get the location ID of a shader parameter
-    ///
-    /// \param name Name of the parameter to search
-    ///
-    /// \return Location ID of the parameter, or -1 if not found
-    ///
-    ////////////////////////////////////////////////////////////
-    int getParamLocation(const std::string& name);
-
-    ////////////////////////////////////////////////////////////
     // Types
     ////////////////////////////////////////////////////////////
     typedef std::map<int, const Texture*> TextureTable;
@@ -535,10 +516,8 @@ private :
     ////////////////////////////////////////////////////////////
     // Member data
     ////////////////////////////////////////////////////////////
-    unsigned int m_shaderProgram;  ///< OpenGL identifier for the program
-    int          m_currentTexture; ///< Location of the current texture in the shader
-    TextureTable m_textures;       ///< Texture variables in the shader, mapped to their location
-    ParamTable   m_params;         ///< Parameters location cache
+    priv::ShaderImpl* m_impl; ///< Backend-specific implementation of the shader
+
 };
 
 } // namespace sf

@@ -25,11 +25,13 @@
 ////////////////////////////////////////////////////////////
 // Headers
 ////////////////////////////////////////////////////////////
-#include <SFML/Graphics/Font.hpp>
-#include <SFML/Graphics/GLCheck.hpp>
+#ifdef SFML_OPENGL
+    #include <SFML/Graphics/GLCheck.hpp>
+#endif
 #ifdef SFML_SYSTEM_ANDROID
     #include <SFML/System/Android/ResourceStream.hpp>
 #endif
+#include <SFML/Graphics/Font.hpp>
 #include <SFML/System/InputStream.hpp>
 #include <SFML/System/Err.hpp>
 #include <ft2build.h>
@@ -534,9 +536,11 @@ Glyph Font::loadGlyph(Uint32 codePoint, unsigned int characterSize, bool bold) c
     // Delete the FT glyph
     FT_Done_Glyph(glyphDesc);
 
+#ifdef SFML_OPENGL
     // Force an OpenGL flush, so that the font's texture will appear updated
     // in all contexts immediately (solves problems in multi-threaded apps)
     glCheck(glFlush());
+#endif
 
     // Done :)
     return glyph;

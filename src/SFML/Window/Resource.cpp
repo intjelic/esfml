@@ -83,4 +83,11 @@ void Resource::ensureContext()
     priv::ContextManager::ensureContext();
 }
 
+
+////////////////////////////////////////////////////////////
+ContextHandle Resource::getContextHandle() const
+{
+    return priv::ContextManager::getCurrentContext()->getContextHandle();
+}
+
 } // namespace sf

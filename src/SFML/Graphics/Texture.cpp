@@ -28,7 +28,6 @@
 #include <SFML/Graphics/Texture.hpp>
 #include <SFML/Graphics/TextureImpl.hpp>
 #include <SFML/Graphics/Image.hpp>
-#include <SFML/Graphics/GLCheck.hpp>
 #include <SFML/Window/Window.hpp>
 #include <SFML/System/Mutex.hpp>
 #include <SFML/System/Lock.hpp>

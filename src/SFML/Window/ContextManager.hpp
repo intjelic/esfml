@@ -164,6 +164,12 @@ public :
     ////////////////////////////////////////////////////////////
     static ContextImpl* create(const ContextSettings& settings, unsigned int width, unsigned int height);
 
+    ////////////////////////////////////////////////////////////
+    /// \brief Get the current context in this thread
+    ///
+    ////////////////////////////////////////////////////////////
+    static ThreadLocalPtr<ContextImpl>& getCurrentContext();
+
 private:
 
     friend class ContextImpl;
@@ -175,22 +181,16 @@ private:
     static ContextType* getSharedContext();
 
     ////////////////////////////////////////////////////////////
-    /// \brief Get the current context in this thread
-    ///
-    ////////////////////////////////////////////////////////////
-	static ThreadLocalPtr<ContextImpl>& getCurrentContext();
-
-    ////////////////////////////////////////////////////////////
     /// \brief Set the current context for this thread
     ///
     ////////////////////////////////////////////////////////////
-	static void setCurrentContext(ContextImpl* context);
+    static void setCurrentContext(ContextImpl* context);
 
     ////////////////////////////////////////////////////////////
     /// \brief Get the internal context for the current thread
     ///
     ////////////////////////////////////////////////////////////
-	static ContextImpl* getInternalContext();
+    static ContextImpl* getInternalContext();
 };
 
 } // namespace priv
