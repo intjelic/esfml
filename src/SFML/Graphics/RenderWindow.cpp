@@ -25,8 +25,8 @@
 ////////////////////////////////////////////////////////////
 // Headers
 ////////////////////////////////////////////////////////////
-#include <SFML/Graphics/GLCheck.hpp>
 #include <SFML/Graphics/RenderWindow.hpp>
+#include <SFML/Graphics/RenderWindowImpl.hpp>
 
 
 namespace sf
@@ -34,7 +34,7 @@ namespace sf
 ////////////////////////////////////////////////////////////
 RenderWindow::RenderWindow()
 {
-    // Nothing to do
+    m_impl = priv::RenderWindowImpl::create();
 }
 
 
@@ -43,6 +43,8 @@ RenderWindow::RenderWindow(VideoMode mode, const String& title, Uint32 style, co
 {
     // Don't call the base class constructor because it contains virtual function calls
     create(mode, title, style, settings);
+
+    m_impl = priv::RenderWindowImpl::create();
 }
 
 
@@ -51,13 +53,15 @@ RenderWindow::RenderWindow(WindowHandle handle, const ContextSettings& settings)
 {
     // Don't call the base class constructor because it contains virtual function calls
     create(handle, settings);
+
+    m_impl = priv::RenderWindowImpl::create();
 }
 
 
 ////////////////////////////////////////////////////////////
 RenderWindow::~RenderWindow()
 {
-    // Nothing to do
+    delete m_impl;
 }
 
 
@@ -84,15 +88,8 @@ Image RenderWindow::capture() const
         int width = static_cast<int>(getSize().x);
         int height = static_cast<int>(getSize().y);
 
-        // copy rows one by one and flip them (OpenGL's origin is bottom while SFML's origin is top)
-        std::vector<Uint8> pixels(width * height * 4);
-        for (int i = 0; i < height; ++i)
-        {
-            Uint8* ptr = &pixels[i * width * 4];
-            glCheck(glReadPixels(0, height - i - 1, width, 1, GL_RGBA, GL_UNSIGNED_BYTE, ptr));
-        }
-
-        image.create(width, height, &pixels[0]);
+        // Let the implementation create the image
+        m_impl->capture(image, width, height);
     }
 
     return image;

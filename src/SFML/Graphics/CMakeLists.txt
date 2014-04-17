@@ -28,6 +28,8 @@ set(SRC
     ${INCROOT}/RenderTarget.hpp
     ${SRCROOT}/RenderWindow.cpp
     ${INCROOT}/RenderWindow.hpp
+    ${SRCROOT}/RenderWindowImpl.cpp
+    ${SRCROOT}/RenderWindowImpl.hpp
     ${SRCROOT}/Shader.cpp
     ${INCROOT}/Shader.hpp
     ${SRCROOT}/ShaderImpl.cpp
@@ -61,6 +63,8 @@ set(OPENGL_SRC
     ${SRCROOT}/OpenGL/RenderTextureImplFBO.hpp
     ${SRCROOT}/OpenGL/RenderTextureImplDefault.cpp
     ${SRCROOT}/OpenGL/RenderTextureImplDefault.hpp
+    ${SRCROOT}/OpenGL/RenderWindowImplGL.cpp
+    ${SRCROOT}/OpenGL/RenderWindowImplGL.hpp
 )
 source_group("opengl" FILES ${OPENGL_SRC})
 
@@ -73,6 +77,8 @@ set(DIRECTX_SRC
     ${SRCROOT}/DirectX/TextureSaver.hpp
     ${SRCROOT}/DirectX/RenderTextureImplDefault.cpp
     ${SRCROOT}/DirectX/RenderTextureImplDefault.hpp
+    ${SRCROOT}/DirectX/RenderWindowImplDX.cpp
+    ${SRCROOT}/DirectX/RenderWindowImplDX.hpp
 )
 source_group("directx" FILES ${DIRECTX_SRC})
 
