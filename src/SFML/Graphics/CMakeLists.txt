@@ -26,6 +26,8 @@ set(SRC
     ${SRCROOT}/RenderTextureImpl.hpp
     ${SRCROOT}/RenderTarget.cpp
     ${INCROOT}/RenderTarget.hpp
+    ${SRCROOT}/RenderTargetImpl.cpp
+    ${SRCROOT}/RenderTargetImpl.hpp
     ${SRCROOT}/RenderWindow.cpp
     ${INCROOT}/RenderWindow.hpp
     ${SRCROOT}/RenderWindowImpl.cpp
@@ -63,6 +65,8 @@ set(OPENGL_SRC
     ${SRCROOT}/OpenGL/RenderTextureImplFBO.hpp
     ${SRCROOT}/OpenGL/RenderTextureImplDefault.cpp
     ${SRCROOT}/OpenGL/RenderTextureImplDefault.hpp
+    ${SRCROOT}/OpenGL/RenderTargetImplGL.cpp
+    ${SRCROOT}/OpenGL/RenderTargetImplGL.hpp
     ${SRCROOT}/OpenGL/RenderWindowImplGL.cpp
     ${SRCROOT}/OpenGL/RenderWindowImplGL.hpp
 )
@@ -77,6 +81,8 @@ set(DIRECTX_SRC
     ${SRCROOT}/DirectX/TextureSaver.hpp
     ${SRCROOT}/DirectX/RenderTextureImplDefault.cpp
     ${SRCROOT}/DirectX/RenderTextureImplDefault.hpp
+    ${SRCROOT}/DirectX/RenderTargetImplDX.cpp
+    ${SRCROOT}/DirectX/RenderTargetImplDX.hpp
     ${SRCROOT}/DirectX/RenderWindowImplDX.cpp
     ${SRCROOT}/DirectX/RenderWindowImplDX.hpp
 )

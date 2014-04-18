@@ -26,6 +26,7 @@
 // Headers
 ////////////////////////////////////////////////////////////
 #include <SFML/Graphics/RenderTarget.hpp>
+#include <SFML/Graphics/RenderTargetImpl.hpp>
 #include <SFML/Graphics/Drawable.hpp>
 #include <SFML/Graphics/Shader.hpp>
 #include <SFML/Graphics/Texture.hpp>
@@ -42,6 +43,8 @@ m_defaultView(),
 m_view       (),
 m_cache      ()
 {
+    m_impl = priv::RenderTargetImpl::create();
+
     m_cache.statesSet = false;
 }
 
@@ -49,6 +52,7 @@ m_cache      ()
 ////////////////////////////////////////////////////////////
 RenderTarget::~RenderTarget()
 {
+    delete m_impl;
 }
 
 
@@ -56,10 +60,7 @@ RenderTarget::~RenderTarget()
 void RenderTarget::clear(const Color& color)
 {
     if (activate(true))
-    {
-        glCheck(glClearColor(color.r / 255.f, color.g / 255.f, color.b / 255.f, color.a / 255.f));
-        glCheck(glClear(GL_COLOR_BUFFER_BIT));
-    }
+        m_impl->clear(color);
 }
 
 
@@ -158,16 +159,6 @@ void RenderTarget::draw(const Vertex* vertices, unsigned int vertexCount,
     if (!vertices || (vertexCount == 0))
         return;
 
-    // GL_QUADS is unavailable on OpenGL ES
-    #ifdef SFML_OPENGL_ES
-        if (type == Quads)
-        {
-            err() << "sf::Quads primitive type is not supported on OpenGL ES platforms, drawing skipped" << std::endl;
-            return;
-        }
-        #define GL_QUADS 0
-    #endif
-
     if (activate(true))
     {
         // First set the persistent graphics states if it's the very first call
@@ -223,22 +214,7 @@ void RenderTarget::draw(const Vertex* vertices, unsigned int vertexCount,
                 vertices = NULL;
         }
 
-        // Setup the pointers to the vertices' components
-        if (vertices)
-        {
-            const char* data = reinterpret_cast<const char*>(vertices);
-            glCheck(glVertexPointer(2, GL_FLOAT, sizeof(Vertex), data + 0));
-            glCheck(glColorPointer(4, GL_UNSIGNED_BYTE, sizeof(Vertex), data + 8));
-            glCheck(glTexCoordPointer(2, GL_FLOAT, sizeof(Vertex), data + 12));
-        }
-
-        // Find the OpenGL primitive type
-        static const GLenum modes[] = {GL_POINTS, GL_LINES, GL_LINE_STRIP, GL_TRIANGLES,
-                                       GL_TRIANGLE_STRIP, GL_TRIANGLE_FAN, GL_QUADS};
-        GLenum mode = modes[type];
-
-        // Draw the primitives
-        glCheck(glDrawArrays(mode, 0, vertexCount));
+        m_impl->draw(vertices, vertexCount, type);
 
         // Unbind the shader, if any
         if (states.shader)
@@ -281,29 +257,7 @@ void RenderTarget::resetGLStates()
 void RenderTarget::pushStates()
 {
     if (activate(true))
-    {
-        #ifdef SFML_DEBUG
-            // make sure that the user didn't leave an unchecked OpenGL error
-            GLenum error = glGetError();
-            if (error != GL_NO_ERROR)
-            {
-                err() << "OpenGL error (" << error << ") detected in user code, "
-                      << "you should check for errors with glGetError()"
-                      << std::endl;
-            }
-        #endif
-
-        #ifndef SFML_OPENGL_ES
-            glCheck(glPushClientAttrib(GL_CLIENT_ALL_ATTRIB_BITS));
-            glCheck(glPushAttrib(GL_ALL_ATTRIB_BITS));
-        #endif
-        glCheck(glMatrixMode(GL_MODELVIEW));
-        glCheck(glPushMatrix());
-        glCheck(glMatrixMode(GL_PROJECTION));
-        glCheck(glPushMatrix());
-        glCheck(glMatrixMode(GL_TEXTURE));
-        glCheck(glPushMatrix());
-    }
+        m_impl->pushStates();
 
     resetStates();
 }
@@ -313,18 +267,7 @@ void RenderTarget::pushStates()
 void RenderTarget::popStates()
 {
     if (activate(true))
-    {
-        glCheck(glMatrixMode(GL_PROJECTION));
-        glCheck(glPopMatrix());
-        glCheck(glMatrixMode(GL_MODELVIEW));
-        glCheck(glPopMatrix());
-        glCheck(glMatrixMode(GL_TEXTURE));
-        glCheck(glPopMatrix());
-        #ifndef SFML_OPENGL_ES
-            glCheck(glPopClientAttrib());
-            glCheck(glPopAttrib());
-        #endif
-    }
+        m_impl->popStates();
 }
 
 
@@ -333,21 +276,8 @@ void RenderTarget::resetStates()
 {
     if (activate(true))
     {
-        // Make sure that extensions are initialized
-        priv::ensureExtensionsInit();
-
-        // Define the default OpenGL states
-        glCheck(glDisable(GL_CULL_FACE));
-        glCheck(glDisable(GL_LIGHTING));
-        glCheck(glDisable(GL_DEPTH_TEST));
-        glCheck(glDisable(GL_ALPHA_TEST));
-        glCheck(glEnable(GL_TEXTURE_2D));
-        glCheck(glEnable(GL_BLEND));
-        glCheck(glMatrixMode(GL_MODELVIEW));
-        glCheck(glEnableClientState(GL_VERTEX_ARRAY));
-        glCheck(glEnableClientState(GL_COLOR_ARRAY));
-        glCheck(glEnableClientState(GL_TEXTURE_COORD_ARRAY));
-        glCheck(glPolygonMode(GL_FRONT_AND_BACK, GL_FILL));
+        // Define the default graphics states
+        m_impl->resetStates();
         m_cache.statesSet = true;
 
         // Apply the default SFML states
@@ -379,17 +309,9 @@ void RenderTarget::initialize()
 ////////////////////////////////////////////////////////////
 void RenderTarget::applyCurrentView()
 {
-    // Set the viewport
     IntRect viewport = getViewport(m_view);
-    int top = getSize().y - (viewport.top + viewport.height);
-    glCheck(glViewport(viewport.left, top, viewport.width, viewport.height));
-
-    // Set the projection matrix
-    glCheck(glMatrixMode(GL_PROJECTION));
-    glCheck(glLoadMatrixf(m_view.getTransform().getMatrix()));
-
-    // Go back to model-view mode
-    glCheck(glMatrixMode(GL_MODELVIEW));
+    Vector2u size = getSize();
+    m_impl->applyCurrentView(m_view, viewport, size);
 
     m_cache.viewChanged = false;
 }
@@ -398,48 +320,7 @@ void RenderTarget::applyCurrentView()
 ////////////////////////////////////////////////////////////
 void RenderTarget::applyBlendMode(BlendMode mode)
 {
-    switch (mode)
-    {
-        // glBlendFuncSeparate is used when available to avoid an incorrect alpha value when the target
-        // is a RenderTexture -- in this case the alpha value must be written directly to the target buffer
-
-        // Alpha blending
-        default :
-        case BlendAlpha :
-            if (GLEXT_blend_func_separate)
-            {
-                glCheck(GLEXT_glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ONE_MINUS_SRC_ALPHA));
-            }
-            else
-            {
-                glCheck(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
-            }
-
-            break;
-
-        // Additive blending
-        case BlendAdd :
-            if (GLEXT_blend_func_separate)
-            {
-                glCheck(GLEXT_glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE, GL_ONE, GL_ONE));
-            }
-            else
-            {
-                glCheck(glBlendFunc(GL_SRC_ALPHA, GL_ONE));
-            }
-
-            break;
-
-        // Multiplicative blending
-        case BlendMultiply :
-            glCheck(glBlendFunc(GL_DST_COLOR, GL_ZERO));
-            break;
-
-        // No blending
-        case BlendNone :
-            glCheck(glBlendFunc(GL_ONE, GL_ZERO));
-            break;
-    }
+    m_impl->applyBlendMode(mode);
 
     m_cache.lastBlendMode = mode;
 }
@@ -448,9 +329,7 @@ void RenderTarget::applyBlendMode(BlendMode mode)
 ////////////////////////////////////////////////////////////
 void RenderTarget::applyTransform(const Transform& transform)
 {
-    // No need to call glMatrixMode(GL_MODELVIEW), it is always the
-    // current mode (for optimization purpose, since it's the most used)
-    glCheck(glLoadMatrixf(transform.getMatrix()));
+    m_impl->applyTransform(transform);
 }
 
 
