@@ -115,9 +115,21 @@ void RenderTargetImplDX::draw(const Vertex* vertices, unsigned int vertexCount, 
 
     D3DPRIMITIVETYPE mode = modes[type];
 
+    // Compute the number of primitives to draw
+    unsigned int primitiveCount;
+
+    if (mode == D3DPT_POINTLIST)
+        primitiveCount = vertexCount;
+    else if (mode == D3DPT_LINELIST || mode == D3DPT_LINESTRIP)
+        primitiveCount = vertexCount - 1;
+    else if (mode == D3DPT_TRIANGLELIST)
+        primitiveCount = vertexCount / 3;
+    else if (mode == D3DPT_TRIANGLEFAN)
+        primitiveCount = vertexCount - 2;
+
     // Draw the primitives
     context->SetStreamSource(0, vertexBuffer, 0, sizeof(CUSTOMVERTEX));
-    context->DrawPrimitive(mode, 0, vertexCount);
+    context->DrawPrimitive(mode, 0, primitiveCount);
 }
 
 
