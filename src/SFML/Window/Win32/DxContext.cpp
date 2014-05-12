@@ -53,6 +53,9 @@ m_ownsWindow   (true)
     // Create the context
     if (m_deviceContext)
         createContext(shared, VideoMode::getDesktopMode().bitsPerPixel, ContextSettings());
+
+    // Enable drawing
+    m_context->BeginScene();
 }
 
 
@@ -74,6 +77,9 @@ m_ownsWindow   (false)
     // Create the context
     if (m_deviceContext)
         createContext(shared, bitsPerPixel, settings);
+
+    // Enable drawing
+    m_context->BeginScene();
 }
 
 
@@ -96,12 +102,18 @@ m_ownsWindow   (true)
     // Create the context
     if (m_deviceContext)
         createContext(shared, VideoMode::getDesktopMode().bitsPerPixel, settings);
+
+    // Enable drawing
+    m_context->BeginScene();
 }
 
 
 ////////////////////////////////////////////////////////////
 DxContext::~DxContext()
 {
+    // Disable drawing
+    m_context->EndScene();
+
     // Release the DirectX context
     m_context->Release();
 
