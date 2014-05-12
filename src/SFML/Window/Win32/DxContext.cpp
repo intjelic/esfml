@@ -162,6 +162,7 @@ void DxContext::createContext(DxContext* shared, unsigned int bitsPerPixel, cons
     D3DPRESENT_PARAMETERS params;
 
     ZeroMemory(&params, sizeof(params));
+    params.BackBufferCount = 1;
     params.Windowed = TRUE;
     params.SwapEffect = D3DSWAPEFFECT_DISCARD;
     params.hDeviceWindow = m_window;
