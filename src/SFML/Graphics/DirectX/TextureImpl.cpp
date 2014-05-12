@@ -83,6 +83,8 @@ void TextureImpl::update(const Uint8* pixels, unsigned int width, unsigned int h
 {
     IDirect3DDevice9* context = getContextHandle();
 
+    // @todo: take offset (x, y) into account...
+
     if (m_texture)
     {
         D3DLOCKED_RECT rect;
@@ -119,7 +121,10 @@ void TextureImpl::setRepeated(bool repeated)
 ////////////////////////////////////////////////////////////
 void TextureImpl::bind(const TextureImpl* texture, Texture::CoordinateType coordinateType, const Vector2u& size, const Vector2u& actualSize)
 {
-    // To implement
+    IDirect3DDevice9* context = texture->getContextHandle();
+
+    if (texture->m_texture)
+        context->SetTexture(0, texture->m_texture);
 }
 
 ////////////////////////////////////////////////////////////

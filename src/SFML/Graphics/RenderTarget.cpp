@@ -336,7 +336,7 @@ void RenderTarget::applyTransform(const Transform& transform)
 ////////////////////////////////////////////////////////////
 void RenderTarget::applyTexture(const Texture* texture)
 {
-    Texture::bind(texture, Texture::Pixels);
+    m_impl->applyTexture(texture);
 
     m_cache.lastTextureId = texture ? texture->m_cacheId : 0;
 }

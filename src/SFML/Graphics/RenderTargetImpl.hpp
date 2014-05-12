@@ -35,6 +35,7 @@
 #include <SFML/Graphics/BlendMode.hpp>
 #include <SFML/Graphics/PrimitiveType.hpp>
 #include <SFML/Graphics/Vertex.hpp>
+#include <SFML/Graphics/Texture.hpp>
 #include <SFML/System/NonCopyable.hpp>
 
 
@@ -127,6 +128,14 @@ public :
     ///
     ////////////////////////////////////////////////////////////
     virtual void applyTransform(const Transform& transform) = 0;
+
+    ////////////////////////////////////////////////////////////
+    /// \brief Apply a new texture
+    ///
+    /// \param texture Texture to apply
+    ///
+    ////////////////////////////////////////////////////////////
+    virtual void applyTexture(const Texture* texture) = 0;
 
 };
 

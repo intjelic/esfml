@@ -223,6 +223,13 @@ void RenderTargetImplGL::applyTransform(const Transform& transform)
     glCheck(glLoadMatrixf(transform.getMatrix()));
 }
 
+
+////////////////////////////////////////////////////////////
+void RenderTargetImplGL::applyTexture(const Texture* texture)
+{
+    Texture::bind(texture, Texture::Pixels);
+}
+
 } // namespace priv
 
 } // namespace sf

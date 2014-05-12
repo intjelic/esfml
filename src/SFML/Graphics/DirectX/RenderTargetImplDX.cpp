@@ -26,18 +26,25 @@
 // Headers
 ////////////////////////////////////////////////////////////
 #include <SFML/Graphics/DirectX/RenderTargetImplDX.hpp>
+#include <SFML/System/Vector2.hpp>
 #include <SFML/DirectX.hpp>
 #include <d3dx9math.h>
 #include <vector>
 
 
-#define CUSTOMFVF (D3DFVF_XYZ | D3DFVF_DIFFUSE | D3DFVF_TEX0)
-struct CUSTOMVERTEX
+namespace
 {
-    FLOAT x, y, z;
-    DWORD color;
-    FLOAT texX, texY;
-};
+    #define CUSTOMFVF (D3DFVF_XYZ | D3DFVF_DIFFUSE | D3DFVF_TEX1)
+
+    struct CUSTOMVERTEX
+    {
+        FLOAT x, y, z;
+        DWORD color;
+        FLOAT texX, texY;
+    };
+
+    sf::Vector2u textureSize;
+}
 
 
 namespace sf
@@ -86,8 +93,8 @@ void RenderTargetImplDX::draw(const Vertex* vertices, unsigned int vertexCount, 
             vertices[i].position.y,
             1.0f,
             D3DCOLOR_ARGB(vertices[i].color.a, vertices[i].color.r, vertices[i].color.g, vertices[i].color.b),
-            vertices[i].texCoords.x,
-            vertices[i].texCoords.y,};
+            vertices[i].texCoords.x / textureSize.x,
+            vertices[i].texCoords.y / textureSize.y};
 
         repackedVertices.push_back(vertex);
     }
@@ -208,6 +215,21 @@ void RenderTargetImplDX::applyTransform(const Transform& transform)
     // Set the view matrix
     D3DXMATRIX matrix(transform.getMatrix());
     context->SetTransform(D3DTS_VIEW, &matrix);
+}
+
+
+////////////////////////////////////////////////////////////
+void RenderTargetImplDX::applyTexture(const Texture* texture)
+{
+    IDirect3DDevice9* context = getContextHandle();
+
+    Texture::bind(texture, Texture::Pixels);
+    context->SetTextureStageState(0, D3DTSS_TEXCOORDINDEX, D3DTSS_TCI_PASSTHRU);
+
+    if (texture)
+        textureSize = texture->getSize();
+    else
+        textureSize = Vector2u(1, 1);
 }
 
 } // namespace priv
