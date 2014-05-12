@@ -39,7 +39,7 @@
 
 #elif defined(SFML_DIRECTX)
 
-    typedef void* TextureHandle;
+    typedef IDirect3DTexture9* TextureHandle;
 
 #endif
 

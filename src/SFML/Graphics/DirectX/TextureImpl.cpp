@@ -50,7 +50,18 @@ TextureImpl::~TextureImpl()
 ////////////////////////////////////////////////////////////
 bool TextureImpl::create(unsigned int width, unsigned int height, const Vector2u& actualSize, bool smooth, bool repeated)
 {
-    // To implement
+    IDirect3DDevice9* context = getContextHandle();
+
+    context->CreateTexture(
+        width,
+        height,
+        0,
+        D3DUSAGE_DYNAMIC,
+        D3DFMT_A8R8G8B8,
+        D3DPOOL_DEFAULT,
+        &m_texture,
+        NULL);
+
     return true;
 }
 
