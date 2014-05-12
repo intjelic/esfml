@@ -47,7 +47,9 @@ namespace priv
 ////////////////////////////////////////////////////////////
 RenderTargetImplDX::RenderTargetImplDX()
 {
-    // Nothing to do
+    IDirect3DDevice9* context = getContextHandle();
+
+    context->CreateStateBlock(D3DSBT_ALL, &m_states);
 }
 
 
@@ -136,14 +138,14 @@ void RenderTargetImplDX::draw(const Vertex* vertices, unsigned int vertexCount, 
 ////////////////////////////////////////////////////////////
 void RenderTargetImplDX::pushStates()
 {
-    // To implement
+    m_states->Capture();
 }
 
 
 ////////////////////////////////////////////////////////////
 void RenderTargetImplDX::popStates()
 {
-    // To implement
+    m_states->Apply();
 }
 
 

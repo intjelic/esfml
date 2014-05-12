@@ -119,6 +119,7 @@ public :
     virtual void applyTransform(const Transform& transform);
 
     D3DVIEWPORT9 m_viewport;
+    IDirect3DStateBlock9* m_states;
 };
 
 } // namespace priv
