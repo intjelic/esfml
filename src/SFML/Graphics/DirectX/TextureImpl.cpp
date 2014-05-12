@@ -81,7 +81,21 @@ void TextureImpl::copyToImage(const Vector2u& size, const Vector2u& actualSize, 
 ////////////////////////////////////////////////////////////
 void TextureImpl::update(const Uint8* pixels, unsigned int width, unsigned int height, unsigned int x, unsigned int y)
 {
-    // To implement
+    IDirect3DDevice9* context = getContextHandle();
+
+    if (m_texture)
+    {
+        D3DLOCKED_RECT rect;
+        m_texture->LockRect(0, &rect, NULL, D3DLOCK_DISCARD);
+
+        const Uint8* src = pixels;
+        D3DCOLOR*    dest = static_cast<D3DCOLOR*>(rect.pBits);
+
+        for (unsigned int i = 0; i < width*height; i++)
+            dest[i] = D3DCOLOR_ARGB(src[(i*4)+3], src[i*4], src[(i*4)+1], src[(i*4)+2]);
+
+        m_texture->UnlockRect(0);
+    }
 }
 
 ////////////////////////////////////////////////////////////
