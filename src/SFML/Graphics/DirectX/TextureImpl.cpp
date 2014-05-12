@@ -37,6 +37,7 @@ namespace priv
 ////////////////////////////////////////////////////////////
 TextureImpl::TextureImpl() :
 m_texture      (NULL),
+m_smooth       (false),
 m_pixelsFlipped(false)
 {
 
@@ -109,7 +110,7 @@ void TextureImpl::update(const Window& window, unsigned int x, unsigned int y)
 ////////////////////////////////////////////////////////////
 void TextureImpl::setSmooth(bool smooth)
 {
-    // To implement
+    m_smooth = smooth;
 }
 
 ////////////////////////////////////////////////////////////
@@ -124,7 +125,12 @@ void TextureImpl::bind(const TextureImpl* texture, Texture::CoordinateType coord
     IDirect3DDevice9* context = texture->getContextHandle();
 
     if (texture->m_texture)
+    {
         context->SetTexture(0, texture->m_texture);
+
+        context->SetSamplerState(0, D3DSAMP_MAGFILTER, texture->m_smooth ? D3DTEXF_LINEAR : D3DTEXF_POINT);
+        context->SetSamplerState(0, D3DSAMP_MINFILTER, texture->m_smooth ? D3DTEXF_LINEAR : D3DTEXF_POINT);
+    }
 }
 
 ////////////////////////////////////////////////////////////

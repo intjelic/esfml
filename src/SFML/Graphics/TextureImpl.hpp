@@ -268,6 +268,7 @@ private :
     // Member data
     ////////////////////////////////////////////////////////////
     TextureHandle m_texture;       ///< Internal texture handle
+    bool          m_smooth;        ///< Status of the smooth filter
     mutable bool  m_pixelsFlipped; ///< To work around the inconsistency in Y orientation
 };
 
