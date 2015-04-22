@@ -102,6 +102,10 @@ struct JoystickState
 
     #include <SFML/Window/Android/JoystickImpl.hpp>
 
+#elif defined(SFML_SYSTEM_BLACKBERRY)
+
+    #include <SFML/Window/Blackberry/JoystickImpl.hpp>
+
 #endif
 
 

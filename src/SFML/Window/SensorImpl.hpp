@@ -51,6 +51,10 @@
 
     #include <SFML/Window/Android/SensorImpl.hpp>
 
+#elif defined(SFML_SYSTEM_BLACKBERRY)
+
+    #include <SFML/Window/Blackberry/SensorImpl.hpp>
+
 #endif
 
 

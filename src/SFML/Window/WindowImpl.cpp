@@ -57,6 +57,11 @@
 
     #include <SFML/Window/Android/WindowImplAndroid.hpp>
     typedef sf::priv::WindowImplAndroid WindowImplType;
+ 
+#elif defined(SFML_SYSTEM_BLACKBERRY)
+
+    #include <SFML/Window/Blackberry/WindowImplBlackberry.hpp>
+    typedef sf::priv::WindowImplBlackberry WindowImplType;
 
 #endif
 

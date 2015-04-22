@@ -76,9 +76,14 @@
         // Android
         #define SFML_SYSTEM_ANDROID
 
+    #elif defined(__QNX__) || defined(__PLAYBOOK__) || defined(__QNXNTO__)
+
+        // Blackberry
+        #define SFML_SYSTEM_BLACKBERRY
+
     #elif defined(__linux__)
 
-         // Linux
+        // Linux
         #define SFML_SYSTEM_LINUX
 
     #elif defined(__FreeBSD__) || defined(__FreeBSD_kernel__)

@@ -1,7 +1,7 @@
 ////////////////////////////////////////////////////////////
 //
 // SFML - Simple and Fast Multimedia Library
-// Copyright (C) 2007-2015 Laurent Gomila (laurent@sfml-dev.org)
+// Copyright (C) 2013 Jonathan De Wachter (dewachter.jonathan@gmail.com)
 //
 // This software is provided 'as-is', without any express or implied warranty.
 // In no event will the authors be held liable for any damages arising from the use of this software.
@@ -22,21 +22,8 @@
 //
 ////////////////////////////////////////////////////////////
 
-#ifndef SFML_SOCKETIMPL_HPP
-#define SFML_SOCKETIMPL_HPP
-
-////////////////////////////////////////////////////////////
-// Headers
-////////////////////////////////////////////////////////////
-#include <SFML/Network/Socket.hpp>
-#include <sys/time.h>
-#include <sys/types.h>
-#include <sys/socket.h>
-#include <netinet/in.h>
-#include <netinet/tcp.h>
-#include <arpa/inet.h>
-#include <netdb.h>
-#include <unistd.h>
+#ifndef SFML_JOYSTICKIMPLBLACKBERRY_HPP
+#define SFML_JOYSTICKIMPLBLACKBERRY_HPP
 
 
 namespace sf
@@ -44,62 +31,82 @@ namespace sf
 namespace priv
 {
 ////////////////////////////////////////////////////////////
-/// \brief Helper class implementing all the non-portable
-///        socket stuff; this is the Unix version
+/// \brief Blackberry implementation of joysticks
 ///
 ////////////////////////////////////////////////////////////
-class SocketImpl
+class JoystickImpl
 {
-public:
+public :
 
     ////////////////////////////////////////////////////////////
-    // Types
+    /// \brief Perform the global initialization of the joystick module
+    ///
     ////////////////////////////////////////////////////////////
-    typedef socklen_t AddrLength;
+    static void initialize();
 
     ////////////////////////////////////////////////////////////
-    /// \brief Create an internal sockaddr_in address
-    ///
-    /// \param address Target address
-    /// \param port    Target port
-    ///
-    /// \return sockaddr_in ready to be used by socket functions
+    /// \brief Perform the global cleanup of the joystick module
     ///
     ////////////////////////////////////////////////////////////
-    static sockaddr_in createAddress(Uint32 address, unsigned short port);
+    static void cleanup();
 
     ////////////////////////////////////////////////////////////
-    /// \brief Return the value of the invalid socket
+    /// \brief Check if a joystick is currently connected
     ///
-    /// \return Special value of the invalid socket
+    /// \param index Index of the joystick to check
+    ///
+    /// \return True if the joystick is connected, false otherwise
     ///
     ////////////////////////////////////////////////////////////
-    static SocketHandle invalidSocket();
+    static bool isConnected(unsigned int index);
 
     ////////////////////////////////////////////////////////////
-    /// \brief Close and destroy a socket
+    /// \brief Open the joystick
     ///
-    /// \param sock Handle of the socket to close
+    /// \param index Index assigned to the joystick
+    ///
+    /// \return True on success, false on failure
     ///
     ////////////////////////////////////////////////////////////
-    static void close(SocketHandle sock);
+    bool open(unsigned int index);
 
     ////////////////////////////////////////////////////////////
-    /// \brief Set a socket as blocking or non-blocking
-    ///
-    /// \param sock  Handle of the socket
-    /// \param block New blocking state of the socket
+    /// \brief Close the joystick
     ///
     ////////////////////////////////////////////////////////////
-    static void setBlocking(SocketHandle sock, bool block);
+    void close();
 
     ////////////////////////////////////////////////////////////
-    /// Get the last socket error status
+    /// \brief Get the joystick capabilities
     ///
-    /// \return Status corresponding to the last socket error
+    /// \return Joystick capabilities
     ///
     ////////////////////////////////////////////////////////////
-    static Socket::Status getErrorStatus();
+    JoystickCaps getCapabilities() const;
+
+    ////////////////////////////////////////////////////////////
+    /// \brief Get the joystick identification
+    ///
+    /// \return Joystick identification
+    ///
+    ////////////////////////////////////////////////////////////
+    Joystick::Identification getIdentification() const;
+    
+    ////////////////////////////////////////////////////////////
+    /// \brief Update the joystick and get its new state
+    ///
+    /// \return Joystick state
+    ///
+    ////////////////////////////////////////////////////////////
+    JoystickState update();
+
+private :
+
+    ////////////////////////////////////////////////////////////
+    // Member data
+    ////////////////////////////////////////////////////////////
+    JoystickState            m_state;
+    Joystick::Identification m_identification; ///< Joystick identification
 };
 
 } // namespace priv
@@ -107,4 +114,4 @@ public:
 } // namespace sf
 
 
-#endif // SFML_SOCKETIMPL_HPP
+#endif // SFML_JOYSTICKIMPLBLACKBERRY_HPP

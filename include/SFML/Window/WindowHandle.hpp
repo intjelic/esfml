@@ -66,6 +66,11 @@ namespace sf
     // Window handle is ANativeWindow (void*) on Android
     typedef void* WindowHandle;
 
+#elif defined(SFML_SYSTEM_BLACKBERRY)
+
+    // No windows handle on Blackberry
+    typedef void* WindowHandle;
+
 #endif
 
 } // namespace sf

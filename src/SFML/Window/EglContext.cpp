@@ -40,11 +40,12 @@
     #include <X11/Xlib.h>
 #endif
 
+#include <iostream>
 namespace
 {
     EGLDisplay getInitializedDisplay()
     {
-#if defined(SFML_SYSTEM_LINUX)
+#if defined(SFML_SYSTEM_LINUX) || defined(SFML_SYSTEM_BLACKBERRY)
 
         static EGLDisplay display = EGL_NO_DISPLAY;
 

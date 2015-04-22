@@ -64,6 +64,11 @@ elseif(${CMAKE_SYSTEM_NAME} MATCHES "Android")
 
     # use the OpenGL ES implementation on Android
     set(OPENGL_ES 1)
+elseif(${CMAKE_SYSTEM_NAME} MATCHES "QNX")
+    set(SFML_OS_BLACKBERRY 1)
+
+    # use the OpenGL ES implementation on Blackberry
+    set(OPENGL_ES 1)
 else()
     message(FATAL_ERROR "Unsupported operating system")
     return()
@@ -114,4 +119,6 @@ elseif(SFML_OS_LINUX OR SFML_OS_FREEBSD OR SFML_OS_MACOSX)
     set(INSTALL_MISC_DIR share/SFML)
 elseif(SFML_OS_ANDROID)
     set(INSTALL_MISC_DIR ${ANDROID_NDK}/sources/sfml)
+elseif(SFML_OS_BLACKBERRY)
+    set(INSTALL_MISC_DIR .)
 endif()

@@ -1,7 +1,7 @@
 ////////////////////////////////////////////////////////////
 //
 // SFML - Simple and Fast Multimedia Library
-// Copyright (C) 2007-2015 Laurent Gomila (laurent@sfml-dev.org)
+// Copyright (C) 2013 Jonathan De Wachter (dewachter.jonathan@gmail.com)
 //
 // This software is provided 'as-is', without any express or implied warranty.
 // In no event will the authors be held liable for any damages arising from the use of this software.
@@ -22,53 +22,34 @@
 //
 ////////////////////////////////////////////////////////////
 
-#ifndef SFML_OPENGL_HPP
-#define SFML_OPENGL_HPP
+////////////////////////////////////////////////////////////
+// Headers
+////////////////////////////////////////////////////////////
+#include <SFML/Window/VideoModeImpl.hpp>
+
+namespace sf
+{
+namespace priv
+{
+////////////////////////////////////////////////////////////
+std::vector<VideoMode> VideoModeImpl::getFullscreenModes()
+{
+    VideoMode desktop = getDesktopMode();
+
+    // Return both protrait and landscape resolutions
+    std::vector<VideoMode> modes;
+    modes.push_back(desktop);
+    modes.push_back(VideoMode(desktop.height, desktop.width, desktop.bitsPerPixel));
+    return modes;
+}
 
 
 ////////////////////////////////////////////////////////////
-/// Headers
-////////////////////////////////////////////////////////////
-#include <SFML/Config.hpp>
+VideoMode VideoModeImpl::getDesktopMode()
+{
+    return VideoMode(0, 0);
+}
 
+} // namespace priv
 
-////////////////////////////////////////////////////////////
-/// This file just includes the OpenGL headers,
-/// which have actually different paths on each system
-////////////////////////////////////////////////////////////
-#if defined(SFML_SYSTEM_WINDOWS)
-
-    // The Visual C++ version of gl.h uses WINGDIAPI and APIENTRY but doesn't define them
-    #ifdef _MSC_VER
-        #include <windows.h>
-    #endif
-
-    #include <GL/gl.h>
-
-#elif defined(SFML_SYSTEM_LINUX) || defined(SFML_SYSTEM_FREEBSD)
-
-    #if defined(SFML_OPENGL_ES)
-        #include <GLES/gl.h>
-        #include <GLES/glext.h>
-    #else
-        #include <GL/gl.h>
-    #endif
-
-#elif defined(SFML_SYSTEM_MACOS)
-
-    #include <OpenGL/gl.h>
-
-#elif defined(SFML_SYSTEM_IOS)
-
-    #include <OpenGLES/ES1/gl.h>
-    #include <OpenGLES/ES1/glext.h>
-
-#elif defined(SFML_SYSTEM_ANDROID) || defined(SFML_SYSTEM_BLACKBERRY)
-
-    #include <GLES/gl.h>
-    #include <GLES/glext.h>
-
-#endif
-
-
-#endif // SFML_OPENGL_HPP
+} // namespace sf

@@ -30,7 +30,7 @@
 ////////////////////////////////////////////////////////////
 #include <SFML/Config.hpp>
 
-#ifdef SFML_OPENGL_ES
+#if !defined(SFML_SYSTEM_BLACKBERRY) && defined(SFML_OPENGL_ES)
 
     #include <SFML/OpenGL.hpp>
 

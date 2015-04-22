@@ -1,7 +1,7 @@
 ////////////////////////////////////////////////////////////
 //
 // SFML - Simple and Fast Multimedia Library
-// Copyright (C) 2007-2015 Laurent Gomila (laurent@sfml-dev.org)
+// Copyright (C) 2013 Jonathan De Wachter (dewachter.jonathan@gmail.com)
 //
 // This software is provided 'as-is', without any express or implied warranty.
 // In no event will the authors be held liable for any damages arising from the use of this software.
@@ -22,53 +22,67 @@
 //
 ////////////////////////////////////////////////////////////
 
-#ifndef SFML_OPENGL_HPP
-#define SFML_OPENGL_HPP
+////////////////////////////////////////////////////////////
+// Headers
+////////////////////////////////////////////////////////////
+#include <SFML/Window/SensorImpl.hpp>
+
+
+namespace sf
+{
+namespace priv
+{
+////////////////////////////////////////////////////////////
+void SensorImpl::initialize()
+{
+    // To be implemented
+}
 
 
 ////////////////////////////////////////////////////////////
-/// Headers
-////////////////////////////////////////////////////////////
-#include <SFML/Config.hpp>
+void SensorImpl::cleanup()
+{
+    // To be implemented
+}
 
 
 ////////////////////////////////////////////////////////////
-/// This file just includes the OpenGL headers,
-/// which have actually different paths on each system
+bool SensorImpl::isAvailable(Sensor::Type sensor)
+{
+    // To be implemented
+    return false;
+}
+
+
 ////////////////////////////////////////////////////////////
-#if defined(SFML_SYSTEM_WINDOWS)
-
-    // The Visual C++ version of gl.h uses WINGDIAPI and APIENTRY but doesn't define them
-    #ifdef _MSC_VER
-        #include <windows.h>
-    #endif
-
-    #include <GL/gl.h>
-
-#elif defined(SFML_SYSTEM_LINUX) || defined(SFML_SYSTEM_FREEBSD)
-
-    #if defined(SFML_OPENGL_ES)
-        #include <GLES/gl.h>
-        #include <GLES/glext.h>
-    #else
-        #include <GL/gl.h>
-    #endif
-
-#elif defined(SFML_SYSTEM_MACOS)
-
-    #include <OpenGL/gl.h>
-
-#elif defined(SFML_SYSTEM_IOS)
-
-    #include <OpenGLES/ES1/gl.h>
-    #include <OpenGLES/ES1/glext.h>
-
-#elif defined(SFML_SYSTEM_ANDROID) || defined(SFML_SYSTEM_BLACKBERRY)
-
-    #include <GLES/gl.h>
-    #include <GLES/glext.h>
-
-#endif
+bool SensorImpl::open(Sensor::Type sensor)
+{
+    // To be implemented
+    return false;
+}
 
 
-#endif // SFML_OPENGL_HPP
+////////////////////////////////////////////////////////////
+void SensorImpl::close()
+{
+    // To be implemented
+}
+
+
+////////////////////////////////////////////////////////////
+Vector3f SensorImpl::update()
+{
+    // To be implemented
+    return Vector3f();
+}
+
+
+////////////////////////////////////////////////////////////
+void SensorImpl::setEnabled(bool enabled)
+{
+    // To be implemented
+}
+
+} // namespace priv
+
+} // namespace sf

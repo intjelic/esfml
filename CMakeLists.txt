@@ -120,6 +120,21 @@ else()
     unset(ANDROID_NDK CACHE)
 endif()
 
+# Blackberry options
+if(SFML_OS_BLACKBERRY)
+    # force usage of GNU C++ STL library
+    set(BLACKBERRY_STL "_gpp")
+
+    # we install libs in a subdirectory named after the target type (device or simulator)
+    set(LIB_PREFIX "${ARCHITECTURE_NAME}/")
+
+    # we install headers in ${QNX_TARGET}/usr/include
+    set(INCLUDE_PREFIX "usr/")
+
+    # install everything in the ndk
+    set(CMAKE_INSTALL_PREFIX ${BLACKBERRY_QNX_TARGET})
+endif()
+
 # define SFML_STATIC if the build type is not set to 'shared'
 if(NOT BUILD_SHARED_LIBS)
     add_definitions(-DSFML_STATIC)
@@ -228,7 +243,7 @@ endif()
 # setup the install rules
 if(NOT SFML_BUILD_FRAMEWORKS)
     install(DIRECTORY include
-            DESTINATION .
+            DESTINATION ${INCLUDE_PREFIX}.
             COMPONENT devel
             FILES_MATCHING PATTERN "*.hpp" PATTERN "*.inl")
 else()

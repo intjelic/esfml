@@ -116,8 +116,14 @@ Font::~Font()
 
 
 ////////////////////////////////////////////////////////////
-bool Font::loadFromFile(const std::string& filename)
+bool Font::loadFromFile(const std::string& _filename)
 {
+    #ifdef SFML_SYSTEM_BLACKBERRY
+        std::string filename = std::string("app/native/") + _filename;
+    #else
+        std::string filename = _filename;
+    #endif
+
     #ifndef SFML_SYSTEM_ANDROID
 
     // Cleanup the previous resources

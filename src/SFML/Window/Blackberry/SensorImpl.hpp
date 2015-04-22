@@ -1,7 +1,7 @@
 ////////////////////////////////////////////////////////////
 //
 // SFML - Simple and Fast Multimedia Library
-// Copyright (C) 2007-2015 Laurent Gomila (laurent@sfml-dev.org)
+// Copyright (C) 2013 Jonathan De Wachter (dewachter.jonathan@gmail.com)
 //
 // This software is provided 'as-is', without any express or implied warranty.
 // In no event will the authors be held liable for any damages arising from the use of this software.
@@ -22,21 +22,13 @@
 //
 ////////////////////////////////////////////////////////////
 
-#ifndef SFML_SOCKETIMPL_HPP
-#define SFML_SOCKETIMPL_HPP
+#ifndef SFML_SENSORIMPLBLACKBERRY_HPP
+#define SFML_SENSORIMPLBLACKBERRY_HPP
 
 ////////////////////////////////////////////////////////////
 // Headers
 ////////////////////////////////////////////////////////////
-#include <SFML/Network/Socket.hpp>
-#include <sys/time.h>
-#include <sys/types.h>
-#include <sys/socket.h>
-#include <netinet/in.h>
-#include <netinet/tcp.h>
-#include <arpa/inet.h>
-#include <netdb.h>
-#include <unistd.h>
+#include <SFML/System/Vector3.hpp>
 
 
 namespace sf
@@ -44,62 +36,67 @@ namespace sf
 namespace priv
 {
 ////////////////////////////////////////////////////////////
-/// \brief Helper class implementing all the non-portable
-///        socket stuff; this is the Unix version
+/// \brief Blackberry implementation of sensors
 ///
 ////////////////////////////////////////////////////////////
-class SocketImpl
+class SensorImpl
 {
-public:
+public :
 
     ////////////////////////////////////////////////////////////
-    // Types
+    /// \brief Perform the global initialization of the sensor module
+    ///
     ////////////////////////////////////////////////////////////
-    typedef socklen_t AddrLength;
+    static void initialize();
 
     ////////////////////////////////////////////////////////////
-    /// \brief Create an internal sockaddr_in address
-    ///
-    /// \param address Target address
-    /// \param port    Target port
-    ///
-    /// \return sockaddr_in ready to be used by socket functions
+    /// \brief Perform the global cleanup of the sensor module
     ///
     ////////////////////////////////////////////////////////////
-    static sockaddr_in createAddress(Uint32 address, unsigned short port);
+    static void cleanup();
 
     ////////////////////////////////////////////////////////////
-    /// \brief Return the value of the invalid socket
+    /// \brief Check if a sensor is available
     ///
-    /// \return Special value of the invalid socket
+    /// \param sensor Sensor to check
+    ///
+    /// \return True if the sensor is available, false otherwise
     ///
     ////////////////////////////////////////////////////////////
-    static SocketHandle invalidSocket();
+    static bool isAvailable(Sensor::Type sensor);
 
     ////////////////////////////////////////////////////////////
-    /// \brief Close and destroy a socket
+    /// \brief Open the sensor
     ///
-    /// \param sock Handle of the socket to close
+    /// \param sensor Type of the sensor
+    ///
+    /// \return True on success, false on failure
     ///
     ////////////////////////////////////////////////////////////
-    static void close(SocketHandle sock);
+    bool open(Sensor::Type sensor);
 
     ////////////////////////////////////////////////////////////
-    /// \brief Set a socket as blocking or non-blocking
-    ///
-    /// \param sock  Handle of the socket
-    /// \param block New blocking state of the socket
+    /// \brief Close the sensor
     ///
     ////////////////////////////////////////////////////////////
-    static void setBlocking(SocketHandle sock, bool block);
+    void close();
 
     ////////////////////////////////////////////////////////////
-    /// Get the last socket error status
+    /// \brief Update the sensor and get its new value
     ///
-    /// \return Status corresponding to the last socket error
+    /// \return Sensor value
     ///
     ////////////////////////////////////////////////////////////
-    static Socket::Status getErrorStatus();
+    Vector3f update();
+
+    ////////////////////////////////////////////////////////////
+    /// \brief Enable or disable the sensor
+    ///
+    /// \param enabled True to enable, false to disable
+    ///
+    ////////////////////////////////////////////////////////////
+    void setEnabled(bool enabled);
+
 };
 
 } // namespace priv
@@ -107,4 +104,4 @@ public:
 } // namespace sf
 
 
-#endif // SFML_SOCKETIMPL_HPP
+#endif // SFML_SENSORIMPLBLACKBERRY_HPP
